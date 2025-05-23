@@ -19,7 +19,7 @@
     "express-session": "^1.18.0",
     "method-override": "^3.0.0",
     "mongodb": "^6.5.0",
-    "mongoose": "^8.3.2",
+    "mongoose": "^8.10.0",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0"
   },

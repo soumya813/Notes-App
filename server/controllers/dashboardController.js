@@ -32,7 +32,7 @@ exports.dashboard = async (req, res) => {
       .limit(perPage)
       .exec();
   
-      const count = await Note.count();
+      const count = await Note.countDocuments();
   
       res.render('dashboard/index', {
         userName: req.user.firstName,
@@ -124,11 +124,26 @@ exports.dashboardAddNote = async(req,res) => {
 
 exports.dashboardAddNote = async(req,res) => {
     try {
+        if (!req.body.title || req.body.title.trim() === "") {
+            return res.render('dashboard/add', {
+                layout: '../views/layouts/dashboard',
+                error: 'Title is required',
+                formData: req.body
+            });
+        }
         req.body.user = req.user.id;
         await Note.create(req.body);
         res.redirect('/dashboard');
     } catch (error) {
-        console.log(error);
+        let errorMsg = 'An error occurred while adding the note.';
+        if (error.name === 'ValidationError') {
+            errorMsg = error.message;
+        }
+        res.render('dashboard/add', {
+            layout: '../views/layouts/dashboard',
+            error: errorMsg,
+            formData: req.body
+        });
     }
 }
 

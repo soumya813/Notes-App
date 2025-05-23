@@ -1,7 +1,7 @@
 <div class="container-fluid container-fluid-custom pb-5 mb-5">
     <div class="row mb-4">
         <div class="col">
-            <h1>Hey, <% userName %></h1>
+            <h1>Hey, <%= userName %></h1>
         </div>
         <div class="col text-end">
             <a href="/dashboard/add" class="btn btn-primary">+ New Note</a>
@@ -16,8 +16,7 @@
                 <div class="card border-primary" style="min-height: 210px">
                     <a href="/dashboard/item/ <%= notes[i]._id %>" class="card-body text-decoration-none">
                         <h5 class="card-title"><%= notes[i].title %></h5>
-                        <p class="card-text"><%= notes[i].body %>
-                        </p>
+                        <p class="card-text"><%= notes[i].body %></p>
                     </a>
                 </div>
             </div>
@@ -45,39 +44,33 @@
       <% if(notes.length>0){ %>
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center mt-5">
-                <% if(current == 1) {%>
+                <% if(current == 1) { %>
                     <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                    <% }else{ %>
+                <% } else { %>
                     <li class="page-item"><a class="page-link" href="/dashboard">First</a></li>
-                    <% } %>
+                <% } %>
 
-                    <% var i = (Number(current)>5 ? Number(current)-4:1) %>
-                    <% if(i!==1){ %>
+                <% var i = (Number(current) > 5 ? Number(current) - 4 : 1); %>
+                <% if(i !== 1){ %>
+                    <li class="page-item"><a class="page-link" href="#">...</a></li>
+                <% } %>
+
+                <% for(; i <= Math.min(Number(current) + 4, pages); i++) { %>
+                    <% if(i == current){ %>
+                        <li class="page-item"><a class="page-link" href="#"><%= i %></a></li>
+                    <% } else { %>
+                        <li class="page-item"><a class="page-link" href="/dashboard/?page=<%= i %>"><%= i %></a></li>
+                    <% } %>
+                    <% if(i == Number(current) + 4 && i < pages) { %>
                         <li class="page-item"><a class="page-link" href="#">...</a></li>
                     <% } %>
+                <% } %>
 
-                    <% for(;i<=(Number(current)+4)) && i<=pages;i++ { %>
-
-                        <% if(i==current){ %>
-
-                            <li class="page-item"><a class="page-link" href="#"><%= i %></a></li>
-
-                        <% }else{ %>
-                            <li class="page-item"><a class="page-link" href="/dashboard/?page=<%= i %>"><%= i %></a></li>    
-                            
-                        <% } %>
-
-                        <% if(i == Number(current) + 4 && i< pages) { %>
-                            <li class="page-item"><a class="page-link" href="#">...</a></li>
-                        <% } %>
-
-                    <% } %>
-
-                    <% if(current == pages){ %>
-                        <li class="page-item disabled"><a class="page-link" href="#">last</a></li>
-                    <% } else{ %>
-                        <li class="page-item"><a class="page-link" href="/dashboard/?pages=<% pages %>">Next</a></li>
-                    <% } %>
+                <% if(current == pages){ %>
+                    <li class="page-item disabled"><a class="page-link" href="#">last</a></li>
+                <% } else { %>
+                    <li class="page-item"><a class="page-link" href="/dashboard/?page=<%= pages %>">Next</a></li>
+                <% } %>
             </ul>
 
         </nav>
