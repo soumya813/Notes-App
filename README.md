@@ -15,7 +15,7 @@ Welcome to **Notes App**, a simple and intuitive web-based note-taking platform 
 
 ## 📸 Demo
 
-![Notes App UI Screenshot](public/img/notes-app-ui.png)
+![Notes App UI Screenshot](public/img/Notes-App-ui.png)
 
 > 💡 Want to try it live? Deploying soon on Vercel/Render – Stay tuned!
 
