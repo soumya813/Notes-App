@@ -1,19 +1,59 @@
 <div class="container-fluid">
-    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 ">
-      <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-primary text-decoration-none fw-bold fs-2">
-        NotesApp
-      </a>
+  <header class="d-flex flex-wrap align-items-center justify-content-between py-3 mb-4">
+    <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-primary text-decoration-none fw-bold fs-2">
+      NotesApp
+    </a>
 
-      <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
-        <li><a href="#" class="nav-link px-2 link-dark">Features</a></li>
-        <li><a href="#" class="nav-link px-2 link-dark">FAQs</a></li>
-        <li><a href="/about" class="nav-link px-2 link-dark">About</a></li>
-      </ul>
+    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+      <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
+      <li><a href="#" class="nav-link px-2 link-dark">Features</a></li>
+      <li><a href="#" class="nav-link px-2 link-dark">FAQs</a></li>
+      <li><a href="/about" class="nav-link px-2 link-dark">About</a></li>
+    </ul>
 
-      <div class="col-md-3 text-end">
-        <a href="/auth/google" type="button" class="btn btn-outline-primary me-2">Login</a>
-        <a href="/auth/google" type="button" class="btn btn-primary">Sign-up</a>
-      </div>
-    </header>
-  </div>
+    <div class="col-md-3 d-flex justify-content-end align-items-center gap-2">
+
+      <a href="/auth/google" class="btn btn-outline-primary">Login</a>
+      <a href="/auth/google" class="btn btn-primary">Sign-up</a>
+     
+      <!-- 🌙 Dark Mode Toggle Button with Tooltip -->
+      <button id="darkModeToggle" class="btn btn-outline-secondary" title="Enable Dark Mode" style="font-size: 1.1rem;">
+        🌙
+      </button>
+     </div>
+  </header>
+</div>
+
+<script>
+  const toggleBtn = document.getElementById('darkModeToggle');
+  const savedTheme = localStorage.getItem('theme');
+
+  const enableDark = () => {
+    document.body.classList.add('dark-mode');
+    toggleBtn.textContent = '🌙';
+    toggleBtn.title = 'Disable Dark Mode';
+    localStorage.setItem('theme', 'dark');
+  };
+
+  const disableDark = () => {
+    document.body.classList.remove('dark-mode');
+   
+     toggleBtn.textContent = '🌞';
+    toggleBtn.title = 'Enable Dark Mode';
+    localStorage.setItem('theme', 'light');
+  };
+
+  if (savedTheme === 'dark') {
+    enableDark();
+  } else {
+    disableDark();
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    if (document.body.classList.contains('dark-mode')) {
+      disableDark();
+    } else {
+      enableDark();
+    }
+  });
+</script>

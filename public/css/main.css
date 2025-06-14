@@ -1,90 +1,126 @@
-:root{
-    --background-color : #EDC7B7;
-    --bs-primary-rgb: #AC3B61;
+:root {
+ /* Light Theme Defaults */
+  --bg-color: #ffffff;
+  --text-color: #111111;
+  --card-bg: #f8f9fa;
+  --header-bg: #ffffff;
+  --nav-link-color: #000000;
+
+
 }
 
-body{
-    font-family: 'Poppins', 'sans-serif';
-    background-color: var(--background-color);
-    color: var(--bs-primary-rgb);
-    font-weight: 300;
-    font-size: 1.2rem;
+/* 🌙 Dark Mode overrides via class on body */
+body.dark-mode {
+  
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --card-bg: #1f1f1f;
+  --header-bg: #1a1a1a;
+  --nav-link-color: #cccccc;
+
 }
 
-h1,h2,h3,h4,h5,h6{
-    font-family: 'Unbounded', cursive;
-    font-weight: 800;
+/* 🔁 Apply variables */
+body {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-.container-fluid-custom{
-    max-width: 1600px;
+/* Cards, navbar, containers, forms adapt */
+.card,
+.container,
+.navbar,
+.form-control,
+textarea {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.btn{
-    padding-left: 1.6rem;
-    padding-right: 1.6rem;
-    border-radius: 2rem;
+/* Optional for links */
+.nav-link {
+  color: var(--nav-link-color) !important;
 }
 
+/* Headings font */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Unbounded', cursive;
+  font-weight: 800;
+}
+
+/* Container customization */
+.container-fluid-custom {
+  max-width: 1600px;
+}
+
+/* Buttons */
+.btn {
+  padding-left: 1.6rem;
+  padding-right: 1.6rem;
+  border-radius: 2rem;
+}
+
+/* Primary Button Styling */
 .btn-primary {
-    --bs-btn-color: #fff;
-    --bs-btn-bg: #123C69;
-    --bs-btn-border-color: #123C69;
-    --bs-btn-hover-color: #fff;
-    --bs-btn-hover-bg: #325993;
-    --bs-btn-hover-border-color: #325993;
-    --bs-btn-focus-shadow-rgb: 49, 132, 253;
-    --bs-btn-active-color: #fff;
-    --bs-btn-active-bg: #123C69;
-    --bs-btn-active-border-color: #123C69;
-    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-    --bs-btn-disabled-color: #fff;
-    --bs-btn-disabled-bg: #123C69;
-    --bs-btn-disabled-border-color: #123C69;
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #123C69;
+  --bs-btn-border-color: #123C69;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #325993;
+  --bs-btn-hover-border-color: #325993;
+  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #123C69;
+  --bs-btn-active-border-color: #123C69;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #123C69;
+  --bs-btn-disabled-border-color: #123C69;
 }
 
+/* Outline Button Styling */
 .btn-outline-primary {
-    --bs-btn-color: #123C69;
-    --bs-btn-border-color: #123C69;
-    --bs-btn-hover-color: #fff;
-    --bs-btn-hover-bg: #325993;
-    --bs-btn-hover-border-color: #325993;
-    --bs-btn-focus-shadow-rgb: 13, 110, 253;
-    --bs-btn-active-color: #fff;
-    --bs-btn-active-bg: #123C69;
-    --bs-btn-active-border-color: #123C69;
-    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-    --bs-btn-disabled-color: #123C69;
-    --bs-btn-disabled-bg: transparent;
-    --bs-btn-disabled-border-color: #123C69;
-    --bs-gradient: none;
+  --bs-btn-color: #123C69;
+  --bs-btn-border-color: #123C69;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #325993;
+  --bs-btn-hover-border-color: #325993;
+  --bs-btn-focus-shadow-rgb: 13, 110, 253;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #123C69;
+  --bs-btn-active-border-color: #123C69;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #123C69;
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: #123C69;
+  --bs-gradient: none;
 }
 
-.pagination{
-    --bs-pagination-color: var(--bs-primary-rgb);
-    --bs-pagination-active-bg: var(--bs-primary-rgb);
-    --bs-pagination-active-border-color: var(--bs-primary-rgb);
+/* Pagination */
+.pagination {
+  --bs-pagination-color: var(--bs-primary-rgb);
+  --bs-pagination-active-bg: var(--bs-primary-rgb);
+  --bs-pagination-active-border-color: var(--bs-primary-rgb);
 }
 
-/*Home*/
-@media(min-width:1200px){
-    .home{
-        background:
-        var(--background-color);
-        ;
-    }
+/* Home section */
+@media (min-width: 1200px) {
+  .home {
+    background: var(--bg-color); /* Was hardcoded before */
+  }
 }
 
-.home-title::before{
-    content: url('../img/stars.svg');
-    position: absolute;
-    left: -50px;
-    top: -30px;
+.home-title::before {
+  content: url('../img/stars.svg');
+  position: absolute;
+  left: -50px;
+  top: -30px;
 }
 
-.home-title::after{
-    content: url('../img/stars.svg');
-    position: absolute;
-    right: -50px;
-    bottom: -30px;
-}
+.home-title::after {
+  content: url('../img/stars.svg');
+  position: absolute;
+  right: -50px;
+  bottom: -30px;
+}  
