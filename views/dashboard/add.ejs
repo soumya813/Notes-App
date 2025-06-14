@@ -1,4 +1,4 @@
-<div class=".container-fluid container-fluid-custom pb-5 mb-5">
+<div class=".container-fluid container-fluid-custom pb-5 mb-5" style="overflow-x: hidden;">
 
     <div class="row mb-4">
 
@@ -27,19 +27,61 @@
 
     <form action="/dashboard/add" method="POST" class="position-relative">
         <div class="form-group mb-4 position-absolute">
-            <input type="text" class="form-control fw-bold border-0 fs-4" id="title" name="title" placeholder="Title" required value="<%= typeof formData !== 'undefined' ? formData.title : '' %>">
+            <input type="text" class=" fw-bold border-0 fs-4" id="title" name="title" placeholder="Title" required value="<%= typeof formData !== 'undefined' ? formData.title : '' %>">
         </div>
 
 
         <div class="form-group mb-4">
-            <textarea required class="form-control pt-5 fs-4" id="body" name="body" placeholder="Take a note..." rows="12"><%= typeof formData !== 'undefined' ? formData.body : '' %></textarea>
+            <textarea required class="pt-5 fs-4" id="body" name="body" placeholder="Take a note..." cols="130" rows="12"><%= typeof formData !== 'undefined' ? formData.body : '' %></textarea>
+        </div>
+
+         <div class="form-group mt-4 mb-5">
+            <h4 class="fw-bold">Summary</h4>
+            <textarea id="summary" name="summary" class=" pt-5 fs-4" cols="130" rows="8">
+            </textarea>
         </div>
 
         <div class="form-group">
+            <button type="button" class="btn btn-primary btn-lg" id="summaryButton" >
+                Summarize
+            </button>
             <button type="submit" class="btn btn-primary btn-lg">+ Add Note</button>
         </div>
     </form>
-
 </div>
 
+<script>
+  document.getElementById('summaryButton').addEventListener('click', async () => {
+    const bodyText = document.getElementById('body').value;
+    const summaryField = document.getElementById('summary');
 
+    if (!bodyText.trim()) {
+      alert("Please enter note body to summarize.");
+      return;
+    }
+
+    summaryField.value = "Generating summary...";
+    summaryField.style.color = 'black';
+
+    try {
+      const response = await fetch('/dashboard/summarize', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: bodyText })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        summaryField.value = data.summary || "No summary returned.";
+      } else {
+        summaryField.value = "Failed to generate summary.";
+        summaryField.style.color = 'red';
+      }
+    } catch (error) {
+      summaryField.value = "Error: " + error.message;
+      summaryField.style.color = 'red';
+    }
+  });
+</script>
