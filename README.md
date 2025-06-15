@@ -113,9 +113,11 @@ npm install
 Create a `.env` file in the root directory and add:
 
 ```env
-PORT=3000
-MONGODB_URI=your_mongo_uri_here
-SESSION_SECRET=your_secret_key
+MONGODB_URI=your_mongodb_connection_string
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_CALLBACK_URL=http://localhost:5000/google/callback
+PORT=5000
 ```
 
 4. **Run the App**
