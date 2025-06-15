@@ -19,6 +19,12 @@ h1,h2,h3,h4,h5,h6{
 .container-fluid-custom{
     max-width: 1600px;
 }
+.card small {
+  font-size: 0.8rem;
+  display: block;
+  margin-top: 10px;
+  color: #6c757d;
+}
 
 .btn{
     padding-left: 1.6rem;

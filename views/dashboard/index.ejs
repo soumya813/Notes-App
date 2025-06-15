@@ -17,6 +17,11 @@
                     <a href="/dashboard/item/ <%= notes[i]._id %>" class="card-body text-decoration-none">
                         <h5 class="card-title"><%= notes[i].title %></h5>
                         <p class="card-text"><%= notes[i].body %></p>
+                        <small class="position-absolute bottom-0 end-0 m-2 text-muted small">
+                            Created: <%= new Date(notes[i].createdAt).toLocaleString() %>
+                            <br>
+                            Updated: <%= new Date(notes[i].updatedAt).toLocaleString() %>
+                        </small>
                     </a>
                 </div>
             </div>
