@@ -10,6 +10,14 @@ const NoteSchema = new schema({
         type: String, 
         required: true,
     },
+    folder: {
+        type: String,
+        default: 'Uncategorized', 
+    },
+    color: {
+        type: String,
+        default: '#ffffff', 
+    },
     body:{
         type:String,
         required:true,

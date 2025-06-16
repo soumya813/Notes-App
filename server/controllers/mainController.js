@@ -2,6 +2,8 @@
  * GET /
  *  Homepage
  */
+const Note = require('../models/Notes');
+const mongoose = require('mongoose');
 
 exports.homepage = async(req,res) => {
     const locals = {
