@@ -1,24 +1,18 @@
-<div class=".container-fluid container-fluid-custom pb-5 mb-5">
+<div class="container-fluid container-fluid-custom pb-5 mb-5">
 
     <div class="row mb-4">
-
         <div class="col">
-
             <nav aria-label="breadcrumb">
-
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>    
-                    <li class="breadcrumb-item-active">Add Note</li>
+                    <li class="breadcrumb-item active">Add Note</li>
                 </ol>
-
             </nav>
 
-                <div class="col d-flex justify-content-between align-items-center">
-                    <h1 class="h3">Add Note</h1>
-
-                </div>
+            <div class="col d-flex justify-content-between align-items-center">
+                <h1 class="h3">Add Note</h1>
+            </div>
         </div>
-
     </div>
 
     <% if (typeof error !== 'undefined') { %>
@@ -27,12 +21,51 @@
 
     <form action="/dashboard/add" method="POST" class="position-relative">
         <div class="form-group mb-4 position-absolute">
-            <input type="text" class="form-control fw-bold border-0 fs-4" id="title" name="title" placeholder="Title" required value="<%= typeof formData !== 'undefined' ? formData.title : '' %>">
+            <input 
+                type="text" 
+                class="form-control fw-bold border-0 fs-4" 
+                id="title" 
+                name="title" 
+                placeholder="Title" 
+                required 
+                value="<%= typeof formData !== 'undefined' ? formData.title : '' %>"
+            >
         </div>
 
+        <div class="form-group mb-4">
+            <textarea 
+                required 
+                class="form-control pt-5 fs-4" 
+                id="body" 
+                name="body" 
+                placeholder="Take a note..." 
+                rows="12"
+            ><%= typeof formData !== 'undefined' ? formData.body : '' %></textarea>
+        </div>
 
         <div class="form-group mb-4">
-            <textarea required class="form-control pt-5 fs-4" id="body" name="body" placeholder="Take a note..." rows="12"><%= typeof formData !== 'undefined' ? formData.body : '' %></textarea>
+            <label for="folder" class="form-label">Folder</label>
+            <select 
+                id="folder" 
+                name="folder" 
+                class="form-control"
+            >
+                <option value="Uncategorized" <%= (typeof formData !== 'undefined' && formData.folder === 'Uncategorized') ? 'selected' : '' %>>Uncategorized</option>
+                <option value="Work" <%= (typeof formData !== 'undefined' && formData.folder === 'Work') ? 'selected' : '' %>>Work</option>
+                <option value="Personal" <%= (typeof formData !== 'undefined' && formData.folder === 'Personal') ? 'selected' : '' %>>Personal</option>
+                <option value="Ideas" <%= (typeof formData !== 'undefined' && formData.folder === 'Ideas') ? 'selected' : '' %>>Ideas</option>
+            </select>
+        </div>
+
+        <div class="form-group mb-4">
+            <label for="color" class="form-label">Note Color</label>
+            <input 
+                type="color" 
+                id="color" 
+                name="color" 
+                class="form-control form-control-color" 
+                value="<%= typeof formData !== 'undefined' && formData.color ? formData.color : '#ffffff' %>"
+            >
         </div>
 
         <div class="form-group">
@@ -41,5 +74,3 @@
     </form>
 
 </div>
-
-
