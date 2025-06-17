@@ -60,7 +60,7 @@ exports.dashboardViewNote = async(req,res) => {
 
 
     if(note){
-        res.render('dashboard/view-note',{
+        res.render('dashboard/view-notes',{
             noteID: req.params.id,
             note,
             layout: '../views/layouts/dashboard'
