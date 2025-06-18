@@ -26,16 +26,16 @@
 
     </div>
 
-    <form action="/dashboard/item/<%= noteID %>?_method=PUT" method="POST" class="position-relative">
+    <form action="/dashboard/item/<%= noteID %>?_method=PUT" method="POST" class="position-relative ms-3">
         <div class="form-group mb-4 position-absolute">
             <input type="text" class="form-control fw-bold border-0 fs-4" id="title" name="title" value="<%= note.title %>" placeholder="Title">
         </div>
         <div class="form-group mb-4">
-            <textarea class="form-control pt-5 fs-4" id="body" name="body" placeholder="Take a note..." rowa="12"><%= note.body %></textarea>
+            <textarea class="form-control pt-5 fs-4" id="body" name="body" placeholder="Take a note..." cols="125" rows="12"><%= note.body %></textarea>
         </div>
         <div class="form-group mb-4">
             <h4 class="fw-bold">Summary</h4>
-            <textarea class="form-control pt-5 fs-4" id="summary" name="summary" placeholder="Summary" rowa="12"><%= note.summary %></textarea>
+            <textarea class="form-control p-2 fs-4" id="summary" name="summary" placeholder="Summary" cols="125" rows="12"><%= note.summary %></textarea>
         </div>
 
         <div class="form-group">
