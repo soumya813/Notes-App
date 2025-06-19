@@ -126,7 +126,7 @@ PORT=5000
 npm start
 ```
 
-The app will run at [http://localhost:3000](http://localhost:3000)
+The app will run at [http://localhost:5000](http://localhost:5000)
 
 ---
 
