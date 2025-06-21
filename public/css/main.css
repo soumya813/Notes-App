@@ -88,3 +88,24 @@ h1,h2,h3,h4,h5,h6{
     right: -50px;
     bottom: -30px;
 }
+
+.card {
+  border-radius: 1.5rem;
+}
+
+textarea.form-control {
+  resize: none;
+}
+
+.modal-content {
+  border-radius: 1rem;
+}
+
+.modal-header.bg-danger {
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.modal-footer {
+  border-top: none;
+}
