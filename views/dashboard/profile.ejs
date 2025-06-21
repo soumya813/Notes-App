@@ -1,0 +1,43 @@
+<div class=".container-fluid container-fluid-custom pb-5 mb-5">
+    <div class="row mb-4">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                    <li class="breadcrumb-item-active">Profile</li>
+                </ol>
+            </nav>
+            <div class="col d-flex justify-content-between align-items-center">
+                <h1 class="h3">User Profile</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <img src="<%= user.profileImage %>" class="img-fluid rounded-circle mb-3" alt="Profile Image" style="width: 150px; height: 150px; object-fit: cover;">
+                    <h5 class="card-title mt-3"><%= user.displayName %></h5>
+                </div>
+                <div class="col-md-8">
+                    <form action="/dashboard/profile" method="POST">
+                        <div class="mb-3">
+                            <label for="firstName" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstName" name="firstName" value="<%= user.firstName %>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lastName" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" name="lastName" value="<%= user.lastName %>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="displayName" class="form-label">Display Name</label>
+                            <input type="text" class="form-control" id="displayName" name="displayName" value="<%= user.displayName %>" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
