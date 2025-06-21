@@ -22,10 +22,12 @@ exports.dashboard = async (req, res) => {
         { $sort: { updatedAt: -1 } },
         { $match: { user: new mongoose.Types.ObjectId(req.user.id) } },
         {
-          $project: {
+        $project: {
             title: { $substr: ["$title", 0, 30] },
             body: { $substr: ["$body", 0, 100] },
-          },
+            createdAt: 1,
+            updatedAt: 1
+        }
         },
       ])
       .skip(perPage * page - perPage)
