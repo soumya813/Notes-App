@@ -198,7 +198,7 @@ exports.dashboardSearchSubmit = async(req,res) => {
                 {title: {$regex: new RegExp(searchNoSpecialChars, 'i') }},
                 {body: {$regex: new RegExp(searchNoSpecialChars, 'i') }}
             ]
-        }).where({yser:req.user.id});
+        }).where({user:req.user.id});
         res.render('dashboard/search', {
             searchResults,
             layout: '../views/layouts/dashboard'
