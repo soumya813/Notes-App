@@ -1,4 +1,5 @@
 const Note = require('../models/Notes');
+const User = require('../models/User');
 const mongoose = require('mongoose');
 
 /**
@@ -191,3 +192,45 @@ exports.dashboardSearchSubmit = async(req,res) => {
         console.log(error);
     }
 }
+
+/**
+ * GET /
+ * User Profile
+ */
+exports.dashboardProfile = async (req, res) => {
+    const locals = {
+        title: "User Profile",
+        description: "Free NodeJS Notes App.",
+    };
+
+    try {
+        const user = await User.findById(req.user.id);
+
+        res.render('dashboard/profile', {
+            userName: req.user.firstName,
+            user,
+            locals,
+            layout: "../views/layouts/dashboard",
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+/**
+ * POST /
+ * Update User Profile
+ */
+exports.dashboardUpdateProfile = async (req, res) => {
+    try {
+        await User.findByIdAndUpdate(req.user.id, {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            displayName: req.body.displayName,
+            updatedAt: Date.now()
+        });
+        res.redirect('/dashboard/profile');
+    } catch (error) {
+        console.log(error);
+    }
+};

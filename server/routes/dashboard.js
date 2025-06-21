@@ -14,6 +14,8 @@ router.get('/dashboard/add',isLoggedIn, dashboardController.dashboardAddNote);
 router.post('/dashboard/add',isLoggedIn, dashboardController.dashboardAddNote);
 router.get('/dashboard/search',isLoggedIn, dashboardController.dashboardSearch);
 router.post('/dashboard/search',isLoggedIn, dashboardController.dashboardSearchSubmit);
+router.get('/dashboard/profile', isLoggedIn, dashboardController.dashboardProfile);
+router.post('/dashboard/profile', isLoggedIn, dashboardController.dashboardUpdateProfile);
 
 
 module.exports = router;
