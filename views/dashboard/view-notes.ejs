@@ -1,4 +1,4 @@
-<div class=".container-fluid container-fluid-custom pb-5 mb-5">
+<div class=".container-fluid container-fluid-custom pb-5 mb-5" style="overflow-x: hidden;">
 
     <div class="row mb-4">
 
@@ -25,33 +25,33 @@
         </div>
 
     </div>
+    <div class="container mt-4">
+        <form action="/dashboard/item/<%= noteID %>?_method=PUT" method="POST">
+            <div class="form-group mb-4">
+                <input type="text" class="form-control w-100 fw-bold border-0 fs-4" id="title" name="title" value="<%= note.title %>" placeholder="Title">
+            </div>
+            <div class="form-group mb-4">
+                <textarea class="form-control p-2 fs-4" id="body" name="body" placeholder="Take a note..." rows="12" required minlength="20" pattern="[A-Za-z\s]+"><%= note.body %></textarea>
+            </div>
+            <div class="form-group mb-4">
+                <h4 class="fw-bold">Summary</h4>
+                <textarea class="form-control p-2 fs-4" id="summary" name="summary" placeholder="Summary" rows="12"><%= note.summary %></textarea>
+            </div>
 
-    <form action="/dashboard/item/<%= noteID %>?_method=PUT" method="POST" class="position-relative ms-3">
-        <div class="form-group mb-4 position-absolute">
-            <input type="text" class="form-control fw-bold border-0 fs-4" id="title" name="title" value="<%= note.title %>" placeholder="Title">
-        </div>
-        <div class="form-group mb-4">
-            <textarea class="form-control pt-5 fs-4" id="body" name="body" placeholder="Take a note..." cols="125" rows="12"><%= note.body %></textarea>
-        </div>
-        <div class="form-group mb-4">
-            <h4 class="fw-bold">Summary</h4>
-            <textarea class="form-control p-2 fs-4" id="summary" name="summary" placeholder="Summary" cols="125" rows="12"><%= note.summary %></textarea>
-        </div>
-
-        <div class="form-group">
-            <button type="button" class="btn btn-primary btn-lg" id="summaryButton" >
-                Summarize
-            </button>
-            <button type="submit" class="btn btn-primary btn-lg">Update</button>
-        </div>
-    </form>
-
+            <div class="form-group">
+                <button type="button" class="btn btn-primary btn-lg" id="summaryButton" >
+                    Summarize
+                </button>
+                <button type="submit" class="btn btn-primary btn-lg">Update</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="modal" tabindex="-1" role="dialog" id="deleteModal">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header flex justify-content-between align-items-center">
           <h5 class="modal-title">Modal title</h5>
           <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -77,7 +77,13 @@
     const summaryField = document.getElementById('summary');
 
     if (!bodyText.trim()) {
-      alert("Please enter note body to summarize.");
+      summaryField.value = "Please enter note body to summarize.";
+      summaryField.style.color = 'red';
+      return;
+    }
+    if (bodyText.trim().length < 50) {
+      summaryField.value = "Note body is too short to summarize please enter atleast 50 characters.";
+      summaryField.style.color = 'red';
       return;
     }
 
