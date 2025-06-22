@@ -88,3 +88,96 @@ h1,h2,h3,h4,h5,h6{
     right: -50px;
     bottom: -30px;
 }
+
+/* Dark Theme Variables */
+[data-theme="dark"] {
+  --background-color: #1e1e2f;
+  --bs-primary-rgb: #f3f3f3;
+
+  --bs-btn-bg: #123C69;
+  --bs-btn-border-color: #123C69;
+  --bs-btn-hover-bg: #325993;
+  --bs-btn-hover-border-color: #325993;
+
+  --bs-btn-color: #fff;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-color: #fff;
+  --bs-btn-disabled-color: #ccc;
+
+  --bs-pagination-color: #f3f3f3;
+  --bs-pagination-active-bg: #f3f3f3;
+  --bs-pagination-active-border-color: #f3f3f3;
+}
+
+[data-theme="dark"] body {
+  background-color: var(--background-color) !important;
+  color: var(--bs-primary-rgb) !important;
+}
+
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 {
+  color: var(--bs-primary-rgb) !important;
+}
+
+[data-theme="dark"] .btn,
+[data-theme="dark"] .btn-primary,
+[data-theme="dark"] .btn-outline-primary {
+  color: var(--bs-btn-color) !important;
+  background-color: var(--bs-btn-bg) !important;
+  border-color: var(--bs-btn-border-color) !important;
+}
+
+[data-theme="dark"] .btn:hover,
+[data-theme="dark"] .btn-primary:hover,
+[data-theme="dark"] .btn-outline-primary:hover {
+  background-color: var(--bs-btn-hover-bg) !important;
+  color: white !important;
+  border-color: var(--bs-btn-hover-border-color) !important;
+}
+
+[data-theme="dark"] .pagination {
+  color: var(--bs-pagination-color) !important;
+}
+
+[data-theme="dark"] .pagination .active .page-link {
+  background-color: var(--bs-pagination-active-bg) !important;
+  border-color: var(--bs-pagination-active-border-color) !important;
+}
+
+[data-theme="dark"] .home-title::before,
+[data-theme="dark"] .home-title::after {
+  filter: brightness(0) invert(1);
+}
+
+
+  [data-theme="dark"] {
+    --background-color: #1e1e2f;
+    --bs-primary-rgb: #f3f3f3;
+  }
+
+  [data-theme="dark"] body {
+    background-color: var(--background-color) !important;
+    color: var(--bs-primary-rgb) !important;
+  }
+
+  [data-theme="dark"] .btn-primary,
+  [data-theme="dark"] .btn-outline-primary {
+    background-color: #fff !important;
+    border-color: #325993 !important;
+    color: #325993 !important;
+
+  }
+
+
+  [data-theme="dark"] .nav-link {
+    color: #f1f1f1 !important;
+  }
+
+  [data-theme="dark"] .btn-outline-light {
+    border-color: #ccc !important;
+    color: #ccc !important;
+  }
