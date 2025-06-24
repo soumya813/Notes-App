@@ -1,19 +1,81 @@
-<div class="container-fluid">
-    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 ">
-      <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-primary text-decoration-none fw-bold fs-2">
-        NotesApp
-      </a>
-
-      <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
-        <li><a href="#" class="nav-link px-2 link-dark">Features</a></li>
-        <li><a href="#" class="nav-link px-2 link-dark">FAQs</a></li>
-        <li><a href="/about" class="nav-link px-2 link-dark">About</a></li>
+<nav
+  class="navbar navbar-expand-lg sticky-top shadow-sm unique-navbar position-relative"
+  style="backdrop-filter: blur(12px); background: rgba(237, 199, 183, 0.85)"
+>
+  <div class="navbar-animated-border"></div>
+  <div class="container-fluid position-relative">
+    <a
+      class="navbar-brand fw-bold fs-2 text-primary d-flex align-items-center gap-2"
+      href="/"
+    >
+      <span class="pen-animate">
+        <svg
+          width="28"
+          height="28"
+          viewBox="0 0 28 28"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4 24L24 4M20 4H24V8"
+            stroke="#AC3B61"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <animate
+              attributeName="d"
+              values="M4 24L24 4;M4 24L24 4;M4 24L24 4"
+              dur="2s"
+              repeatCount="indefinite"
+            />
+          </path>
+        </svg>
+      </span>
+      NotesApp
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link px-3 link-secondary unique-underline" href="/"
+            >Home</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3 link-dark unique-underline" href="#"
+            >Features</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3 link-dark unique-underline" href="#">FAQs</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3 link-dark unique-underline" href="/about"
+            >About</a
+          >
+        </li>
       </ul>
-
-      <div class="col-md-3 text-end">
-        <a href="/auth/google" type="button" class="btn btn-outline-primary me-2">Login</a>
-        <a href="/auth/google" type="button" class="btn btn-primary">Sign-up</a>
+      <div class="d-flex gap-2">
+        <a
+          href="/auth/google"
+          class="btn btn-outline-primary unique-btn-animate"
+          >Login</a
+        >
+        <a href="/auth/google" class="btn btn-primary unique-btn-animate"
+          >Sign-up</a
+        >
       </div>
-    </header>
+    </div>
   </div>
+</nav>

@@ -1,15 +1,70 @@
-<div class="container-fluid">
-    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 ">
-      <a href="/dashboard" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-primary text-decoration-none fw-bold fs-2">
-        NotesApp
-      </a>
-
-      <form class="nav col-12 col-md-auto flex-fill mb-2 justify-content-center mb-md-0" role="search" method="POST" action="/dashboard/search">
-        <input type="search" name="searchTerm" class="form-control border-primary" placeholder="Search..." aria-label="Search">
+<nav
+  class="navbar navbar-expand-lg sticky-top shadow-sm unique-navbar position-relative"
+  style="backdrop-filter: blur(12px); background: rgba(237, 199, 183, 0.85)"
+>
+  <div class="navbar-animated-border"></div>
+  <div class="container-fluid position-relative">
+    <a
+      class="navbar-brand fw-bold fs-2 text-primary d-flex align-items-center gap-2"
+      href="/dashboard"
+    >
+      <span class="pen-animate">
+        <svg
+          width="28"
+          height="28"
+          viewBox="0 0 28 28"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4 24L24 4M20 4H24V8"
+            stroke="#AC3B61"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <animate
+              attributeName="d"
+              values="M4 24L24 4;M4 24L24 4;M4 24L24 4"
+              dur="2s"
+              repeatCount="indefinite"
+            />
+          </path>
+        </svg>
+      </span>
+      NotesApp
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarDashboard"
+      aria-controls="navbarDashboard"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarDashboard">
+      <form
+        class="d-flex flex-grow-1 mx-3"
+        role="search"
+        method="POST"
+        action="/dashboard/search"
+      >
+        <input
+          type="search"
+          name="searchTerm"
+          class="form-control border-primary"
+          placeholder="Search..."
+          aria-label="Search"
+        />
       </form>
-
-      <div class="col-md-3 text-end">
-        <a href="/logout" type="button" class="btn btn-outline-primary">Logout</a>
+      <div class="d-flex gap-2 ms-auto">
+        <a href="/logout" class="btn btn-outline-primary unique-btn-animate"
+          >Logout</a
+        >
       </div>
-    </header>
+    </div>
   </div>
+</nav>

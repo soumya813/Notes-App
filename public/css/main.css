@@ -1,90 +1,238 @@
-:root{
-    --background-color : #EDC7B7;
-    --bs-primary-rgb: #AC3B61;
+:root {
+  --background-color: #edc7b7;
+  --bs-primary-rgb: #ac3b61;
 }
 
-body{
-    font-family: 'Poppins', 'sans-serif';
-    background-color: var(--background-color);
-    color: var(--bs-primary-rgb);
-    font-weight: 300;
-    font-size: 1.2rem;
+body {
+  font-family: "Poppins", "sans-serif";
+  background-color: var(--background-color);
+  color: var(--bs-primary-rgb);
+  font-weight: 300;
+  font-size: 1.2rem;
 }
 
-h1,h2,h3,h4,h5,h6{
-    font-family: 'Unbounded', cursive;
-    font-weight: 800;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Unbounded", cursive;
+  font-weight: 800;
 }
 
-.container-fluid-custom{
-    max-width: 1600px;
+.container-fluid-custom {
+  max-width: 1600px;
 }
 
-.btn{
-    padding-left: 1.6rem;
-    padding-right: 1.6rem;
-    border-radius: 2rem;
+.btn {
+  padding-left: 1.6rem;
+  padding-right: 1.6rem;
+  border-radius: 2rem;
 }
 
 .btn-primary {
-    --bs-btn-color: #fff;
-    --bs-btn-bg: #123C69;
-    --bs-btn-border-color: #123C69;
-    --bs-btn-hover-color: #fff;
-    --bs-btn-hover-bg: #325993;
-    --bs-btn-hover-border-color: #325993;
-    --bs-btn-focus-shadow-rgb: 49, 132, 253;
-    --bs-btn-active-color: #fff;
-    --bs-btn-active-bg: #123C69;
-    --bs-btn-active-border-color: #123C69;
-    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-    --bs-btn-disabled-color: #fff;
-    --bs-btn-disabled-bg: #123C69;
-    --bs-btn-disabled-border-color: #123C69;
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #123c69;
+  --bs-btn-border-color: #123c69;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #325993;
+  --bs-btn-hover-border-color: #325993;
+  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #123c69;
+  --bs-btn-active-border-color: #123c69;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #123c69;
+  --bs-btn-disabled-border-color: #123c69;
 }
 
 .btn-outline-primary {
-    --bs-btn-color: #123C69;
-    --bs-btn-border-color: #123C69;
-    --bs-btn-hover-color: #fff;
-    --bs-btn-hover-bg: #325993;
-    --bs-btn-hover-border-color: #325993;
-    --bs-btn-focus-shadow-rgb: 13, 110, 253;
-    --bs-btn-active-color: #fff;
-    --bs-btn-active-bg: #123C69;
-    --bs-btn-active-border-color: #123C69;
-    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-    --bs-btn-disabled-color: #123C69;
-    --bs-btn-disabled-bg: transparent;
-    --bs-btn-disabled-border-color: #123C69;
-    --bs-gradient: none;
+  --bs-btn-color: #123c69;
+  --bs-btn-border-color: #123c69;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #325993;
+  --bs-btn-hover-border-color: #325993;
+  --bs-btn-focus-shadow-rgb: 13, 110, 253;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #123c69;
+  --bs-btn-active-border-color: #123c69;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #123c69;
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: #123c69;
+  --bs-gradient: none;
 }
 
-.pagination{
-    --bs-pagination-color: var(--bs-primary-rgb);
-    --bs-pagination-active-bg: var(--bs-primary-rgb);
-    --bs-pagination-active-border-color: var(--bs-primary-rgb);
+.pagination {
+  --bs-pagination-color: var(--bs-primary-rgb);
+  --bs-pagination-active-bg: var(--bs-primary-rgb);
+  --bs-pagination-active-border-color: var(--bs-primary-rgb);
 }
 
 /*Home*/
-@media(min-width:1200px){
-    .home{
-        background:
-        var(--background-color);
-        ;
-    }
+@media (min-width: 1200px) {
+  .home {
+    background: var(--background-color);
+  }
 }
 
-.home-title::before{
-    content: url('../img/stars.svg');
-    position: absolute;
-    left: -50px;
-    top: -30px;
+.home-title::before {
+  content: url("../img/stars.svg");
+  position: absolute;
+  left: -50px;
+  top: -30px;
 }
 
-.home-title::after{
-    content: url('../img/stars.svg');
-    position: absolute;
-    right: -50px;
-    bottom: -30px;
+.home-title::after {
+  content: url("../img/stars.svg");
+  position: absolute;
+  right: -50px;
+  bottom: -30px;
+}
+
+/* NavBar Custom Styles */
+.navbar {
+  box-shadow: 0 2px 8px rgba(172, 59, 97, 0.08);
+  border-bottom: 2px solid #ac3b6110;
+  z-index: 1030;
+}
+.navbar .navbar-brand {
+  font-family: "Unbounded", cursive;
+  color: #ac3b61 !important;
+  letter-spacing: 1px;
+}
+.navbar-nav .nav-link {
+  color: #123c69 !important;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.navbar-nav .nav-link.link-secondary {
+  color: #ac3b61 !important;
+}
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link:hover {
+  color: #ac3b61 !important;
+  background: #fff3;
+  border-radius: 0.5rem;
+}
+.navbar .btn-primary {
+  background-color: #123c69;
+  border-color: #123c69;
+}
+.navbar .btn-outline-primary {
+  color: #123c69;
+  border-color: #123c69;
+}
+
+/* Unique NavBar Styles */
+.unique-navbar {
+  background: rgba(237, 199, 183, 0.85) !important;
+  backdrop-filter: blur(12px);
+  border-bottom: none;
+  box-shadow: 0 4px 24px rgba(172, 59, 97, 0.1);
+  z-index: 1030;
+}
+.unique-navbar .navbar-brand {
+  font-family: "Unbounded", cursive;
+  color: #ac3b61 !important;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 2;
+}
+.star-animate svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Animated gradient border at top of nav bar */
+.navbar-animated-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  z-index: 100;
+  background: linear-gradient(270deg, #ac3b61, #123c69, #edc7b7, #ac3b61);
+  background-size: 600% 600%;
+  animation: gradientMove 6s ease-in-out infinite;
+  border-radius: 0 0 8px 8px;
+}
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Pen icon micro-animation */
+.pen-animate svg path {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: penDraw 1.2s ease-in-out forwards;
+}
+@keyframes penDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Refined animated underline for nav links */
+.unique-underline {
+  position: relative;
+  overflow: hidden;
+}
+.unique-underline::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 50%;
+  bottom: 0.2em;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #ac3b61 0%, #123c69 100%);
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.77, 0, 0.18, 1);
+}
+.unique-underline:hover::after,
+.unique-underline:focus::after {
+  left: 0;
+  width: 100%;
+}
+
+/* Gentle hover effect for nav bar buttons */
+.unique-btn-animate {
+  transition: transform 0.15s cubic-bezier(0.77, 0, 0.18, 1), box-shadow 0.15s;
+}
+.unique-btn-animate:hover,
+.unique-btn-animate:focus {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 4px 16px rgba(172, 59, 97, 0.1);
+}
+
+/* Remove previous wave styles if present */
+.navbar-wave {
+  display: none !important;
+}
+.star-animate {
+  display: none !important;
+}
+
+/* Adjust nav bar content stacking */
+.unique-navbar .container-fluid {
+  position: relative;
+  z-index: 2;
+}
+
+/* Responsive tweaks */
+@media (max-width: 991.98px) {
+  .navbar-wave {
+    display: none;
+  }
 }
