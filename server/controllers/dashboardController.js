@@ -191,3 +191,64 @@ exports.dashboardSearchSubmit = async(req,res) => {
         console.log(error);
     }
 }
+
+/**
+ * GET
+ * Export all notes
+ * EXPORT FEATURE: Handles bulk export of all notes for the current user
+ * - Fetches all notes belonging to the logged-in user
+ * - Sorts them by most recently updated (newest first)
+ * - Renders the export view with all notes displayed
+ * - Includes print/PDF functionality for easy sharing and backup
+ */
+exports.dashboardExport = async(req,res) => {
+    try {
+        // Fetch all notes for the current user, sorted by update date
+        const notes = await Note.find({ user: req.user.id })
+            .sort({ updatedAt: -1 })
+            .lean();
+
+        // Render the export view with all notes
+        res.render('dashboard/export', {
+            userName: req.user.firstName,
+            notes,
+            layout: '../views/layouts/dashboard'
+        });
+    } catch (error) {
+        console.log(error);
+        res.redirect('/dashboard');
+    }
+}
+
+/**
+ * GET
+ * Export individual note
+ * EXPORT FEATURE: Handles export of a single note by its ID
+ * - Validates that the note belongs to the current user (security)
+ * - Fetches the complete note data (not truncated like dashboard)
+ * - Renders a focused view for single note export
+ * - Includes print/PDF functionality for individual note sharing
+ */
+exports.dashboardExportNote = async(req,res) => {
+    try {
+        // Find the specific note and ensure it belongs to the current user
+        const note = await Note.findById({_id: req.params.id})
+            .where({user: req.user.id})
+            .lean();
+
+        if(note){
+            // Render the individual note export view
+            res.render('dashboard/export-note', {
+                userName: req.user.firstName,
+                note,
+                layout: '../views/layouts/dashboard'
+            });
+        } else{
+            // Redirect if note not found or doesn't belong to user
+            res.redirect('/dashboard');
+        }
+    } catch (error) {
+        console.log(error);
+        res.redirect('/dashboard');
+    }
+}
