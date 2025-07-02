@@ -1,12 +1,29 @@
 <div class="container-fluid">
-    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4">
-      <p class="col-md-4 mb-0 text-muted">© 2022 Company, Inc</p>
-  
-      <ul class="nav col-md-4 justify-content-end">
-        <li class="nav-item"><a href="/" class="nav-link px-2 text-muted">Home</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
-        <li class="nav-item"><a href="/about" class="nav-link px-2 text-muted">About</a></li>
-      </ul>
-    </footer>
-  </div>
+  <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4">
+    <p class="col-md-4 mb-0 text-muted">© 2022 Company, Inc</p>
+
+    <ul class="nav col-md-4 justify-content-end">
+      <li class="nav-item"><a href="/" class="nav-link px-2 text-muted">Home</a></li>
+      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
+      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+      <li class="nav-item"><a href="/about" class="nav-link px-2 text-muted">About</a></li>
+    </ul>
+
+    <script>
+      const toggleSwitch = document.getElementById('theme-toggle');
+      const body = document.body;
+
+      // Load theme preference
+      if (localStorage.getItem('theme') === 'dark') {
+        body.classList.add('dark-mode');
+        toggleSwitch.checked = true;
+      }
+
+      toggleSwitch.addEventListener('change', () => {
+        body.classList.toggle('dark-mode');
+        localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
+      });
+    </script>
+
+  </footer>
+</div>
