@@ -10,3 +10,5 @@ const connectDB = async() => {
     }
 }
 module.exports = connectDB;
+
+// Make sure to load environment variables for Cloudinary in your main app entry point (app.js)

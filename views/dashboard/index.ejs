@@ -14,10 +14,18 @@
 
             <div class="col-sm-3 mb-4">
                 <div class="card border-primary" style="min-height: 210px">
-                    <a href="/dashboard/item/<%= notes[i]._id %>" class="card-body text-decoration-none">
+                    <div class="card-body position-relative">
+                        <% if (notes[i].images && notes[i].images.length > 0) { %>
+                            <div class="d-flex flex-wrap mb-2">
+                                <% notes[i].images.forEach(function(url) { %>
+                                    <img src="<%= url %>" alt="Note Image" class="note-image me-2 mb-2" style="max-width:100px;max-height:100px;object-fit:cover;border-radius:8px;" />
+                                <% }); %>
+                            </div>
+                        <% } %>
                         <h5 class="card-title"><%= notes[i].title %></h5>
                         <p class="card-text"><%= notes[i].body %></p>
-                    </a>
+                        <a href="/dashboard/item/<%= notes[i]._id %>" class="stretched-link"></a>
+                    </div>
                 </div>
             </div>
 
