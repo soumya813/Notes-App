@@ -88,3 +88,14 @@ h1,h2,h3,h4,h5,h6{
     right: -50px;
     bottom: -30px;
 }
+
+/* Note image previews */
+#imagePreview img, .note-image {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    max-width: 120px;
+    max-height: 120px;
+    object-fit: cover;
+}

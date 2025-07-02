@@ -14,6 +14,9 @@ const NoteSchema = new schema({
         type:String,
         required:true,
     },
+    images: [{
+        type: String
+    }],
     createdAt:{
         type:Date,
         default: Date.now()

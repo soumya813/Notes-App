@@ -1,44 +1,61 @@
-<div class=".container-fluid container-fluid-custom pb-5 mb-5">
-
+<div class="container-fluid container-fluid-custom pb-5 mb-5">
     <div class="row mb-4">
-
         <div class="col">
-
             <nav aria-label="breadcrumb">
-
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>    
                     <li class="breadcrumb-item-active"><%= note.title %></li>
                 </ol>
-
             </nav>
-
-                <div class="col d-flex justify-content-between align-items-center">
-                    <h1 class="h3">View Note</h1>
-                    <button type="button" class="btn btn-danger me-2" data-bs-toggle="modal" id="deleteButton" data-bs-target="#deleteModal">
-                        Delete
-                    </button>
-
-                </div>
+            <div class="col d-flex justify-content-between align-items-center">
+                <h1 class="h3">View Note</h1>
+                <button type="button" class="btn btn-danger me-2" data-bs-toggle="modal" id="deleteButton" data-bs-target="#deleteModal">
+                    Delete
+                </button>
+            </div>
         </div>
-
     </div>
-
-    <form action="/dashboard/item/<%= noteID %>?_method=PUT" method="POST" class="position-relative">
-        <div class="form-group mb-4 position-absolute">
-            <input type="text" class="form-control fw-bold border-0 fs-4" id="title" name="title" value="<%= note.title %>" placeholder="Title">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card border-primary">
+                <div class="card-body">
+                    <form id="updateNoteForm" action="/dashboard/item/<%= noteID %>?_method=PUT" method="POST" class="position-relative">
+                        <div class="form-group mb-4">
+                            <input type="text" class="form-control fw-bold border-0 fs-4" id="title" name="title" value="<%= note.title %>" placeholder="Title">
+                        </div>
+                        <div class="form-group mb-4">
+                            <label>Existing Images</label>
+                            <div id="existingImages" class="mb-3 d-flex flex-wrap">
+                                <% if (note.images && note.images.length > 0) { %>
+                                    <% note.images.forEach(function(url, idx) { %>
+                                        <div class="position-relative me-2 mb-2">
+                                            <img src="<%= url %>" alt="Note Image" class="note-image" style="max-height:120px; max-width:160px; object-fit:cover; border-radius:8px;" />
+                                            <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 remove-image-btn" data-url="<%= url %>" style="border-radius:50%;padding:2px 6px;">&times;</button>
+                                        </div>
+                                    <% }); %>
+                                <% } %>
+                            </div>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="newImages">Add Images</label>
+                            <div id="dropArea" style="border:2px dashed #aaa; border-radius:8px; padding:16px; text-align:center; cursor:pointer; background:#f8f8f8;">
+                                Drag & drop images here or click to select
+                                <input type="file" id="newImages" accept="image/*" multiple class="form-control" style="display:none;">
+                            </div>
+                            <div id="imagePreview" class="mt-2 d-flex flex-wrap"></div>
+                        </div>
+                        <input type="hidden" name="imageUrls" id="imageUrls" value='<%= JSON.stringify(note.images || []) %>'>
+                        <div class="form-group mb-4">
+                            <textarea class="form-control pt-5 fs-4" id="body" name="body" placeholder="Take a note..." rowa="12"><%= note.body %></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-lg">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-
-        <div class="form-group mb-4">
-            <textarea class="form-control pt-5 fs-4" id="body" name="body" placeholder="Take a note..." rowa="12"><%= note.body %></textarea>
-        </div>
-
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary btn-lg">Update</button>
-        </div>
-    </form>
-
+    </div>
 </div>
 
 
@@ -69,3 +86,89 @@
       </div>
     </div>
   </div>
+
+<script>
+const dropArea = document.getElementById('dropArea');
+const newImagesInput = document.getElementById('newImages');
+const imagePreview = document.getElementById('imagePreview');
+const updateNoteForm = document.getElementById('updateNoteForm');
+const imageUrlsInput = document.getElementById('imageUrls');
+const submitBtn = updateNoteForm.querySelector('button[type="submit"]');
+let uploadedImageUrls = JSON.parse(imageUrlsInput.value || '[]');
+let uploading = false;
+
+// Remove existing image
+const existingImagesDiv = document.getElementById('existingImages');
+existingImagesDiv.addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-image-btn')) {
+        const url = e.target.getAttribute('data-url');
+        uploadedImageUrls = uploadedImageUrls.filter(img => img !== url);
+        imageUrlsInput.value = JSON.stringify(uploadedImageUrls);
+        e.target.parentElement.remove();
+    }
+});
+
+dropArea.addEventListener('click', () => newImagesInput.click());
+dropArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropArea.style.background = '#e0e0e0';
+});
+dropArea.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    dropArea.style.background = '#f8f8f8';
+});
+dropArea.addEventListener('drop', async (e) => {
+    e.preventDefault();
+    dropArea.style.background = '#f8f8f8';
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length === 0) return;
+    newImagesInput.files = e.dataTransfer.files;
+    const event = new Event('change');
+    newImagesInput.dispatchEvent(event);
+});
+
+newImagesInput.addEventListener('change', async function(e) {
+    imagePreview.innerHTML = '';
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+    const formData = new FormData();
+    files.forEach(file => formData.append('images', file));
+    // Preview
+    files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            const img = document.createElement('img');
+            img.src = ev.target.result;
+            img.className = 'me-2 mb-2';
+            img.style.maxWidth = '100px';
+            img.style.maxHeight = '100px';
+            imagePreview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    });
+    // Disable submit while uploading
+    uploading = true;
+    submitBtn.disabled = true;
+    // Upload
+    const res = await fetch('/dashboard/upload-image', {
+        method: 'POST',
+        body: formData
+    });
+    const data = await res.json();
+    if (data.imageUrls) {
+        uploadedImageUrls = uploadedImageUrls.concat(data.imageUrls);
+        imageUrlsInput.value = JSON.stringify(uploadedImageUrls);
+    }
+    uploading = false;
+    submitBtn.disabled = false;
+});
+
+updateNoteForm.addEventListener('submit', function(e) {
+    if (uploading) {
+        e.preventDefault();
+        alert('Please wait for images to finish uploading.');
+        return false;
+    }
+    imageUrlsInput.value = JSON.stringify(uploadedImageUrls);
+});
+</script>

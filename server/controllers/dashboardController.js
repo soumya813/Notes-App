@@ -23,8 +23,10 @@ exports.dashboard = async (req, res) => {
         { $match: { user: new mongoose.Types.ObjectId(req.user.id) } },
         {
           $project: {
+            _id: 1,
             title: { $substr: ["$title", 0, 30] },
             body: { $substr: ["$body", 0, 100] },
+            images: 1
           },
         },
       ])
@@ -77,9 +79,20 @@ exports.dashboardViewNote = async(req,res) => {
 
 exports.dashboardUpdateNote = async(req,res) => {
     try {
+        let images = [];
+        if (req.body.imageUrls) {
+            try {
+                images = JSON.parse(req.body.imageUrls);
+            } catch (e) { images = []; }
+        }
         await Note.findOneAndUpdate(
             {_id: req.params.id},
-            {title: req.body.title , body: req.body.body , updatedAt: Date.now() }
+            {
+                title: req.body.title,
+                body: req.body.body,
+                images: images,
+                updatedAt: Date.now()
+            }
         ).where({ user: req.user.id });
         res.redirect('/dashboard');
     } catch (error) {
@@ -124,6 +137,7 @@ exports.dashboardAddNote = async(req,res) => {
 
 exports.dashboardAddNote = async(req,res) => {
     try {
+        console.log('Received body:', req.body);
         if (!req.body.title || req.body.title.trim() === "") {
             return res.render('dashboard/add', {
                 layout: '../views/layouts/dashboard',
@@ -132,9 +146,21 @@ exports.dashboardAddNote = async(req,res) => {
             });
         }
         req.body.user = req.user.id;
-        await Note.create(req.body);
+        let images = [];
+        if (req.body.imageUrls) {
+            try {
+                images = JSON.parse(req.body.imageUrls);
+            } catch (e) { images = []; }
+        }
+        await Note.create({
+            user: req.body.user,
+            title: req.body.title,
+            body: req.body.body,
+            images: images
+        });
         res.redirect('/dashboard');
     } catch (error) {
+        console.log('Error saving note:', error);
         let errorMsg = 'An error occurred while adding the note.';
         if (error.name === 'ValidationError') {
             errorMsg = error.message;

@@ -25,21 +25,105 @@
       <div class="alert alert-danger"><%= error %></div>
     <% } %>
 
-    <form action="/dashboard/add" method="POST" class="position-relative">
+    <form id="noteForm" action="/dashboard/add" method="POST" class="position-relative">
         <div class="form-group mb-4 position-absolute">
             <input type="text" class="form-control fw-bold border-0 fs-4" id="title" name="title" placeholder="Title" required value="<%= typeof formData !== 'undefined' ? formData.title : '' %>">
         </div>
-
 
         <div class="form-group mb-4">
             <textarea required class="form-control pt-5 fs-4" id="body" name="body" placeholder="Take a note..." rows="12"><%= typeof formData !== 'undefined' ? formData.body : '' %></textarea>
         </div>
 
+        <div class="form-group mb-4">
+            <label for="images">Attach Images</label>
+            <div id="dropArea" style="border:2px dashed #aaa; border-radius:8px; padding:16px; text-align:center; cursor:pointer; background:#f8f8f8;">
+                Drag & drop images here or click to select
+                <input type="file" id="images" accept="image/*" multiple class="form-control" style="display:none;">
+            </div>
+            <div id="imagePreview" class="mt-2 d-flex flex-wrap"></div>
+        </div>
+        <input type="hidden" name="imageUrls" id="imageUrls">
         <div class="form-group">
             <button type="submit" class="btn btn-primary btn-lg">+ Add Note</button>
         </div>
     </form>
 
 </div>
+
+<script>
+const dropArea = document.getElementById('dropArea');
+const imagesInput = document.getElementById('images');
+const imagePreview = document.getElementById('imagePreview');
+const noteForm = document.getElementById('noteForm');
+const imageUrlsInput = document.getElementById('imageUrls');
+const submitBtn = noteForm.querySelector('button[type="submit"]');
+let uploadedImageUrls = [];
+let uploading = false;
+
+dropArea.addEventListener('click', () => imagesInput.click());
+dropArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropArea.style.background = '#e0e0e0';
+});
+dropArea.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    dropArea.style.background = '#f8f8f8';
+});
+dropArea.addEventListener('drop', async (e) => {
+    e.preventDefault();
+    dropArea.style.background = '#f8f8f8';
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length === 0) return;
+    imagesInput.files = e.dataTransfer.files;
+    const event = new Event('change');
+    imagesInput.dispatchEvent(event);
+});
+
+imagesInput.addEventListener('change', async function(e) {
+    imagePreview.innerHTML = '';
+    uploadedImageUrls = [];
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+    const formData = new FormData();
+    files.forEach(file => formData.append('images', file));
+    // Preview
+    files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            const img = document.createElement('img');
+            img.src = ev.target.result;
+            img.className = 'me-2 mb-2';
+            img.style.maxWidth = '100px';
+            img.style.maxHeight = '100px';
+            imagePreview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    });
+    // Disable submit while uploading
+    uploading = true;
+    submitBtn.disabled = true;
+    // Upload
+    const res = await fetch('/dashboard/upload-image', {
+        method: 'POST',
+        body: formData
+    });
+    const data = await res.json();
+    if (data.imageUrls) {
+        uploadedImageUrls = data.imageUrls;
+        imageUrlsInput.value = JSON.stringify(uploadedImageUrls);
+    }
+    uploading = false;
+    submitBtn.disabled = false;
+});
+
+noteForm.addEventListener('submit', function(e) {
+    if (uploading) {
+        e.preventDefault();
+        alert('Please wait for images to finish uploading.');
+        return false;
+    }
+    imageUrlsInput.value = JSON.stringify(uploadedImageUrls);
+});
+</script>
 
 
