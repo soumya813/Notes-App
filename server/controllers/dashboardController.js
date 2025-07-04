@@ -58,7 +58,6 @@ exports.dashboardViewNote = async(req,res) => {
     const note = await Note.findById({_id: req.params.id})
     .where({user: req.user.id}).lean();
 
-
     if(note){
         res.render('dashboard/view-notes',{
             noteID: req.params.id,
@@ -191,3 +190,32 @@ exports.dashboardSearchSubmit = async(req,res) => {
         console.log(error);
     }
 }
+
+/**
+ * POST
+ * for summarize notes using Hugging Face API
+ */
+
+const axios = require('axios');
+
+exports.dashboardSummarizeNote = async (req, res) => {
+  try {
+    const textToSummarize = req.body.text;
+
+    // Call Hugging Face API or your summarization logic
+    const response = await axios.post(
+      'https://api-inference.huggingface.co/models/facebook/bart-large-cnn',
+      { inputs: textToSummarize },
+      {
+        headers: { Authorization: `Bearer ${process.env.HUGGING_FACE_API}` }
+      }
+    );
+
+    const summary = response.data?.[0]?.summary_text || "No summary returned.";
+
+    res.json({ summary });
+  } catch (error) {
+    console.error('Summarize Error:', error.message);
+    res.status(500).json({ summary: "Failed to generate summary." });
+  }
+};
