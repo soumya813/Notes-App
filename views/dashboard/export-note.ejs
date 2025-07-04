@@ -57,7 +57,7 @@
 </div>
 
 <!-- EXPORT FEATURE: Print-friendly CSS styles for individual note -->
-<style>
+<!-- <style>
     @media print {
         /* Hide navigation buttons and headers when printing */
         .btn, .card-header {
@@ -78,4 +78,35 @@
             line-height: 1.6;
         }
     }
-</style> 
+</style>  -->
+
+<style>
+    @media print {
+      /* Hide everything by default */
+      body * {
+        visibility: hidden;
+      }
+    
+      /* Show only the note title and content */
+      .note-item, .note-item * {
+        visibility: visible;
+      }
+    
+      /* Optional: Position the visible content at the top */
+      .note-item {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+    
+      /* Optional: Better text appearance */
+      .note-body {
+        font-size: 14px;
+        line-height: 1.6;
+      }
+    }
+    </style>
+    
