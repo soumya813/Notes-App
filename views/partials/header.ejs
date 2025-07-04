@@ -4,12 +4,16 @@
         NotesApp
       </a>
 
-      <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
-        <li><a href="#" class="nav-link px-2 link-dark">Features</a></li>
-        <li><a href="#" class="nav-link px-2 link-dark">FAQs</a></li>
-        <li><a href="/about" class="nav-link px-2 link-dark">About</a></li>
-      </ul>
+      <!-- Animated Tab Bar Navigation -->
+      <nav class="tab-nav-container col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+        <div class="tab-nav-bar" id="tabNavBar">
+          <a href="/" class="tab-nav-link active" data-tab="home">Home</a>
+          <a href="#" class="tab-nav-link" data-tab="features">Features</a>
+          <a href="#" class="tab-nav-link" data-tab="faqs">FAQs</a>
+          <a href="/about" class="tab-nav-link" data-tab="about">About</a>
+          <div class="tab-nav-slider" id="tabNavSlider"></div>
+        </div>
+      </nav>
 
       <div class="col-md-3 text-end">
         <a href="/auth/google" type="button" class="btn btn-outline-primary me-2">Login</a>
@@ -17,3 +21,148 @@
       </div>
     </header>
   </div>
+
+<style>
+.tab-nav-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1 1 auto;
+}
+.tab-nav-bar {
+  position: relative;
+  display: flex;
+  background: #fff;
+  border-radius: 2rem;
+  box-shadow: 0 2px 12px rgba(172,59,97,0.08);
+  padding: 0.15rem 0.4rem;
+  min-width: 320px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+.tab-nav-link {
+  position: relative;
+  z-index: 2;
+  padding: 0.5rem 1.6rem;
+  font-weight: 600;
+  color: #AC3B61;
+  cursor: pointer;
+  border-radius: 2rem;
+  transition: color 0.2s;
+  user-select: none;
+  text-decoration: none;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+}
+.tab-nav-link.active {
+  color: #fff;
+}
+.tab-nav-slider {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 90px;
+  height: 38px;
+  background: linear-gradient(90deg, #AC3B61, #123C69);
+  border-radius: 2rem;
+  box-shadow: 0 2px 12px rgba(172,59,97,0.10), 0 0 16px 4px rgba(172,59,97,0.12);
+  z-index: 1;
+  border: 2px solid #fff;
+  transition: left 0.65s cubic-bezier(.68,-0.6,.32,1.6), width 0.38s cubic-bezier(.68,-0.6,.32,1.6), background-position 0.7s cubic-bezier(.68,-0.6,.32,1.6);
+  background-size: 200% 100%;
+  background-position: 0% 50%;
+  filter: drop-shadow(0 0 8px #AC3B6133);
+}
+.tab-nav-link:active ~ .tab-nav-slider,
+.tab-nav-link:focus ~ .tab-nav-slider {
+  background-position: 100% 50%;
+}
+.tab-nav-bar.animating .tab-nav-slider {
+  animation: sliderGradientMove 0.7s cubic-bezier(.68,-0.6,.32,1.6);
+}
+@keyframes sliderGradientMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+@media (max-width: 600px) {
+  .tab-nav-bar { min-width: 200px; }
+  .tab-nav-link { padding: 0.5rem 0.7rem; font-size: 1rem; }
+  .tab-nav-slider { height: 32px; }
+}
+</style>
+<script>
+// Animated Tab Bar Navigation Logic
+const tabNavBar = document.getElementById('tabNavBar');
+const tabNavLinks = tabNavBar.querySelectorAll('.tab-nav-link');
+const tabNavSlider = document.getElementById('tabNavSlider');
+
+function updateTabNavSlider(target) {
+  const rect = target.getBoundingClientRect();
+  const parentRect = tabNavBar.getBoundingClientRect();
+  tabNavSlider.style.width = rect.width + 'px';
+  tabNavSlider.style.left = (rect.left - parentRect.left) + 'px';
+}
+
+function setActiveTabByPath() {
+  let path = window.location.pathname;
+  let found = false;
+  tabNavLinks.forEach(link => {
+    link.classList.remove('active');
+    // Home: exact match or root
+    if ((link.getAttribute('href') === '/' && (path === '/' || path === '')) ||
+        (link.getAttribute('href') !== '/' && path.startsWith(link.getAttribute('href')))) {
+      link.classList.add('active');
+      updateTabNavSlider(link);
+      found = true;
+    }
+  });
+  // Fallback: if no match, set first tab as active
+  if (!found && tabNavLinks.length) {
+    tabNavLinks[0].classList.add('active');
+    updateTabNavSlider(tabNavLinks[0]);
+  }
+}
+
+tabNavLinks.forEach(link => {
+  link.addEventListener('click', function(e) {
+    // Only animate if not a full page reload
+    if (this.getAttribute('href') === '#' || this.getAttribute('href') === window.location.pathname) {
+      e.preventDefault();
+      tabNavBar.querySelector('.tab-nav-link.active').classList.remove('active');
+      this.classList.add('active');
+      updateTabNavSlider(this);
+    } else {
+      // Animate slider, then navigate
+      e.preventDefault();
+      tabNavBar.querySelector('.tab-nav-link.active').classList.remove('active');
+      this.classList.add('active');
+      tabNavBar.classList.add('animating');
+      updateTabNavSlider(this);
+      const href = this.getAttribute('href');
+      // Wait for slider transition to finish using requestAnimationFrame
+      const slider = tabNavSlider;
+      let start = null;
+      const duration = 650; // match the CSS transition duration
+      function waitForTransition(ts) {
+        if (!start) start = ts;
+        const elapsed = ts - start;
+        if (elapsed < duration) {
+          requestAnimationFrame(waitForTransition);
+        } else {
+          tabNavBar.classList.remove('animating');
+          window.location.href = href;
+        }
+      }
+      requestAnimationFrame(waitForTransition);
+    }
+  });
+});
+// Initialize slider position and active tab on load and on popstate
+window.addEventListener('DOMContentLoaded', setActiveTabByPath);
+window.addEventListener('resize', () => {
+  const activeTab = tabNavBar.querySelector('.tab-nav-link.active');
+  if (activeTab) updateTabNavSlider(activeTab);
+});
+window.addEventListener('popstate', setActiveTabByPath);
+</script>
