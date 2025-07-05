@@ -4,14 +4,14 @@
         NotesApp
       </a>
 
-      <!-- Animated Tab Bar Navigation -->
-      <nav class="tab-nav-container col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <div class="tab-nav-bar" id="tabNavBar">
-          <a href="/" class="tab-nav-link active" data-tab="home">Home</a>
-          <a href="#" class="tab-nav-link" data-tab="features">Features</a>
-          <a href="#" class="tab-nav-link" data-tab="faqs">FAQs</a>
-          <a href="/about" class="tab-nav-link" data-tab="about">About</a>
-          <div class="tab-nav-slider" id="tabNavSlider"></div>
+      <!-- Minimal Modern Tab Navigation -->
+      <nav class="minimal-nav-container col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+        <div class="minimal-nav-bar" id="minimalNavBar">
+          <a href="/" class="minimal-nav-link active" data-tab="home">Home</a>
+          <a href="#" class="minimal-nav-link" data-tab="features">Features</a>
+          <a href="#" class="minimal-nav-link" data-tab="faqs">FAQs</a>
+          <a href="/about" class="minimal-nav-link" data-tab="about">About</a>
+          <div class="minimal-nav-slider" id="minimalNavSlider"></div>
         </div>
       </nav>
 
@@ -23,146 +23,128 @@
   </div>
 
 <style>
-.tab-nav-container {
+.minimal-nav-container {
   display: flex;
   justify-content: center;
   align-items: center;
   flex: 1 1 auto;
 }
-.tab-nav-bar {
+.minimal-nav-bar {
   position: relative;
   display: flex;
-  background: #fff;
+  background: #ffffff; /* a bit darker than #EDC7B7 */
+  backdrop-filter: blur(12px);
   border-radius: 2rem;
-  box-shadow: 0 2px 12px rgba(172,59,97,0.08);
-  padding: 0.15rem 0.4rem;
-  min-width: 320px;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 4px 32px 0 rgba(172,59,97,0.07), 0 1.5px 6px rgba(0,0,0,0.04);
+  padding: 0.25rem 0.75rem;
+  min-width: 340px;
   max-width: 100%;
   margin: 0 auto;
+  font-family: 'Poppins', 'sans-serif';
 }
-.tab-nav-link {
+.minimal-nav-link {
   position: relative;
   z-index: 2;
-  padding: 0.5rem 1.6rem;
-  font-weight: 600;
-  color: #AC3B61;
+  padding: 0.7rem 2.2rem;
+  font-weight: 500;
+  color: #6d5c5c;
   cursor: pointer;
-  border-radius: 2rem;
-  transition: color 0.2s;
+  border-radius: 1.5rem;
+  transition: color 0.22s cubic-bezier(.4,2,.6,1), background 0.22s cubic-bezier(.4,2,.6,1);
   user-select: none;
   text-decoration: none;
-  font-size: 1.1rem;
+  font-size: 1.08rem;
   display: flex;
   align-items: center;
+  letter-spacing: 0.04em;
+  background: none;
 }
-.tab-nav-link.active {
+.minimal-nav-link:hover {
+  color: #AC3B61;
+  background: rgba(172,59,97,0.07);
+}
+.minimal-nav-link.active {
   color: #fff;
+  font-weight: 600;
 }
-.tab-nav-slider {
+.minimal-nav-slider {
   position: absolute;
-  top: 3px;
-  left: 3px;
+  top: 6px;
+  left: 6px;
   width: 90px;
-  height: 38px;
-  background: linear-gradient(90deg, #AC3B61, #123C69);
-  border-radius: 2rem;
-  box-shadow: 0 2px 12px rgba(172,59,97,0.10), 0 0 16px 4px rgba(172,59,97,0.12);
+  height: 44px;
+  background: #AC3B61; /* even darker, no gradient */
+  border-radius: 1.5rem;
+  box-shadow: 0 2px 8px rgba(172, 59, 97, 0.10);
   z-index: 1;
-  border: 2px solid #fff;
-  transition: left 0.65s cubic-bezier(.68,-0.6,.32,1.6), width 0.38s cubic-bezier(.68,-0.6,.32,1.6), background-position 0.7s cubic-bezier(.68,-0.6,.32,1.6);
-  background-size: 200% 100%;
-  background-position: 0% 50%;
-  filter: drop-shadow(0 0 8px #AC3B6133);
-}
-.tab-nav-link:active ~ .tab-nav-slider,
-.tab-nav-link:focus ~ .tab-nav-slider {
-  background-position: 100% 50%;
-}
-.tab-nav-bar.animating .tab-nav-slider {
-  animation: sliderGradientMove 0.7s cubic-bezier(.68,-0.6,.32,1.6);
-}
-@keyframes sliderGradientMove {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
+  filter: none;
+  border: 1.5px solid #fff;
+  transition: left 0.25s ease, width 0.18s ease, background 0.25s ease;
 }
 @media (max-width: 600px) {
-  .tab-nav-bar { min-width: 200px; }
-  .tab-nav-link { padding: 0.5rem 0.7rem; font-size: 1rem; }
-  .tab-nav-slider { height: 32px; }
+  .minimal-nav-bar { min-width: 200px; padding: 0.15rem 0.3rem; }
+  .minimal-nav-link { padding: 0.7rem 1.1rem; font-size: 1rem; }
+  .minimal-nav-slider { height: 38px; }
 }
 </style>
 <script>
-// Animated Tab Bar Navigation Logic
-const tabNavBar = document.getElementById('tabNavBar');
-const tabNavLinks = tabNavBar.querySelectorAll('.tab-nav-link');
-const tabNavSlider = document.getElementById('tabNavSlider');
+// Minimal Modern Tab Navigation Logic
+const minimalNavBar = document.getElementById('minimalNavBar');
+const minimalNavLinks = minimalNavBar.querySelectorAll('.minimal-nav-link');
+const minimalNavSlider = document.getElementById('minimalNavSlider');
 
-function updateTabNavSlider(target) {
+function updateMinimalNavSlider(target) {
   const rect = target.getBoundingClientRect();
-  const parentRect = tabNavBar.getBoundingClientRect();
-  tabNavSlider.style.width = rect.width + 'px';
-  tabNavSlider.style.left = (rect.left - parentRect.left) + 'px';
+  const parentRect = minimalNavBar.getBoundingClientRect();
+  minimalNavSlider.style.width = rect.width + 'px';
+  minimalNavSlider.style.left = (rect.left - parentRect.left) + 'px';
 }
 
-function setActiveTabByPath() {
+function setActiveMinimalTabByPath() {
   let path = window.location.pathname;
   let found = false;
-  tabNavLinks.forEach(link => {
+  minimalNavLinks.forEach(link => {
     link.classList.remove('active');
-    // Home: exact match or root
     if ((link.getAttribute('href') === '/' && (path === '/' || path === '')) ||
         (link.getAttribute('href') !== '/' && path.startsWith(link.getAttribute('href')))) {
       link.classList.add('active');
-      updateTabNavSlider(link);
+      updateMinimalNavSlider(link);
       found = true;
     }
   });
-  // Fallback: if no match, set first tab as active
-  if (!found && tabNavLinks.length) {
-    tabNavLinks[0].classList.add('active');
-    updateTabNavSlider(tabNavLinks[0]);
+  if (!found && minimalNavLinks.length) {
+    minimalNavLinks[0].classList.add('active');
+    updateMinimalNavSlider(minimalNavLinks[0]);
   }
 }
 
-tabNavLinks.forEach(link => {
+minimalNavLinks.forEach(link => {
   link.addEventListener('click', function(e) {
-    // Only animate if not a full page reload
     if (this.getAttribute('href') === '#' || this.getAttribute('href') === window.location.pathname) {
       e.preventDefault();
-      tabNavBar.querySelector('.tab-nav-link.active').classList.remove('active');
+      minimalNavBar.querySelector('.minimal-nav-link.active').classList.remove('active');
       this.classList.add('active');
-      updateTabNavSlider(this);
-    } else {
-      // Animate slider, then navigate
+      updateMinimalNavSlider(this);
+    } else if (this.getAttribute('href') === '/' && window.location.pathname === '/about') {
+      // Smooth transition from About to Home
       e.preventDefault();
-      tabNavBar.querySelector('.tab-nav-link.active').classList.remove('active');
+      minimalNavBar.querySelector('.minimal-nav-link.active').classList.remove('active');
       this.classList.add('active');
-      tabNavBar.classList.add('animating');
-      updateTabNavSlider(this);
-      const href = this.getAttribute('href');
-      // Wait for slider transition to finish using requestAnimationFrame
-      const slider = tabNavSlider;
-      let start = null;
-      const duration = 650; // match the CSS transition duration
-      function waitForTransition(ts) {
-        if (!start) start = ts;
-        const elapsed = ts - start;
-        if (elapsed < duration) {
-          requestAnimationFrame(waitForTransition);
-        } else {
-          tabNavBar.classList.remove('animating');
-          window.location.href = href;
-        }
-      }
-      requestAnimationFrame(waitForTransition);
+      updateMinimalNavSlider(this);
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 400);
+    } else {
+      // Navigate immediately without animation for other transitions
     }
   });
 });
-// Initialize slider position and active tab on load and on popstate
-window.addEventListener('DOMContentLoaded', setActiveTabByPath);
+
+window.addEventListener('DOMContentLoaded', setActiveMinimalTabByPath);
 window.addEventListener('resize', () => {
-  const activeTab = tabNavBar.querySelector('.tab-nav-link.active');
-  if (activeTab) updateTabNavSlider(activeTab);
+  const activeTab = minimalNavBar.querySelector('.minimal-nav-link.active');
+  if (activeTab) updateMinimalNavSlider(activeTab);
 });
-window.addEventListener('popstate', setActiveTabByPath);
+window.addEventListener('popstate', setActiveMinimalTabByPath);
 </script>
