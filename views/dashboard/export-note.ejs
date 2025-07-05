@@ -24,9 +24,7 @@
                         <!-- Note header with title and last updated date -->
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <h2 class="mb-1"><%= note.title %></h2>
-                            <small class="text-muted">
-                                <%= new Date(note.updatedAt).toLocaleDateString() %>
-                            </small>
+                           
                         </div>
                         <!-- Note content - displays complete body (not truncated) -->
                         <div class="note-content mb-3">
@@ -34,21 +32,8 @@
                                 <p class="lead"><%= note.body %></p>
                             </div>
                         </div>
-                        <!-- Note metadata - creation and update dates in organized layout -->
-                        <div class="note-meta">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <small class="text-muted">
-                                        <strong>Created:</strong> <%= new Date(note.createdAt).toLocaleDateString() %>
-                                    </small>
-                                </div>
-                                <div class="col-md-6">
-                                    <small class="text-muted">
-                                        <strong>Last Updated:</strong> <%= new Date(note.updatedAt).toLocaleDateString() %>
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
+                       
+                        
                     </div>
                 </div>
             </div>

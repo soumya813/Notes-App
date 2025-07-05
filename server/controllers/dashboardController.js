@@ -245,9 +245,6 @@ exports.dashboardExportNote = async(req,res) => {
     }
 }
 
-//  * POST
-//  * for summarize notes using Hugging Face API
-
 
 const axios = require('axios');
 
@@ -270,6 +267,4 @@ exports.dashboardSummarizeNote = async (req, res) => {
   } catch (error) {
     console.error('Summarize Error:', error.message);
     res.status(500).json({ summary: "Failed to generate summary." });
-  }
-};
-
+  }}
