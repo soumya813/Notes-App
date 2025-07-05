@@ -56,32 +56,18 @@
     </div>
 </div>
 
-<!-- EXPORT FEATURE: Print-friendly CSS styles for individual note -->
-<!-- <style>
-    @media print {
-        /* Hide navigation buttons and headers when printing */
-        .btn, .card-header {
-            display: none !important;
-        }
-        /* Remove padding for better print layout */
-        .container-fluid-custom {
-            padding: 0 !important;
-        }
-        /* Prevent note from breaking across pages */
-        .note-item {
-            break-inside: avoid;
-            page-break-inside: avoid;
-        }
-        /* Optimize text size and spacing for print */
-        .note-body {
-            font-size: 14px;
-            line-height: 1.6;
-        }
-    }
-</style>  -->
-
 <style>
     @media print {
+
+        @page{
+            margin:0;
+            /* CHANGE: No margin for print page */
+        }
+        html body{
+            margin:0 !important;
+            padding: 0 !important;
+            /* CHANGE: Remove default margin and padding from html and body for print */
+        }
       /* Hide everything by default */
       body * {
         visibility: hidden;
@@ -92,14 +78,18 @@
         visibility: visible;
       }
     
-      /* Optional: Position the visible content at the top */
+      /* CHANGE: Add small top, left, and right margins for professional appearance */
       .note-item {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
+        position: fixed; /* CHANGE: set to fixed for print so note starts at the very top */
+        top: 20px; /* CHANGE: add small top margin for print */
+        left: 20px; /* CHANGE: add small left margin for print */
+        right: 20px; /* CHANGE: add small right margin for print */
+        width: calc(100vw - 40px); /* CHANGE: subtract left and right margins from width */
+        margin: 0 !important; /* CHANGE: Ensure no margin */
+        padding: 16px !important; /* CHANGE: add inner padding for print */
         break-inside: avoid;
         page-break-inside: avoid;
+        box-sizing: border-box; /* CHANGE: ensure padding/margin are included in width */
       }
     
       /* Optional: Better text appearance */
@@ -108,5 +98,6 @@
         line-height: 1.6;
       }
     }
-    </style>
+</style>
+<!-- CHANGE: Adjusted print CSS to remove all space above note and ensure note starts at top of printed page. -->
     

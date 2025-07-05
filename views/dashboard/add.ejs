@@ -7,8 +7,9 @@
             <nav aria-label="breadcrumb">
 
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>    
-                    <li class="breadcrumb-item-active">Add Note</li>
+                    <!-- remove the underline from dashboard -->
+                    <li class="breadcrumb-item"><a href="/dashboard" style="text-decoration: none;">Dashboard</a></li>    
+                    <!-- <li class="breadcrumb-item-active">Add Note</li> -->
                 </ol>
 
             </nav>
@@ -27,7 +28,7 @@
 
     <form action="/dashboard/add" method="POST" class="position-relative">
         <div class="form-group mb-4 position-absolute">
-            <input type="text" class="form-control fw-bold border-0 fs-4" id="title" name="title" placeholder="Title" required value="<%= typeof formData !== 'undefined' ? formData.title : '' %>">
+            <input type="text" class="form-control fw-bold border-0 fs-4" id="title" name="title" placeholder=" Enter your Title" required value="<%= typeof formData !== 'undefined' ? formData.title : '' %>">
         </div>
 
 
@@ -36,7 +37,7 @@
         </div>
 
         <div class="form-group">
-            <button type="submit" class="btn btn-primary btn-lg">+ Add Note</button>
+            <button type="submit" class="btn btn-primary btn-lg">Save Note</button>
         </div>
     </form>
 
