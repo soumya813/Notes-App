@@ -4,11 +4,12 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
         <nav aria-label="breadcrumb">
-          <ol class="breadcrumb mb-1">
+          <ol class="breadcrumb mb-2">
             <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-            <li class="breadcrumb-item active"><%= note.title %></li>
+            <li class="breadcrumb-item active">View Note</li>
           </ol>
-          <h2 class="fw-bold text-dark">🗒️ View Note</h2>
+          <!-- Note Title as Main Heading -->
+          <h2 class="fw-bold text-dark"><%= note.title %></h2>
         </nav>
       </div>
       <button
