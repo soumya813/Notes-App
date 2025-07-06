@@ -58,7 +58,6 @@ exports.dashboardViewNote = async(req,res) => {
     const note = await Note.findById({_id: req.params.id})
     .where({user: req.user.id}).lean();
 
-
     if(note){
         res.render('dashboard/view-notes',{
             noteID: req.params.id,
@@ -193,13 +192,10 @@ exports.dashboardSearchSubmit = async(req,res) => {
 }
 
 /**
+ export-feature
  * GET
  * Export all notes
- * EXPORT FEATURE: Handles bulk export of all notes for the current user
- * - Fetches all notes belonging to the logged-in user
- * - Sorts them by most recently updated (newest first)
- * - Renders the export view with all notes displayed
- * - Includes print/PDF functionality for easy sharing and backup
+
  */
 exports.dashboardExport = async(req,res) => {
     try {
@@ -223,11 +219,7 @@ exports.dashboardExport = async(req,res) => {
 /**
  * GET
  * Export individual note
- * EXPORT FEATURE: Handles export of a single note by its ID
- * - Validates that the note belongs to the current user (security)
- * - Fetches the complete note data (not truncated like dashboard)
- * - Renders a focused view for single note export
- * - Includes print/PDF functionality for individual note sharing
+ 
  */
 exports.dashboardExportNote = async(req,res) => {
     try {
@@ -252,3 +244,32 @@ exports.dashboardExportNote = async(req,res) => {
         res.redirect('/dashboard');
     }
 }
+
+//  * POST
+//  * for summarize notes using Hugging Face API
+
+
+const axios = require('axios');
+
+exports.dashboardSummarizeNote = async (req, res) => {
+  try {
+    const textToSummarize = req.body.text;
+
+    // Call Hugging Face API or your summarization logic
+    const response = await axios.post(
+      'https://api-inference.huggingface.co/models/facebook/bart-large-cnn',
+      { inputs: textToSummarize },
+      {
+        headers: { Authorization: `Bearer ${process.env.HUGGING_FACE_API}` }
+      }
+    );
+
+    const summary = response.data?.[0]?.summary_text || "No summary returned.";
+
+    res.json({ summary });
+  } catch (error) {
+    console.error('Summarize Error:', error.message);
+    res.status(500).json({ summary: "Failed to generate summary." });
+  }
+};
+

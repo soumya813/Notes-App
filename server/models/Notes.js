@@ -14,6 +14,10 @@ const NoteSchema = new schema({
         type:String,
         required:true,
     },
+    summary: {
+        type: String,
+        default: '',
+    },
     createdAt:{
         type:Date,
         default: Date.now()
