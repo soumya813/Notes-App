@@ -26,3 +26,16 @@ exports.about = async(req,res) => {
     }
     res.render('about',locals);
 }
+
+/**
+ * GET /
+ *  FAQs
+ */
+
+exports.faq = async(req,res) => {
+    const locals = {
+        title: "FAQs NotesApp",
+        description: "Free Notes App",
+    }
+    res.render('faq',locals);
+}
