@@ -1,3 +1,4 @@
+
 <div class=".container-fluid container-fluid-custom pb-5 mb-5" style="overflow-x: hidden;">
 
     <div class="row mb-4">
@@ -24,33 +25,39 @@
                     </button>
                     </div>
 
-                </div>
-        </div>
+    <!-- Form -->
+    <form action="/dashboard/item/<%= noteID %>?_method=PUT" method="POST">
+      <div class="form-floating mb-4">
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          placeholder="Note Title"
+          value="<%= note.title %>"
+          required
+        />
+        <label for="title">Title</label>
+      </div>
 
-    </div>
-    <div class="container mt-4">
-        <form action="/dashboard/item/<%= noteID %>?_method=PUT" method="POST">
-            <div class="form-group mb-4">
-                <input type="text" class="form-control w-100 fw-bold border-0 fs-4" id="title" name="title" value="<%= note.title %>" placeholder="Title">
-            </div>
-            <div class="form-group mb-4">
-                <textarea class="form-control p-2 fs-4" id="body" name="body" placeholder="Take a note..." rows="12" required minlength="20" pattern="[A-Za-z\s]+"><%= note.body %></textarea>
-            </div>
-            <div class="form-group mb-4">
-                <h4 class="fw-bold">Summary</h4>
-                <textarea class="form-control p-2 fs-4" id="summary" name="summary" placeholder="Summary" rows="12"><%= note.summary %></textarea>
-            </div>
+      <div class="form-floating mb-4">
+        <textarea
+          class="form-control"
+          placeholder="Write your note here..."
+          id="body"
+          name="body"
+          style="height: 250px"
+          required
+        ><%= note.body %></textarea>
+        <label for="body">Note</label>
+      </div>
 
-            <div class="form-group">
-                <button type="button" class="btn btn-primary btn-lg" id="summaryButton" >
-                    Summarize
-                </button>
-                <button type="submit" class="btn btn-primary btn-lg">Update</button>
-            </div>
-        </form>
-    </div>
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary btn-lg">Update</button>
+      </div>
+    </form>
+  </div>
 </div>
-
 
 <div class="modal" tabindex="-1" role="dialog" id="deleteModal">
     <div class="modal-dialog" role="document">
@@ -73,47 +80,8 @@
                 <button type="submit" class="btn btn-primary">Delete Note</button>
             </form>
         </div>
+
       </div>
     </div>
   </div>
-<script>
-  document.getElementById('summaryButton').addEventListener('click', async () => {
-    const bodyText = document.getElementById('body').value;
-    const summaryField = document.getElementById('summary');
-
-    if (!bodyText.trim()) {
-      summaryField.value = "Please enter note body to summarize.";
-      summaryField.style.color = 'red';
-      return;
-    }
-    if (bodyText.trim().length < 50) {
-      summaryField.value = "Note body is too short to summarize please enter atleast 50 characters.";
-      summaryField.style.color = 'red';
-      return;
-    }
-
-    summaryField.value = "Generating summary...";
-    summaryField.style.color = 'black';
-
-    try {
-      const response = await fetch('/dashboard/summarize', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ text: bodyText })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        summaryField.value = data.summary || "No summary returned.";
-      } else {
-        summaryField.value = "Failed to generate summary.";
-        summaryField.style.color = 'red';
-      }
-    } catch (error) {
-      summaryField.value = "Error: " + error.message;
-      summaryField.style.color = 'red';
-    }
-  });
-</script>
+</div>
