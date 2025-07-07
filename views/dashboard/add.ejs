@@ -1,94 +1,46 @@
-<div class=".container-fluid container-fluid-custom pb-5 mb-5" style="overflow-x: hidden;">
-
-    <div class="row mb-4">
-
-        <div class="col">
-
-            <nav aria-label="breadcrumb">
-
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>    
-                    <li class="breadcrumb-item-active">Add Note</li>
-                </ol>
-
-            </nav>
-
-                <div class="col d-flex justify-content-between align-items-center">
-                    <h1 class="h3">Add Note</h1>
-
-                </div>
-        </div>
-
+<div class="container py-5">
+  <div class="card shadow-lg rounded-4 p-5 bg-white border-0">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="fw-bold text-dark">📝 Add a New Note</h2>
+      <a href="/dashboard" class="btn btn-outline-primary">← Back to Dashboard</a>
     </div>
 
     <% if (typeof error !== 'undefined') { %>
-      <div class="alert alert-danger"><%= error %></div>
+      <div class="alert alert-danger mb-4"><%= error %></div>
     <% } %>
-    <div class="container mt-4">
-      <form action="/dashboard/add" method="POST">
-          <div class="form-group mb-4">
-              <input type="text" class="form-control w-100 fw-bold border-0 fs-4" id="title" name="title" placeholder="Title" required value="<%= typeof formData !== 'undefined' ? formData.title : '' %>">
-          </div>
 
+    <form action="/dashboard/add" method="POST">
+      <!-- Title Field -->
+      <div class="form-floating mb-4">
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          placeholder="Note Title"
+          required
+          value="<%= typeof formData !== 'undefined' ? formData.title : '' %>"
+        />
+        <label for="title">Title</label>
+      </div>
 
-          <div class="form-group mb-4">
-              <textarea required class="form-control p-2 fs-4" id="body" name="body" placeholder="Take a note..."rows="12" required minlength="20" pattern="[A-Za-z\s]+"><%= typeof formData !== 'undefined' ? formData.body : '' %></textarea>
-          </div>
+      <!-- Body Field -->
+      <div class="form-floating mb-4">
+        <textarea
+          class="form-control"
+          placeholder="Write your note here..."
+          id="body"
+          name="body"
+          style="height: 250px"
+          required
+        ><%= typeof formData !== 'undefined' ? formData.body : '' %></textarea>
+        <label for="body">Note</label>
+      </div>
 
-          <div class="form-group mt-4 mb-5">
-              <h4 class="fw-bold">Summary</h4>
-              <textarea id="summary" name="summary"  class=" p-2 fs-4 form-control" placeholder="Summary" rows="8">
-              </textarea>
-          </div>
-
-          <div class="form-group">
-              <button type="button" class="btn btn-primary btn-lg" id="summaryButton" >
-                  Summarize
-              </button>
-              <button type="submit" class="btn btn-primary btn-lg">+ Add Note</button>
-          </div>
-      </form>
-    </div>
+      <!-- Submit Button -->
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary btn-lg">+ Add Note</button>
+      </div>
+    </form>
+  </div>
 </div>
-
-<script>
-  document.getElementById('summaryButton').addEventListener('click', async () => {
-    const bodyText = document.getElementById('body').value;
-    const summaryField = document.getElementById('summary');
-
-    if (!bodyText.trim()) {
-      summaryField.value = "Please enter note body to summarize.";
-      summaryField.style.color = 'red';
-      return;
-    }
-    if (bodyText.trim().length < 50) {
-      summaryField.value = "Note body is too short to summarize please enter atleast 50 characters.";
-      summaryField.style.color = 'red';
-      return;
-    }
-
-    summaryField.value = "Generating summary...";
-    summaryField.style.color = 'black';
-
-    try {
-      const response = await fetch('/dashboard/summarize', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ text: bodyText })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        summaryField.value = data.summary || "No summary returned.";
-      } else {
-        summaryField.value = "Failed to generate summary.";
-        summaryField.style.color = 'red';
-      }
-    } catch (error) {
-      summaryField.value = "Error: " + error.message;
-      summaryField.style.color = 'red';
-    }
-  });
-</script>

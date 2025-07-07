@@ -1,114 +1,78 @@
-<div class=".container-fluid container-fluid-custom pb-5 mb-5" style="overflow-x: hidden;">
-
-    <div class="row mb-4">
-
-        <div class="col">
-
-            <nav aria-label="breadcrumb">
-
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>    
-                    <li class="breadcrumb-item-active"><%= note.title %></li>
-                </ol>
-
-            </nav>
-
-                <div class="col d-flex justify-content-between align-items-center">
-                    <h1 class="h3">View Note</h1>
-                    <div >
-                    <button type="button" class="btn btn-danger me-2" data-bs-toggle="modal" id="deleteButton" data-bs-target="#deleteModal">
-                        Delete
-                    </button>
-                    </div>
-
-                </div>
-        </div>
-
+<div class="container py-5">
+  <div class="card shadow-lg rounded-4 p-5 bg-white border-0">
+    <!-- Header with Back & Delete -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-2">
+            <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+            <li class="breadcrumb-item active">View Note</li>
+          </ol>
+          <!-- Note Title as Main Heading -->
+          <h2 class="fw-bold text-dark"><%= note.title %></h2>
+        </nav>
+      </div>
+      <button
+        type="button"
+        class="btn btn-danger"
+        data-bs-toggle="modal"
+        data-bs-target="#deleteModal"
+      >
+        Delete
+      </button>
     </div>
-    <div class="container mt-4">
-        <form action="/dashboard/item/<%= noteID %>?_method=PUT" method="POST">
-            <div class="form-group mb-4">
-                <input type="text" class="form-control w-100 fw-bold border-0 fs-4" id="title" name="title" value="<%= note.title %>" placeholder="Title">
-            </div>
-            <div class="form-group mb-4">
-                <textarea class="form-control p-2 fs-4" id="body" name="body" placeholder="Take a note..." rows="12" required minlength="20" pattern="[A-Za-z\s]+"><%= note.body %></textarea>
-            </div>
-            <div class="form-group mb-4">
-                <h4 class="fw-bold">Summary</h4>
-                <textarea class="form-control p-2 fs-4" id="summary" name="summary" placeholder="Summary" rows="12"><%= note.summary %></textarea>
-            </div>
 
-            <div class="form-group">
-                <button type="button" class="btn btn-primary btn-lg" id="summaryButton" >
-                    Summarize
-                </button>
-                <button type="submit" class="btn btn-primary btn-lg">Update</button>
-            </div>
-        </form>
-    </div>
+    <!-- Form -->
+    <form action="/dashboard/item/<%= noteID %>?_method=PUT" method="POST">
+      <div class="form-floating mb-4">
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          placeholder="Note Title"
+          value="<%= note.title %>"
+          required
+        />
+        <label for="title">Title</label>
+      </div>
+
+      <div class="form-floating mb-4">
+        <textarea
+          class="form-control"
+          placeholder="Write your note here..."
+          id="body"
+          name="body"
+          style="height: 250px"
+          required
+        ><%= note.body %></textarea>
+        <label for="body">Note</label>
+      </div>
+
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary btn-lg">Update</button>
+      </div>
+    </form>
+  </div>
 </div>
 
-<div class="modal" tabindex="-1" role="dialog" id="deleteModal">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header flex justify-content-between align-items-center">
-          <h5 class="modal-title">Modal title</h5>
-          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <p>This will delete your note <b class="fw-bold"><%= note.title %></b><br/>
-            Are you sure?
-        </p>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <form action="/dashboard/item-delete/<%= noteID %>?_method=DELETE" method="POST" class="position-relative">
-                <button type="submit" class="btn btn-primary">Delete Note</button>
-            </form>
-        </div>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Delete Note</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete the note <strong><%= note.title %></strong>?
+      </div>
+      <div class="modal-footer">
+        <form action="/dashboard/item-delete/<%= noteID %>?_method=DELETE" method="POST">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Delete Note</button>
+        </form>
       </div>
     </div>
   </div>
-<script>
-  document.getElementById('summaryButton').addEventListener('click', async () => {
-    const bodyText = document.getElementById('body').value;
-    const summaryField = document.getElementById('summary');
-
-    if (!bodyText.trim()) {
-      summaryField.value = "Please enter note body to summarize.";
-      summaryField.style.color = 'red';
-      return;
-    }
-    if (bodyText.trim().length < 50) {
-      summaryField.value = "Note body is too short to summarize please enter atleast 50 characters.";
-      summaryField.style.color = 'red';
-      return;
-    }
-
-    summaryField.value = "Generating summary...";
-    summaryField.style.color = 'black';
-
-    try {
-      const response = await fetch('/dashboard/summarize', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ text: bodyText })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        summaryField.value = data.summary || "No summary returned.";
-      } else {
-        summaryField.value = "Failed to generate summary.";
-        summaryField.style.color = 'red';
-      }
-    } catch (error) {
-      summaryField.value = "Error: " + error.message;
-      summaryField.style.color = 'red';
-    }
-  });
-</script>
+</div>
