@@ -4,12 +4,16 @@
         NotesApp
       </a>
 
-      <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li><a href="/" class="nav-link px-2 link-secondary">Home</a></li>
-        <li><a href="#" class="nav-link px-2 link-dark">Features</a></li>
-        <li><a href="#" class="nav-link px-2 link-dark">FAQs</a></li>
-        <li><a href="/about" class="nav-link px-2 link-dark">About</a></li>
-      </ul>
+      <!-- Minimal Modern Tab Navigation -->
+      <nav class="minimal-nav-container col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+        <div class="minimal-nav-bar" id="minimalNavBar">
+          <a href="/" class="minimal-nav-link active" data-tab="home">Home</a>
+          <a href="#" class="minimal-nav-link" data-tab="features">Features</a>
+          <a href="#" class="minimal-nav-link" data-tab="faqs">FAQs</a>
+          <a href="/about" class="minimal-nav-link" data-tab="about">About</a>
+          <div class="minimal-nav-slider" id="minimalNavSlider"></div>
+        </div>
+      </nav>
 
       <div class="col-md-3 text-end">
         <a href="/auth/google" type="button" class="btn btn-outline-primary me-2">Login</a>
@@ -17,3 +21,130 @@
       </div>
     </header>
   </div>
+
+<style>
+.minimal-nav-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1 1 auto;
+}
+.minimal-nav-bar {
+  position: relative;
+  display: flex;
+  background: #ffffff; /* a bit darker than #EDC7B7 */
+  backdrop-filter: blur(12px);
+  border-radius: 2rem;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 4px 32px 0 rgba(172,59,97,0.07), 0 1.5px 6px rgba(0,0,0,0.04);
+  padding: 0.25rem 0.75rem;
+  min-width: 340px;
+  max-width: 100%;
+  margin: 0 auto;
+  font-family: 'Poppins', 'sans-serif';
+}
+.minimal-nav-link {
+  position: relative;
+  z-index: 2;
+  padding: 0.7rem 2.2rem;
+  font-weight: 500;
+  color: #6d5c5c;
+  cursor: pointer;
+  border-radius: 1.5rem;
+  transition: color 0.22s cubic-bezier(.4,2,.6,1), background 0.22s cubic-bezier(.4,2,.6,1);
+  user-select: none;
+  text-decoration: none;
+  font-size: 1.08rem;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.04em;
+  background: none;
+}
+.minimal-nav-link:hover {
+  color: #AC3B61;
+  background: rgba(172,59,97,0.07);
+}
+.minimal-nav-link.active {
+  color: #fff;
+  font-weight: 600;
+}
+.minimal-nav-slider {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 90px;
+  height: 44px;
+  background: #AC3B61; /* even darker, no gradient */
+  border-radius: 1.5rem;
+  box-shadow: 0 2px 8px rgba(172, 59, 97, 0.10);
+  z-index: 1;
+  filter: none;
+  border: 1.5px solid #fff;
+  transition: left 0.25s ease, width 0.18s ease, background 0.25s ease;
+}
+@media (max-width: 600px) {
+  .minimal-nav-bar { min-width: 200px; padding: 0.15rem 0.3rem; }
+  .minimal-nav-link { padding: 0.7rem 1.1rem; font-size: 1rem; }
+  .minimal-nav-slider { height: 38px; }
+}
+</style>
+<script>
+// Minimal Modern Tab Navigation Logic
+const minimalNavBar = document.getElementById('minimalNavBar');
+const minimalNavLinks = minimalNavBar.querySelectorAll('.minimal-nav-link');
+const minimalNavSlider = document.getElementById('minimalNavSlider');
+
+function updateMinimalNavSlider(target) {
+  const rect = target.getBoundingClientRect();
+  const parentRect = minimalNavBar.getBoundingClientRect();
+  minimalNavSlider.style.width = rect.width + 'px';
+  minimalNavSlider.style.left = (rect.left - parentRect.left) + 'px';
+}
+
+function setActiveMinimalTabByPath() {
+  let path = window.location.pathname;
+  let found = false;
+  minimalNavLinks.forEach(link => {
+    link.classList.remove('active');
+    if ((link.getAttribute('href') === '/' && (path === '/' || path === '')) ||
+        (link.getAttribute('href') !== '/' && path.startsWith(link.getAttribute('href')))) {
+      link.classList.add('active');
+      updateMinimalNavSlider(link);
+      found = true;
+    }
+  });
+  if (!found && minimalNavLinks.length) {
+    minimalNavLinks[0].classList.add('active');
+    updateMinimalNavSlider(minimalNavLinks[0]);
+  }
+}
+
+minimalNavLinks.forEach(link => {
+  link.addEventListener('click', function(e) {
+    if (this.getAttribute('href') === '#' || this.getAttribute('href') === window.location.pathname) {
+      e.preventDefault();
+      minimalNavBar.querySelector('.minimal-nav-link.active').classList.remove('active');
+      this.classList.add('active');
+      updateMinimalNavSlider(this);
+    } else if (this.getAttribute('href') === '/' && window.location.pathname === '/about') {
+      // Smooth transition from About to Home
+      e.preventDefault();
+      minimalNavBar.querySelector('.minimal-nav-link.active').classList.remove('active');
+      this.classList.add('active');
+      updateMinimalNavSlider(this);
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 400);
+    } else {
+      // Navigate immediately without animation for other transitions
+    }
+  });
+});
+
+window.addEventListener('DOMContentLoaded', setActiveMinimalTabByPath);
+window.addEventListener('resize', () => {
+  const activeTab = minimalNavBar.querySelector('.minimal-nav-link.active');
+  if (activeTab) updateMinimalNavSlider(activeTab);
+});
+window.addEventListener('popstate', setActiveMinimalTabByPath);
+</script>

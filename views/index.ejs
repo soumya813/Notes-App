@@ -7,7 +7,90 @@
             </h1>
             <p>Notes is a simple to use free note taking app.</p>
         </div>
-
     </div>
 </main>
 </div>
+<style>
+.tab-bar-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.tab-bar {
+  position: relative;
+  display: flex;
+  background: #fff;
+  border-radius: 2rem;
+  box-shadow: 0 4px 24px rgba(172,59,97,0.10);
+  padding: 0.25rem 0.5rem;
+  min-width: 320px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+.tab {
+  position: relative;
+  z-index: 2;
+  padding: 0.7rem 2.2rem;
+  font-weight: 600;
+  color: #AC3B61;
+  cursor: pointer;
+  border-radius: 2rem;
+  transition: color 0.2s;
+  user-select: none;
+}
+.tab.active {
+  color: #fff;
+}
+.tab-slider {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 110px;
+  height: 44px;
+  background: linear-gradient(90deg, #AC3B61, #123C69);
+  border-radius: 2rem;
+  box-shadow: 0 2px 12px rgba(172,59,97,0.10);
+  z-index: 1;
+  transition: left 0.45s cubic-bezier(.68,-0.55,.27,1.55), width 0.3s cubic-bezier(.68,-0.55,.27,1.55);
+}
+@media (max-width: 500px) {
+  .tab-bar { min-width: 220px; }
+  .tab { padding: 0.7rem 1.1rem; font-size: 1rem; }
+  .tab-slider { height: 38px; }
+}
+</style>
+<script>
+// Animated Tab Bar Logic
+const tabBar = document.getElementById('tabBar');
+const tabs = tabBar.querySelectorAll('.tab');
+const slider = document.getElementById('tabSlider');
+const tabContent = document.getElementById('tabContent').children;
+
+function updateSlider(target) {
+  const rect = target.getBoundingClientRect();
+  const parentRect = tabBar.getBoundingClientRect();
+  slider.style.width = rect.width + 'px';
+  slider.style.left = (rect.left - parentRect.left) + 'px';
+}
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', function() {
+    tabBar.querySelector('.tab.active').classList.remove('active');
+    this.classList.add('active');
+    updateSlider(this);
+    // Animate content
+    for (let c of tabContent) {
+      c.style.display = c.getAttribute('data-content') === this.getAttribute('data-tab') ? '' : 'none';
+    }
+  });
+});
+// Initialize slider position
+window.addEventListener('DOMContentLoaded', () => {
+  const activeTab = tabBar.querySelector('.tab.active');
+  updateSlider(activeTab);
+});
+window.addEventListener('resize', () => {
+  const activeTab = tabBar.querySelector('.tab.active');
+  updateSlider(activeTab);
+});
+</script>
