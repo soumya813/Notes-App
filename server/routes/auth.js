@@ -18,6 +18,8 @@ passport.use(new GoogleStrategy({
       firstName: profile.name.givenName,
       lastName: profile.name.familyName,
       profileImage: profile.photos[0].value,
+      email: profile.emails && profile.emails[0] ? profile.emails[0].value : '',
+      profilePicture: profile.photos && profile.photos[0] ? profile.photos[0].value : '/img/default-profile.png',
       createdAt: new Date() 
     };
     

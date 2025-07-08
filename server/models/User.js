@@ -22,6 +22,15 @@ const UserSchema = new schema({
         type: String,
         required: true
     },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    profilePicture: {
+        type: String,
+        default: '/img/default-profile.png'
+    },
     createdAt: {
         type: Date,
         default: Date.now,

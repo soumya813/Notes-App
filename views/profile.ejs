@@ -1,0 +1,21 @@
+<% const profilePic = user.profilePicture || user.profileImage || '/img/default-profile.png'; %>
+<% const email = user.email || '' %>
+<% if (error) { %>
+  <div class="alert alert-danger"><%= error %></div>
+<% } %>
+<h2>Profile</h2>
+<form action="/profile/update" method="POST" enctype="multipart/form-data">
+  <img src="<%= profilePic %>" alt="Profile Picture" width="100" />
+  <div>
+    <label>Email:</label>
+    <input type="email" name="email" value="<%= email %>" required />
+  </div>
+  <div>
+    <label>Profile Picture:</label>
+    <input type="file" name="profilePicture" accept="image/*" />
+  </div>
+  <button type="submit">Update Profile</button>
+</form>
+<form action="/profile/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.');">
+  <button type="submit" class="btn btn-danger mt-3">Delete Profile</button>
+</form> 

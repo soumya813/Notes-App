@@ -20,6 +20,7 @@
     "method-override": "^3.0.0",
     "mongodb": "^6.5.0",
     "mongoose": "^8.10.0",
+    "multer": "^2.0.1",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0"
   },
