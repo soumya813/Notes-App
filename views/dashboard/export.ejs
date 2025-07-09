@@ -34,13 +34,7 @@
                                 <div class="note-content">
                                     <p class="mb-2"><%= notes[i].body %></p>
                                 </div>
-                                <!-- Note metadata - creation and update dates -->
-                                <div class="note-meta">
-                                    <small class="text-muted">
-                                        Created: <%= new Date(notes[i].createdAt).toLocaleDateString() %> | 
-                                        Last Updated: <%= new Date(notes[i].updatedAt).toLocaleDateString() %>
-                                    </small>
-                                </div>
+                                
                             </div>
                             <% if(i < notes.length - 1) { %>
                                 <hr class="my-3">
