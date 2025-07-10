@@ -1,13 +1,51 @@
+
+<div class=".container-fluid container-fluid-custom pb-5 mb-5" style="overflow-x: hidden;">
+
+    <div class="row mb-4">
+
+        <div class="col">
+
+            <nav aria-label="breadcrumb">
+
+                <ol class="breadcrumb">
+                    <!-- remove the underline from dashboard -->
+                    <li class="breadcrumb-item"><a href="/dashboard" style="text-decoration: none;">Dashboard</a></li>    
+                    <!-- <li class="breadcrumb-item-active">Add Note</li> -->
+                </ol>
+
+            </nav>
+
+                <div class="col d-flex justify-content-between align-items-center">
+                    <h1 class="h3">Add Note</h1>
+
+                </div>
+        </div>
+
+
 <div class="container py-5">
   <div class="card shadow-lg rounded-4 p-5 bg-white border-0">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2 class="fw-bold text-dark">📝 Add a New Note</h2>
       <a href="/dashboard" class="btn btn-outline-primary">← Back to Dashboard</a>
+
     </div>
 
     <% if (typeof error !== 'undefined') { %>
       <div class="alert alert-danger mb-4"><%= error %></div>
     <% } %>
+
+
+    <div class="container mt-4">
+      
+
+
+    <form action="/dashboard/add" method="POST" class="position-relative">
+        <div class="form-group mb-4 position-absolute">
+            <input type="text" class="form-control fw-bold border-0 fs-4" id="title" name="title" placeholder="Enter your Title" required value="<%= typeof formData !== 'undefined' ? formData.title : '' %>">
+        </div>
+
+
+
 
     <form action="/dashboard/add" method="POST">
       <!-- Title Field -->
@@ -24,6 +62,7 @@
         <label for="title">Title</label>
       </div>
 
+<<<<<<< HEAD
       <!-- Body Field -->
       <div class="form-floating mb-4">
         <textarea
@@ -43,4 +82,16 @@
       </div>
     </form>
   </div>
+=======
+          <div class="form-group mt-4 mb-5">
+              <h4 class="fw-bold">Summary</h4>
+              <textarea id="summary" name="summary"  class=" p-2 fs-4 form-control" placeholder="Summary" rows="8">
+              </textarea>
+          </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-lg">Save Note</button>
+        </div>
+    </form>
+>>>>>>> dd1a1cd (fix: removed top margin on print layout)
+
 </div>

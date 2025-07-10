@@ -1,0 +1,89 @@
+<!-- EXPORT FEATURE: Individual Note Export View - Displays single note for export/printing -->
+<div class="container-fluid container-fluid-custom pb-5 mb-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h1>Export Note - <%= userName %></h1>
+            <p class="text-muted">Individual note export</p>
+        </div>
+        <div class="col text-end">
+            <!-- Navigation and print controls -->
+            <a href="/dashboard" class="btn btn-outline-primary me-2">← Back to Dashboard</a>
+            <button onclick="window.print()" class="btn btn-success">Print/Save as PDF</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Note Details</h5>
+                </div>
+                <div class="card-body">
+                    <!-- EXPORT FEATURE: Single note display with full content and metadata -->
+                    <div class="note-item p-4 border rounded">
+                        <!-- Note header with title -->
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h2 class="mb-1"><%= note.title %></h2>
+                            
+                           
+                        </div>
+                        <!-- Note content - displays complete body (not truncated) -->
+                        <div class="note-content mb-3">
+                            <div class="note-body">
+                                <p class="lead"><%= note.body %></p>
+                            </div>
+                        </div>
+                       
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @media print {
+
+        @page{
+            margin:0;
+            /* CHANGE: No margin for print page */
+        }
+        html body{
+            margin:0 !important;
+            padding: 0 !important;
+            /* CHANGE: Remove default margin and padding from html and body for print */
+        }
+      /* Hide everything by default */
+      body * {
+        visibility: hidden;
+      }
+    
+      /* Show only the note title and content */
+      .note-item, .note-item * {
+        visibility: visible;
+      }
+    
+      /* CHANGE: Add small top, left, and right margins for professional appearance */
+      .note-item {
+        position: fixed; /* CHANGE: set to fixed for print so note starts at the very top */
+        top: 20px; /* CHANGE: add small top margin for print */
+        left: 20px; /* CHANGE: add small left margin for print */
+        right: 20px; /* CHANGE: add small right margin for print */
+        width: calc(100vw - 40px); /* CHANGE: subtract left and right margins from width */
+        margin: 0 !important; /* CHANGE: Ensure no margin */
+        padding: 16px !important; /* CHANGE: add inner padding for print */
+        break-inside: avoid;
+        page-break-inside: avoid;
+        box-sizing: border-box; /* CHANGE: ensure padding/margin are included in width */
+      }
+    
+      /* Optional: Better text appearance */
+      .note-body {
+        font-size: 14px;
+        line-height: 1.6;
+      }
+    }
+</style>
+<!-- CHANGE: Adjusted print CSS to remove all space above note and ensure note starts at top of printed page. -->
+    

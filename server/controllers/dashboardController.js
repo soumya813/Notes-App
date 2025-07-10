@@ -192,9 +192,59 @@ exports.dashboardSearchSubmit = async(req,res) => {
 }
 
 /**
- * POST
- * for summarize notes using Hugging Face API
+ export-feature
+ * GET
+ * Export all notes
+
  */
+exports.dashboardExport = async(req,res) => {
+    try {
+        // Fetch all notes for the current user, sorted by update date
+        const notes = await Note.find({ user: req.user.id })
+            .sort({ updatedAt: -1 })
+            .lean();
+
+        // Render the export view with all notes
+        res.render('dashboard/export', {
+            userName: req.user.firstName,
+            notes,
+            layout: '../views/layouts/dashboard'
+        });
+    } catch (error) {
+        console.log(error);
+        res.redirect('/dashboard');
+    }
+}
+
+/**
+ * GET
+ * Export individual note
+ 
+ */
+exports.dashboardExportNote = async(req,res) => {
+    try {
+        // Find the specific note and ensure it belongs to the current user
+        const note = await Note.findById({_id: req.params.id})
+            .where({user: req.user.id})
+            .lean();
+
+        if(note){
+            // Render the individual note export view
+            res.render('dashboard/export-note', {
+                userName: req.user.firstName,
+                note,
+                layout: '../views/layouts/dashboard'
+            });
+        } else{
+            // Redirect if note not found or doesn't belong to user
+            res.redirect('/dashboard');
+        }
+    } catch (error) {
+        console.log(error);
+        res.redirect('/dashboard');
+    }
+}
+
 
 const axios = require('axios');
 
@@ -217,5 +267,4 @@ exports.dashboardSummarizeNote = async (req, res) => {
   } catch (error) {
     console.error('Summarize Error:', error.message);
     res.status(500).json({ summary: "Failed to generate summary." });
-  }
-};
+  }}
