@@ -1,0 +1,40 @@
+<div class="container-fluid container-fluid-custom pb-5 mb-5" style="background: #f7f7f7; min-height: 90vh;">
+    <div class="row mb-4">
+        <div class="col">
+            <h1>Archived Notes</h1>
+        </div>
+        <div class="col text-end">
+            <a href="/dashboard" class="btn btn-outline-primary">Back to Dashboard</a>
+        </div>
+    </div>
+    <div class="row">
+        <% if(archivedNotes.length > 0) { %>
+            <% archivedNotes.forEach(function(note) { %>
+                <div class="col-sm-4 mb-4">
+                    <div class="card border-secondary" style="background: #ececec; min-height: 180px;">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= note.title %></h5>
+                            <p class="card-text"><%= note.body.length > 100 ? note.body.substring(0, 100) + '...' : note.body %></p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <form action="/notes/<%= note._id %>/restore?_method=PATCH" method="POST" class="me-2">
+                                    <button type="submit" class="btn btn-success btn-sm" title="Restore this note" style="border-radius: 20px;">
+                                        <span aria-hidden="true">&#x21A9;</span> Restore
+                                    </button>
+                                </form>
+                                <form action="/notes/<%= note._id %>/permanent?_method=DELETE" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this note? This cannot be undone.');">
+                                    <button type="submit" class="btn btn-danger btn-sm" title="Delete permanently" style="border-radius: 20px;">
+                                        <span aria-hidden="true">🗑️</span> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="col-12 text-center mt-5">
+                <h4>No archived notes found.</h4>
+            </div>
+        <% } %>
+    </div>
+</div> 

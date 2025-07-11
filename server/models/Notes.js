@@ -18,6 +18,13 @@ const NoteSchema = new schema({
         type: String,
         default: '',
     },
+    archived: {
+        type: Boolean,
+        default: false
+    },
+    archivedAt: {
+        type: Date
+    },
     createdAt:{
         type:Date,
         default: Date.now()

@@ -4,6 +4,16 @@
         NotesApp
       </a>
 
+      <nav class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+        <a href="/dashboard" class="nav-link px-3">Dashboard</a>
+        <a href="/dashboard/archived" class="nav-link px-3">
+          <span aria-hidden="true">🗃️</span> Archived
+          <% if(typeof archivedCount !== 'undefined' && archivedCount > 0) { %>
+            <span class="badge bg-secondary"><%= archivedCount %></span>
+          <% } %>
+        </a>
+      </nav>
+
       <form class="nav col-12 col-md-auto flex-fill mb-2 justify-content-center mb-md-0" role="search" method="POST" action="/dashboard/search">
         <input type="search" name="searchTerm" class="form-control border-primary" placeholder="Search..." aria-label="Search">
       </form>
