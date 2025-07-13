@@ -88,3 +88,51 @@ h1,h2,h3,h4,h5,h6{
     right: -50px;
     bottom: -30px;
 }
+
+/* Interactive Navigation Bar */
+.nav-interactive {
+  position: relative;
+  color: #123C69;
+  font-weight: 500;
+  transition: color 0.2s, transform 0.2s, font-weight 0.2s;
+}
+
+.nav-interactive.active, .nav-interactive:focus {
+  color: #AC3B61;
+  font-weight: 700;
+  transform: scale(1.12);
+}
+
+.nav-interactive::after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 2px;
+  background: #AC3B61;
+  border-radius: 1px;
+  opacity: 0;
+  transform: scaleX(0.6);
+  transition: all 0.3s cubic-bezier(.4,0,.2,1);
+}
+
+.nav-interactive.active::after, .nav-interactive:focus::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.nav-interactive:hover {
+  color: #AC3B61;
+  font-weight: 700;
+  transform: scale(1.10);
+  background: none;
+  border-radius: 0;
+}
+
+.nav-interactive:hover::after {
+  opacity: 1;
+  transform: scaleX(1);
+  background: #AC3B61;
+}
