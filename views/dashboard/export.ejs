@@ -1,0 +1,80 @@
+<!-- EXPORT FEATURE: Bulk Export View - Displays all user notes for export/printing -->
+<div class="container-fluid container-fluid-custom pb-5 mb-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h1>Export Notes - <%= userName %></h1>
+            <p class="text-muted">All your notes in one place</p>
+        </div>
+        <div class="col text-end">
+            <!-- Navigation and print controls -->
+            <a href="/dashboard" class="btn btn-outline-primary me-2">← Back to Dashboard</a>
+            <button onclick="window.print()" class="btn btn-success">Print/Save as PDF</button>
+        </div>
+    </div>
+
+    <% if(notes.length > 0) { %>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Total Notes: <%= notes.length %></h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- EXPORT FEATURE: Loop through all notes and display full content -->
+                        <% for(var i = 0; i < notes.length; i++){ %>
+                            <div class="note-item mb-4 p-3 border rounded">
+                                <!-- Note header with title and last updated date -->
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h4 class="mb-1"><%= notes[i].title %></h4>
+                                    <!-- <small class="text-muted">
+                                        <%= new Date(notes[i].updatedAt).toLocaleDateString() %>
+                                    </small> -->
+                                </div>
+                                <!-- Note content - displays full body (not truncated like dashboard) -->
+                                <div class="note-content">
+                                    <p class="mb-2"><%= notes[i].body %></p>
+                                </div>
+                                
+                            </div>
+                            <% if(i < notes.length - 1) { %>
+                                <hr class="my-3">
+                            <% } %>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } else { %>
+        <!-- EXPORT FEATURE: Empty state when user has no notes -->
+        <div class="row">
+            <div class="col-12 text-center">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>No notes found</h3>
+                        <p class="text-muted">You don't have any notes to export yet.</p>
+                        <a href="/dashboard/add" class="btn btn-primary">Create Your First Note</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } %>
+</div>
+
+<!-- EXPORT FEATURE: Print-friendly CSS styles -->
+<style>
+    @media print {
+        /* Hide navigation buttons and headers when printing */
+        .btn, .card-header {
+            display: none !important;
+        }
+        /* Remove padding for better print layout */
+        .container-fluid-custom {
+            padding: 0 !important;
+        }
+        /* Prevent notes from breaking across pages */
+        .note-item {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+    }
+</style> 

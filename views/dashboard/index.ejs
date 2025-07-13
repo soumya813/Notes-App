@@ -4,7 +4,9 @@
             <h1>Hey, <%= userName %></h1>
         </div>
         <div class="col text-end">
-            <a href="/dashboard/add" class="btn btn-primary">+ New Note</a>
+            <!-- EXPORT FEATURE: Main export button to export all notes -->
+            <a href="/dashboard/add" class="btn btn-primary me-2"> New Note</a>
+            <!-- <a href="/dashboard/export" class="btn btn-outline-secondary">Export ALL Notes</a> -->
         </div>
     </div>
 
@@ -13,16 +15,27 @@
           <% for(var i = 0; i < notes.length; i++){ %>
 
             <div class="col-sm-3 mb-4">
+
                 <div class="card border-primary position-relative" style="min-height: 210px">
                     <form action="/notes/<%= notes[i]._id %>/archive?_method=PATCH" method="POST" style="position: absolute; top: 8px; right: 8px; z-index: 2;">
                         <button type="submit" class="btn btn-sm btn-outline-secondary" title="Archive this note" style="border-radius: 50%;">
                             <span aria-hidden="true">🗃️</span>
                         </button>
                     </form>
+
+                <div class="card border-primary" style="min-height: 210px">
+                    <!-- Note content area - clickable to view/edit note -->
+
                     <a href="/dashboard/item/<%= notes[i]._id %>" class="card-body text-decoration-none">
                         <h5 class="card-title"><%= notes[i].title %></h5>
                         <p class="card-text"><%= notes[i].body %></p>
                     </a>
+                    <!-- EXPORT FEATURE: Individual note export button for each note card -->
+                    <div class="card-footer bg-transparent border-0 pb-2">
+                        <a href="/dashboard/export/<%= notes[i]._id %>" class="btn btn-sm btn-outline-secondary w-100">
+                            <i class="fas fa-download me-1"></i>Export Note
+                        </a>
+                    </div>
                 </div>
             </div>
 
