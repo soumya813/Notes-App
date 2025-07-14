@@ -11,6 +11,11 @@ passport.use(new GoogleStrategy({
   },
 
   async function(accessToken, refreshToken, profile, done) {
+    const email = profile.emails && profile.emails[0] ? profile.emails[0].value : null;
+    if (!email) {
+      // No email found, handle gracefully
+      return done(new Error('No email found in your Google account. Please use a Google account with a public email.'));
+    }
 
     const newUser = {
       googleId: profile.id,
@@ -18,16 +23,13 @@ passport.use(new GoogleStrategy({
       firstName: profile.name.givenName,
       lastName: profile.name.familyName,
       profileImage: profile.photos[0].value,
-      email: profile.emails && profile.emails[0] ? profile.emails[0].value : '',
+      email: email,
       profilePicture: profile.photos && profile.photos[0] ? profile.photos[0].value : '/img/default-profile.png',
       createdAt: new Date() 
     };
     
-
     try{
-
       let user = await User.findOne({googleId: profile.id});
-
       if(user){
         done(null,user);
       }
@@ -38,13 +40,14 @@ passport.use(new GoogleStrategy({
     }
     catch(error){
       console.log(error);
+      done(error, null); // Pass error to passport
     }
   }
 ));
 
 //google login route
 router.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile'] }));
+  passport.authenticate('google', { scope: ['profile', 'email'] }));
 
   //retrieve user data
 router.get('/google/callback', 
