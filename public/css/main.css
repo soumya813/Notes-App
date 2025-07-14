@@ -94,13 +94,16 @@ h1,h2,h3,h4,h5,h6{
   position: relative;
   color: #123C69;
   font-weight: 500;
-  transition: color 0.2s, transform 0.2s, font-weight 0.2s;
+  transition: color 0.18s, transform 0.18s;
+  padding: 4px 0;
+  display: inline-block;
+  transform-origin: bottom;
+  letter-spacing: 0.04em;
 }
 
 .nav-interactive.active, .nav-interactive:focus {
   color: #AC3B61;
-  font-weight: 700;
-  transform: scale(1.12);
+  transform: scale(1.04);
 }
 
 .nav-interactive::after {
@@ -110,12 +113,12 @@ h1,h2,h3,h4,h5,h6{
   left: 0;
   right: 0;
   bottom: -4px;
-  height: 2px;
-  background: #AC3B61;
+  height: 3px;
+  background: #e7a6b1;
   border-radius: 1px;
   opacity: 0;
-  transform: scaleX(0.6);
-  transition: all 0.3s cubic-bezier(.4,0,.2,1);
+  transform: scaleX(0.7);
+  transition: all 0.22s cubic-bezier(.4,0,.2,1);
 }
 
 .nav-interactive.active::after, .nav-interactive:focus::after {
@@ -125,8 +128,7 @@ h1,h2,h3,h4,h5,h6{
 
 .nav-interactive:hover {
   color: #AC3B61;
-  font-weight: 700;
-  transform: scale(1.10);
+  transform: scale(1.03);
   background: none;
   border-radius: 0;
 }
@@ -134,5 +136,60 @@ h1,h2,h3,h4,h5,h6{
 .nav-interactive:hover::after {
   opacity: 1;
   transform: scaleX(1);
-  background: #AC3B61;
+  background: #e7a6b1;
+}
+
+.nav-link:focus, .nav-link:active,
+.nav-interactive:focus, .nav-interactive:active,
+.nav-box:focus, .nav-box:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  background: none !important;
+}
+
+/* Prevent nav shifting on scale */
+ul.nav {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.nav-box {
+  width: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.box-home {
+  margin-right: 7px;
+}
+
+.box-features {
+  margin-right: 7px;
+  margin-left: 7px;
+}
+
+.box-faq {
+  margin-right: 0px;
+  margin-left: 7px;
+}
+
+.box-about {
+  margin-left: 0px;
+}
+
+/* Remove old nav-interactive-wrapper styles */
+.nav-interactive-wrapper,
+.nav-interactive-wrapper::after {
+  all: unset;
+}
+
+.nav-shift-left {
+  margin-left: 0;
 }
