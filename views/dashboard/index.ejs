@@ -15,8 +15,17 @@
           <% for(var i = 0; i < notes.length; i++){ %>
 
             <div class="col-sm-3 mb-4">
+
+                <div class="card border-primary position-relative" style="min-height: 210px">
+                    <form action="/notes/<%= notes[i]._id %>/archive?_method=PATCH" method="POST" style="position: absolute; top: 8px; right: 8px; z-index: 2;">
+                        <button type="submit" class="btn btn-sm btn-outline-secondary" title="Archive this note" style="border-radius: 50%;">
+                            <span aria-hidden="true">🗃️</span>
+                        </button>
+                    </form>
+
                 <div class="card border-primary" style="min-height: 210px">
                     <!-- Note content area - clickable to view/edit note -->
+
                     <a href="/dashboard/item/<%= notes[i]._id %>" class="card-body text-decoration-none">
                         <h5 class="card-title"><%= notes[i].title %></h5>
                         <p class="card-text"><%= notes[i].body %></p>

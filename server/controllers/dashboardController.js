@@ -18,21 +18,14 @@ exports.dashboard = async (req, res) => {
   
     try {
       // Mongoose "^7.0.0 Update
-      const notes = await Note.aggregate([
-        { $sort: { updatedAt: -1 } },
-        { $match: { user: new mongoose.Types.ObjectId(req.user.id) } },
-        {
-          $project: {
-            title: { $substr: ["$title", 0, 30] },
-            body: { $substr: ["$body", 0, 100] },
-          },
-        },
-      ])
+      const notes = await Note.find({ user: req.user.id, archived: false })
+      .sort({ updatedAt: -1 })
       .skip(perPage * page - perPage)
       .limit(perPage)
       .exec();
   
-      const count = await Note.countDocuments();
+      const count = await Note.countDocuments({ user: req.user.id, archived: false });
+      const archivedCount = await Note.countDocuments({ user: req.user.id, archived: true });
   
       res.render('dashboard/index', {
         userName: req.user.firstName,
@@ -40,7 +33,8 @@ exports.dashboard = async (req, res) => {
         notes,
         layout: "../views/layouts/dashboard",
         current: page,
-        pages: Math.ceil(count / perPage)
+        pages: Math.ceil(count / perPage),
+        archivedCount
       });
      } catch (error) {
       console.log(error);
@@ -267,4 +261,70 @@ exports.dashboardSummarizeNote = async (req, res) => {
   } catch (error) {
     console.error('Summarize Error:', error.message);
     res.status(500).json({ summary: "Failed to generate summary." });
-  }}
+
+  }
+};
+
+// Archive a note
+exports.archiveNote = async (req, res) => {
+    try {
+        const note = await Note.findOneAndUpdate(
+            { _id: req.params.id, user: req.user.id },
+            { archived: true, archivedAt: new Date() },
+            { new: true }
+        );
+        if (!note) return res.status(404).send('Note not found');
+        req.flash('success_msg', 'Note archived successfully.');
+        res.redirect('/dashboard');
+    } catch (err) {
+        res.status(500).send('Server Error');
+    }
+};
+
+// Restore a note
+exports.restoreNote = async (req, res) => {
+    try {
+        const note = await Note.findOneAndUpdate(
+            { _id: req.params.id, user: req.user.id },
+            { archived: false, archivedAt: null },
+            { new: true }
+        );
+        if (!note) return res.status(404).send('Note not found');
+        req.flash('success_msg', 'Note restored successfully.');
+        res.redirect('/dashboard/archived');
+    } catch (err) {
+        res.status(500).send('Server Error');
+    }
+};
+
+// Permanently delete a note
+exports.deleteNotePermanently = async (req, res) => {
+    try {
+        const note = await Note.findOneAndDelete({ _id: req.params.id, user: req.user.id, archived: true });
+        if (!note) return res.status(404).send('Note not found or not archived');
+        req.flash('success_msg', 'Note permanently deleted.');
+        res.redirect('/dashboard/archived');
+    } catch (err) {
+        res.status(500).send('Server Error');
+    }
+};
+
+// GET /dashboard/archived - Show archived notes
+exports.dashboardArchivedNotes = async (req, res) => {
+    try {
+        const archivedNotes = await Note.find({ user: req.user.id, archived: true })
+            .sort({ archivedAt: -1 })
+            .lean();
+        const archivedCount = archivedNotes.length;
+        res.render('dashboard/archived', {
+            userName: req.user.firstName,
+            archivedNotes,
+            layout: '../views/layouts/dashboard',
+            archivedCount
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Server Error');
+    }
+};
+
