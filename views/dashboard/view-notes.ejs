@@ -1,5 +1,5 @@
 
-<div class="container-fluid container-fluid-custom pb-5 mb-5" style="overflow-x: hidden;">
+<div class="container-fluid container-fluid-custom pb-5 mb-5 px-4" style="overflow-x: hidden;">
 
     <div class="row mb-4">
         <div class="col">
@@ -27,7 +27,7 @@
     <!-- Main Content -->
     <div class="row">
         <div class="col-12">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm" style="background-color: #ffffff;">
                 <div class="card-body">
                     <!-- Form -->
                     <form action="/dashboard/item/<%= noteID %>?_method=PUT" method="POST">
@@ -50,7 +50,7 @@
                                 placeholder="Write your note here..."
                                 id="body"
                                 name="body"
-                                style="height: 300px; resize: vertical;"
+                                style="height: 400px; resize: vertical;"
                                 required
                             ><%= note.body %></textarea>
                             <label for="body"><i class="fas fa-edit me-2"></i>Note Content</label>
@@ -73,7 +73,7 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <p id="summaryContent" class="mb-0 text-muted fst-italic"><%= note.summary || '' %></p>
+                                    <p id="summaryContent" class="mb-0"><%= note.summary || '' %></p>
                                 </div>
                             </div>
                         </div>

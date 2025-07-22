@@ -47,7 +47,14 @@ app.use('/', require('./server/routes/dashboard'));
 //handle 404
 app.get('*',function(req,res) {
    // res.status(404).send('404 page not found')
-   res.status(404).render('404');
+   const locals = {
+        title: "404 - Page Not Found",
+        description: "Page not found - NotesApp",
+    }
+   res.status(404).render('404', {
+    locals,
+    layout: './layouts/main'
+   });
 })
 
 app.listen(port, () => {

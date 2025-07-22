@@ -29,6 +29,15 @@ body{
     font-weight: 300;
     font-size: 1.2rem;
     transition: background-color 0.3s ease, color 0.3s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 h1,h2,h3,h4,h5,h6{
@@ -295,6 +304,12 @@ ul.nav {
   opacity: 0.7;
 }
 
+/* Add more space between floating label and input text */
+.form-floating > .form-control:not(:placeholder-shown) {
+  padding-top: 1.625rem;
+  padding-bottom: 0.625rem;
+}
+
 /* Card styling for dark mode */
 .card {
   background-color: var(--background-color);
@@ -339,6 +354,26 @@ ul.nav {
   --bs-btn-hover-color: var(--background-color);
   --bs-btn-hover-bg: var(--text-color);
   --bs-btn-hover-border-color: var(--text-color);
+}
+
+/* Custom button styling for export */
+.btn-export {
+  --bs-btn-color: var(--primary-brand-color);
+  --bs-btn-bg: #ffffff;
+  --bs-btn-border-color: var(--primary-brand-color);
+  --bs-btn-hover-color: var(--nav-active-color);
+  --bs-btn-hover-bg: #f2f2f2;
+  --bs-btn-hover-border-color: var(--nav-active-color);
+  --bs-btn-active-color: var(--nav-active-color);
+  --bs-btn-active-bg: #e6e6e6;
+  --bs-btn-active-border-color: var(--nav-active-color);
+}
+
+[data-theme="dark"] .btn-export {
+  --bs-btn-color: var(--primary-brand-color);
+  --bs-btn-bg: #2D1B23;
+  --bs-btn-border-color: var(--primary-brand-color);
+  --bs-btn-hover-bg: #3a2a31;
 }
 
 /* Responsive adjustments for theme toggle */
@@ -544,4 +579,68 @@ h1, h2, h3, h4, h5, h6 {
 
 [data-theme="dark"] .glass-card {
   border: 1px solid rgba(231, 166, 177, 0.3) !important;
+}
+
+/* AI Summary content styling */
+#summaryContent {
+  font-size: inherit; /* Ensures it matches surrounding text */
+  word-spacing: 0.1em; /* Increases spacing between words */
+  white-space: pre-wrap; /* Matches note body for line breaks */
+}
+
+/* Footer styling for end of page positioning */
+footer {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-top: 1px solid var(--primary-brand-color);
+  opacity: 0.8;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  margin-top: 1rem; /* Reduced space above footer */
+  padding: 0.5rem 0 0; /* Smaller padding, removed bottom padding */
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+[data-theme="dark"] footer {
+  background-color: var(--background-color);
+  border-top: 1px solid rgba(231, 166, 177, 0.15);
+  opacity: 0.85;
+}
+
+footer .text-muted {
+  color: var(--text-color) !important;
+  opacity: 0.6; /* More muted than navbar */
+}
+
+footer .nav-link {
+  color: var(--text-color) !important;
+  opacity: 0.6; /* More muted than navbar links */
+  transition: color 0.3s ease, opacity 0.3s ease;
+  padding: 0.25rem 0.5rem; /* Smaller padding than navbar */
+}
+
+footer .nav-link:hover {
+  color: var(--nav-active-color) !important;
+  opacity: 0.9; /* Less prominent hover than navbar */
+}
+
+/* Responsive footer adjustments */
+@media (max-width: 768px) {
+  footer {
+    text-align: center;
+  }
+  
+  footer .d-flex {
+    flex-direction: column !important;
+    gap: 1rem;
+  }
+  
+  footer .col-md-4 {
+    max-width: 100% !important;
+  }
+  
+  footer .justify-content-end {
+    justify-content: center !important;
+  }
 }

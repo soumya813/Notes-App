@@ -34,7 +34,7 @@
                     <!-- EXPORT FEATURE: Individual note export button for each note card -->
                     <div class="card-footer bg-transparent border-0 pb-2">
                         <div class="d-flex gap-2">
-                            <a href="/dashboard/export/<%= notes[i]._id %>" class="btn btn-sm btn-outline-secondary flex-grow-1">
+                            <a href="/dashboard/export/<%= notes[i]._id %>" class="btn btn-sm btn-export flex-grow-1">
                                 <i class="fas fa-download me-1"></i>Export
                             </a>
                             <% if(notes[i].summary && notes[i].summary.trim()) { %>
