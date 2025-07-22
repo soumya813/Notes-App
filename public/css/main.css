@@ -1,14 +1,34 @@
 :root{
     --background-color : #EDC7B7;
     --bs-primary-rgb: #AC3B61;
+    --text-color: #AC3B61;
+    --button-bg: #123C69;
+    --button-hover-bg: #325993;
+    --nav-text-color: #123C69;
+    --nav-active-color: #AC3B61;
+    --nav-underline-color: #e7a6b1;
+    --primary-brand-color: #AC3B61;
+}
+
+[data-theme="dark"] {
+    --background-color: #2D1B23;
+    --bs-primary-rgb: #E7A6B1;
+    --text-color: #E7A6B1;
+    --button-bg: #AC3B61;
+    --button-hover-bg: #C4526D;
+    --nav-text-color: #E7A6B1;
+    --nav-active-color: #F4B5C0;
+    --nav-underline-color: #AC3B61;
+    --primary-brand-color: #E7A6B1;
 }
 
 body{
     font-family: 'Poppins', 'sans-serif';
     background-color: var(--background-color);
-    color: var(--bs-primary-rgb);
+    color: var(--text-color);
     font-weight: 300;
     font-size: 1.2rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1,h2,h3,h4,h5,h6{
@@ -28,42 +48,42 @@ h1,h2,h3,h4,h5,h6{
 
 .btn-primary {
     --bs-btn-color: #fff;
-    --bs-btn-bg: #123C69;
-    --bs-btn-border-color: #123C69;
+    --bs-btn-bg: var(--button-bg);
+    --bs-btn-border-color: var(--button-bg);
     --bs-btn-hover-color: #fff;
-    --bs-btn-hover-bg: #325993;
-    --bs-btn-hover-border-color: #325993;
+    --bs-btn-hover-bg: var(--button-hover-bg);
+    --bs-btn-hover-border-color: var(--button-hover-bg);
     --bs-btn-focus-shadow-rgb: 49, 132, 253;
     --bs-btn-active-color: #fff;
-    --bs-btn-active-bg: #123C69;
-    --bs-btn-active-border-color: #123C69;
+    --bs-btn-active-bg: var(--button-bg);
+    --bs-btn-active-border-color: var(--button-bg);
     --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
     --bs-btn-disabled-color: #fff;
-    --bs-btn-disabled-bg: #123C69;
-    --bs-btn-disabled-border-color: #123C69;
+    --bs-btn-disabled-bg: var(--button-bg);
+    --bs-btn-disabled-border-color: var(--button-bg);
 }
 
 .btn-outline-primary {
-    --bs-btn-color: #123C69;
-    --bs-btn-border-color: #123C69;
+    --bs-btn-color: var(--button-bg);
+    --bs-btn-border-color: var(--button-bg);
     --bs-btn-hover-color: #fff;
-    --bs-btn-hover-bg: #325993;
-    --bs-btn-hover-border-color: #325993;
+    --bs-btn-hover-bg: var(--button-hover-bg);
+    --bs-btn-hover-border-color: var(--button-hover-bg);
     --bs-btn-focus-shadow-rgb: 13, 110, 253;
     --bs-btn-active-color: #fff;
-    --bs-btn-active-bg: #123C69;
-    --bs-btn-active-border-color: #123C69;
+    --bs-btn-active-bg: var(--button-bg);
+    --bs-btn-active-border-color: var(--button-bg);
     --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-    --bs-btn-disabled-color: #123C69;
+    --bs-btn-disabled-color: var(--button-bg);
     --bs-btn-disabled-bg: transparent;
-    --bs-btn-disabled-border-color: #123C69;
+    --bs-btn-disabled-border-color: var(--button-bg);
     --bs-gradient: none;
 }
 
 .pagination{
-    --bs-pagination-color: var(--bs-primary-rgb);
-    --bs-pagination-active-bg: var(--bs-primary-rgb);
-    --bs-pagination-active-border-color: var(--bs-primary-rgb);
+    --bs-pagination-color: var(--primary-brand-color);
+    --bs-pagination-active-bg: var(--primary-brand-color);
+    --bs-pagination-active-border-color: var(--primary-brand-color);
 }
 
 /*Home*/
@@ -92,7 +112,7 @@ h1,h2,h3,h4,h5,h6{
 /* Interactive Navigation Bar */
 .nav-interactive {
   position: relative;
-  color: #123C69;
+  color: var(--nav-text-color);
   font-weight: 500;
   transition: color 0.18s, transform 0.18s;
   padding: 4px 0;
@@ -102,7 +122,7 @@ h1,h2,h3,h4,h5,h6{
 }
 
 .nav-interactive.active, .nav-interactive:focus {
-  color: #AC3B61;
+  color: var(--nav-active-color);
   transform: scale(1.04);
 }
 
@@ -114,7 +134,7 @@ h1,h2,h3,h4,h5,h6{
   right: 0;
   bottom: -4px;
   height: 3px;
-  background: #e7a6b1;
+  background: var(--nav-underline-color);
   border-radius: 1px;
   opacity: 0;
   transform: scaleX(0.7);
@@ -127,7 +147,7 @@ h1,h2,h3,h4,h5,h6{
 }
 
 .nav-interactive:hover {
-  color: #AC3B61;
+  color: var(--nav-active-color);
   transform: scale(1.03);
   background: none;
   border-radius: 0;
@@ -136,7 +156,7 @@ h1,h2,h3,h4,h5,h6{
 .nav-interactive:hover::after {
   opacity: 1;
   transform: scaleX(1);
-  background: #e7a6b1;
+  background: var(--nav-underline-color);
 }
 
 .nav-link:focus, .nav-link:active,
@@ -192,4 +212,336 @@ ul.nav {
 
 .nav-shift-left {
   margin-left: 0;
+}
+
+/* Dark Mode Toggle */
+.theme-toggle {
+  position: relative;
+  width: 50px;
+  height: 25px;
+  background-color: var(--button-bg);
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 1rem;
+}
+
+.theme-toggle:hover {
+  background-color: var(--button-hover-bg);
+}
+
+.theme-toggle-slider {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 21px;
+  height: 21px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+[data-theme="dark"] .theme-toggle-slider {
+  transform: translateX(25px);
+}
+
+.theme-toggle-slider::before {
+  content: '☀️';
+}
+
+[data-theme="dark"] .theme-toggle-slider::before {
+  content: '🌙';
+}
+
+/* Brand/Logo color updates */
+.text-primary {
+  color: var(--primary-brand-color) !important;
+}
+
+/* Form control updates for dark mode */
+.form-control {
+  background-color: var(--background-color);
+  border-color: var(--primary-brand-color);
+  color: var(--text-color);
+}
+
+[data-theme="dark"] .form-control {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--primary-brand-color);
+  color: var(--text-color);
+}
+
+.form-control:focus {
+  background-color: var(--background-color);
+  border-color: var(--nav-active-color);
+  color: var(--text-color);
+  box-shadow: 0 0 0 0.2rem rgba(172, 59, 97, 0.25);
+}
+
+[data-theme="dark"] .form-control:focus {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--nav-active-color);
+  color: var(--text-color);
+  box-shadow: 0 0 0 0.2rem rgba(231, 166, 177, 0.25);
+}
+
+.form-control::placeholder {
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+/* Card styling for dark mode */
+.card {
+  background-color: var(--background-color);
+  border-color: var(--primary-brand-color) !important;
+  color: var(--text-color);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+[data-theme="dark"] .card {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--primary-brand-color) !important;
+}
+
+.card-title {
+  color: var(--primary-brand-color);
+}
+
+.card-text {
+  color: var(--text-color);
+}
+
+.card-body.text-decoration-none {
+  color: var(--text-color) !important;
+}
+
+.card-body.text-decoration-none:hover {
+  color: var(--nav-active-color) !important;
+}
+
+.card-body.text-decoration-none .card-title {
+  color: var(--primary-brand-color);
+}
+
+.card-body.text-decoration-none:hover .card-title {
+  color: var(--nav-active-color);
+}
+
+/* Button variations for dark mode */
+.btn-outline-secondary {
+  --bs-btn-color: var(--text-color);
+  --bs-btn-border-color: var(--text-color);
+  --bs-btn-hover-color: var(--background-color);
+  --bs-btn-hover-bg: var(--text-color);
+  --bs-btn-hover-border-color: var(--text-color);
+}
+
+/* Responsive adjustments for theme toggle */
+@media (max-width: 768px) {
+  .theme-toggle {
+    margin-left: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  .col-md-3.text-end {
+    flex-direction: column;
+    align-items: center !important;
+  }
+  
+  .col-md-3.text-end .d-flex {
+    flex-direction: row !important;
+    justify-content: center !important;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
+
+/* Breadcrumb styling */
+.breadcrumb {
+  background-color: transparent;
+}
+
+.breadcrumb a {
+  color: var(--nav-text-color) !important;
+  transition: color 0.3s ease;
+}
+
+.breadcrumb a:hover {
+  color: var(--nav-active-color) !important;
+}
+
+.breadcrumb-item-active {
+  color: var(--primary-brand-color);
+}
+
+/* Form floating labels */
+.form-floating > label {
+  color: var(--text-color);
+  opacity: 0.8;
+}
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+  color: var(--nav-active-color);
+}
+
+/* Textarea styling */
+textarea.form-control {
+  background-color: var(--background-color);
+  border-color: var(--primary-brand-color);
+  color: var(--text-color);
+  resize: vertical;
+}
+
+[data-theme="dark"] textarea.form-control {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+textarea.form-control:focus {
+  background-color: var(--background-color);
+  border-color: var(--nav-active-color);
+  color: var(--text-color);
+  box-shadow: 0 0 0 0.2rem rgba(172, 59, 97, 0.25);
+}
+
+[data-theme="dark"] textarea.form-control:focus {
+  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 0.2rem rgba(231, 166, 177, 0.25);
+}
+
+/* Modal and alert styling */
+.modal-content {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-color: var(--primary-brand-color);
+}
+
+.modal-header {
+  border-bottom-color: var(--primary-brand-color);
+}
+
+.modal-footer {
+  border-top-color: var(--primary-brand-color);
+}
+
+.btn-close {
+  opacity: 0.8;
+}
+
+[data-theme="dark"] .btn-close {
+  filter: invert(1);
+  opacity: 0.8;
+}
+
+/* Button danger for dark mode */
+.btn-danger {
+  --bs-btn-bg: #dc3545;
+  --bs-btn-border-color: #dc3545;
+  --bs-btn-hover-bg: #c02b39;
+  --bs-btn-hover-border-color: #c02b39;
+}
+
+/* Alert styling for dark mode */
+.alert {
+  background-color: var(--background-color);
+  border-color: var(--primary-brand-color);
+  color: var(--text-color);
+}
+
+[data-theme="dark"] .alert {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Specific card styling overrides for add/edit pages */
+.card.shadow-lg.bg-white {
+  background-color: var(--background-color) !important;
+  color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .card.shadow-lg.bg-white {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.text-dark {
+  color: var(--text-color) !important;
+}
+
+/* Text muted for both themes */
+.text-muted {
+  color: var(--text-color) !important;
+  opacity: 0.6;
+}
+
+[data-theme="dark"] .text-muted {
+  color: var(--text-color) !important;
+  opacity: 0.7;
+}
+
+/* Lead text styling */
+.lead {
+  color: var(--text-color);
+}
+
+/* Make sure all headings work in dark mode */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-color);
+}
+
+/* Gradient text for about page */
+.about-gradient-text {
+  color: var(--primary-brand-color);
+}
+
+/* Success button for dark mode */
+.btn-success {
+  --bs-btn-bg: #198754;
+  --bs-btn-border-color: #198754;
+  --bs-btn-hover-bg: #146c43;
+  --bs-btn-hover-border-color: #146c43;
+}
+
+/* Feature cards styling for about page */
+.feature-card {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-color: var(--primary-brand-color) !important;
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .feature-card {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.feature-card h5 {
+  color: var(--primary-brand-color) !important;
+}
+
+.feature-card .text-muted.small {
+  color: var(--text-color) !important;
+  opacity: 0.8;
+}
+
+[data-theme="dark"] .feature-card .text-muted.small {
+  color: var(--text-color) !important;
+  opacity: 0.9;
+}
+
+/* Feature card SVG icons - update stroke color for dark mode */
+.feature-card svg {
+  stroke: var(--primary-brand-color);
+}
+
+/* Glass card effect for both themes */
+.glass-card {
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+[data-theme="dark"] .glass-card {
+  border: 1px solid rgba(231, 166, 177, 0.3) !important;
 }
