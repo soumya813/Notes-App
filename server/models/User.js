@@ -23,6 +23,21 @@ const UserSchema = new schema({
         type: String,
         required: true
     },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        validate: {
+            validator: function(v) {
+                return v != null && v.length > 0;
+            },
+            message: 'Email is required and cannot be null or empty'
+        }
+    },
+    profilePicture: {
+        type: String,
+        default: '/img/default-profile.png'
+    },
     createdAt: {
         type: Date,
         default: Date.now,

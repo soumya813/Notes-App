@@ -11,9 +11,13 @@ passport.use(new GoogleStrategy({
   },
 
   async function(accessToken, refreshToken, profile, done) {
+    console.log('Google profile:', JSON.stringify(profile, null, 2)); // Debug log
+    
     const email = profile.emails && profile.emails[0] ? profile.emails[0].value : null;
+    console.log('Extracted email:', email); // Debug log
+    
     if (!email) {
-      // No email found, handle gracefully
+      console.log('No email found in Google profile');
       return done(new Error('No email found in your Google account. Please use a Google account with a public email.'));
     }
 
@@ -22,23 +26,44 @@ passport.use(new GoogleStrategy({
       displayName: profile.displayName,
       firstName: profile.name.givenName || 'User',
       lastName: profile.name.familyName || 'Unknown',
-      profileImage: profile.photos[0].value,
+      profileImage: (profile.photos && profile.photos[0]) ? profile.photos[0].value : '/img/default-profile.png',
       email: email,
-      profilePicture: profile.photos && profile.photos[0] ? profile.photos[0].value : '/img/default-profile.png',
+      profilePicture: (profile.photos && profile.photos[0]) ? profile.photos[0].value : '/img/default-profile.png',
       createdAt: new Date() 
     };
     
+    console.log('Creating user with data:', JSON.stringify(newUser, null, 2)); // Debug log
+    
 
     try{
-
+      // First check if user exists by googleId
       let user = await User.findOne({googleId: profile.id});
-
+      
       if(user){
-        done(null,user);
-      }
-      else{
-        user = await User.create(newUser);
-        done(null,user);
+        // User exists, update email if it's missing
+        if (!user.email && email) {
+          user.email = email;
+          await user.save();
+        }
+        done(null, user);
+      } else {
+        // Check if a user with this email already exists (from a different Google account)
+        const existingEmailUser = await User.findOne({email: email});
+        if (existingEmailUser) {
+          // Update the existing user with the new Google ID
+          existingEmailUser.googleId = profile.id;
+          existingEmailUser.displayName = profile.displayName;
+          existingEmailUser.firstName = profile.name.givenName || 'User';
+          existingEmailUser.lastName = profile.name.familyName || 'Unknown';
+          existingEmailUser.profileImage = (profile.photos && profile.photos[0]) ? profile.photos[0].value : '/img/default-profile.png';
+          existingEmailUser.profilePicture = (profile.photos && profile.photos[0]) ? profile.photos[0].value : '/img/default-profile.png';
+          await existingEmailUser.save();
+          done(null, existingEmailUser);
+        } else {
+          // Create new user
+          user = await User.create(newUser);
+          done(null, user);
+        }
       }
     }
     catch(error){
