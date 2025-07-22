@@ -15,8 +15,8 @@ passport.use(new GoogleStrategy({
     const newUser = {
       googleId: profile.id,
       displayName: profile.displayName,
-      firstName: profile.name.givenName,
-      lastName: profile.name.familyName,
+      firstName: profile.name.givenName || 'User',
+      lastName: profile.name.familyName || 'Unknown',
       profileImage: profile.photos[0].value,
       createdAt: new Date() 
     };
