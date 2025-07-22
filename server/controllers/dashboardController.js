@@ -251,6 +251,7 @@ const axios = require('axios');
 exports.dashboardSummarizeNote = async (req, res) => {
   try {
     const textToSummarize = req.body.text;
+    const noteId = req.body.noteId; // We'll pass this from frontend
 
     // Call Hugging Face API or your summarization logic
     const response = await axios.post(
@@ -262,6 +263,19 @@ exports.dashboardSummarizeNote = async (req, res) => {
     );
 
     const summary = response.data?.[0]?.summary_text || "No summary returned.";
+
+    // Save summary to the note if noteId is provided
+    if (noteId) {
+      const note = await Note.findOneAndUpdate(
+        { _id: noteId, user: req.user.id },
+        { summary: summary },
+        { new: true }
+      );
+      
+      if (!note) {
+        return res.status(404).json({ summary: "Note not found." });
+      }
+    }
 
     res.json({ summary });
   } catch (error) {

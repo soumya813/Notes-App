@@ -15,17 +15,34 @@
           <% for(var i = 0; i < notes.length; i++){ %>
 
             <div class="col-sm-3 mb-4">
-                <div class="card border-primary" style="min-height: 210px">
+                <div class="card border-primary h-100" style="min-height: 210px;">
                     <!-- Note content area - clickable to view/edit note -->
-                    <a href="/dashboard/item/<%= notes[i]._id %>" class="card-body text-decoration-none">
-                        <h5 class="card-title"><%= notes[i].title %></h5>
-                        <p class="card-text"><%= notes[i].body %></p>
+                    <a href="/dashboard/item/<%= notes[i]._id %>" class="card-body text-decoration-none d-flex flex-column">
+                        <h5 class="card-title text-truncate"><%= notes[i].title %></h5>
+                        <p class="card-text flex-grow-1"><%= notes[i].body %></p>
+                        
+                        <!-- Show summary preview if available -->
+                        <% if(notes[i].summary && notes[i].summary.trim()) { %>
+                        <div class="mt-auto">
+                            <small class="text-muted d-flex align-items-center">
+                                <i class="fas fa-robot me-1"></i>
+                                <span class="text-truncate">AI: <%= notes[i].summary.substring(0, 60) %><%= notes[i].summary.length > 60 ? '...' : '' %></span>
+                            </small>
+                        </div>
+                        <% } %>
                     </a>
                     <!-- EXPORT FEATURE: Individual note export button for each note card -->
                     <div class="card-footer bg-transparent border-0 pb-2">
-                        <a href="/dashboard/export/<%= notes[i]._id %>" class="btn btn-sm btn-outline-secondary w-100">
-                            <i class="fas fa-download me-1"></i>Export Note
-                        </a>
+                        <div class="d-flex gap-2">
+                            <a href="/dashboard/export/<%= notes[i]._id %>" class="btn btn-sm btn-outline-secondary flex-grow-1">
+                                <i class="fas fa-download me-1"></i>Export
+                            </a>
+                            <% if(notes[i].summary && notes[i].summary.trim()) { %>
+                            <span class="badge bg-info d-flex align-items-center">
+                                <i class="fas fa-magic me-1"></i>AI
+                            </span>
+                            <% } %>
+                        </div>
                     </div>
                 </div>
             </div>

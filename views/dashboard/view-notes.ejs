@@ -1,85 +1,300 @@
 
-<div class=".container-fluid container-fluid-custom pb-5 mb-5" style="overflow-x: hidden;">
+<div class="container-fluid container-fluid-custom pb-5 mb-5" style="overflow-x: hidden;">
 
     <div class="row mb-4">
-
         <div class="col">
-
             <nav aria-label="breadcrumb">
-
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/dashboard" style="text-decoration: none;">Dashboard</a></li>    
-                    <li class="breadcrumb-item-active"><%= note.title %></li>
+                    <li class="breadcrumb-item active" aria-current="page"><%= note.title %></li>
                 </ol>
-
             </nav>
 
-                <div class="col d-flex justify-content-between align-items-center">
-                    <h1 class="h3">View Note</h1>
-
-                    <button type="button" class="btn btn-danger me-2" data-bs-toggle="modal" id="deleteButton" data-bs-target="#deleteModal">
-                        Delete
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0">View Note</h1>
+                <div class="btn-group" role="group" aria-label="Note actions">
+                    <button type="button" class="btn btn-outline-info" id="summarizeButton" onclick="summarizeNote()">
+                        <i class="fas fa-magic me-1"></i>AI Summary
                     </button>
-                    </div>
-
-    <!-- Form -->
-    <form action="/dashboard/item/<%= noteID %>?_method=PUT" method="POST">
-      <div class="form-floating mb-4">
-        <input
-          type="text"
-          class="form-control"
-          id="title"
-          name="title"
-          placeholder="Note Title"
-          value="<%= note.title %>"
-          required
-        />
-        <label for="title">Title</label>
-      </div>
-
-      <div class="form-floating mb-4">
-        <textarea
-          class="form-control"
-          placeholder="Write your note here..."
-          id="body"
-          name="body"
-          style="height: 250px"
-          required
-        ><%= note.body %></textarea>
-        <label for="body">Note</label>
-      </div>
-
-      <div class="d-grid">
-        <button type="submit" class="btn btn-primary btn-lg">Update</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-
-<div class="modal" tabindex="-1" role="dialog" id="deleteModal">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header flex justify-content-between align-items-center">
-          <h5 class="modal-title">Modal title</h5>
-          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" id="deleteButton" data-bs-target="#deleteModal">
+                        <i class="fas fa-trash me-1"></i>Delete
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          <p>This will delete your note <b class="fw-bold"><%= note.title %></b><br/>
-            Are you sure?
-        </p>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
-            <form action="/dashboard/item-delete/<%= noteID %>?_method=DELETE" method="POST" class="position-relative">
-                <button type="submit" class="btn btn-primary">Delete Note</button>
-            </form>
-        </div>
-
-      </div>
     </div>
-  </div>
+
+    <!-- Main Content -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <!-- Form -->
+                    <form action="/dashboard/item/<%= noteID %>?_method=PUT" method="POST">
+                        <div class="form-floating mb-4">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="title"
+                                name="title"
+                                placeholder="Note Title"
+                                value="<%= note.title %>"
+                                required
+                            />
+                            <label for="title"><i class="fas fa-heading me-2"></i>Title</label>
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            <textarea
+                                class="form-control"
+                                placeholder="Write your note here..."
+                                id="body"
+                                name="body"
+                                style="height: 300px; resize: vertical;"
+                                required
+                            ><%= note.body %></textarea>
+                            <label for="body"><i class="fas fa-edit me-2"></i>Note Content</label>
+                        </div>
+
+                        <!-- Summary Section -->
+                        <div class="mb-4 <% if(!note.summary || !note.summary.trim()) { %>d-none<% } %>" id="summarySection">
+                            <div class="card border-primary bg-light">
+                                <div class="card-header bg-primary bg-opacity-10 d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0 text-primary">
+                                        <i class="fas fa-robot me-2"></i>AI Generated Summary
+                                    </h6>
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge bg-success me-2">
+                                            <i class="fas fa-check me-1"></i>Saved
+                                        </span>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="summarizeNote()" title="Regenerate summary">
+                                            <i class="fas fa-redo"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p id="summaryContent" class="mb-0 text-muted fst-italic"><%= note.summary || '' %></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg flex-grow-1">
+                                <i class="fas fa-save me-2"></i>Update Note
+                            </button>
+                            <a href="/dashboard" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-arrow-left me-2"></i>Back
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="deleteModal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>Confirm Delete
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-3">
+                    Are you sure you want to delete the note 
+                    <strong class="text-primary">"<%= note.title %>"</strong>?
+                </p>
+                <div class="alert alert-warning d-flex align-items-center" role="alert">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <small>This action cannot be undone. The note and its summary will be permanently deleted.</small>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Cancel
+                </button>
+                <form action="/dashboard/item-delete/<%= noteID %>?_method=DELETE" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>Delete Note
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+// Toast notification function
+function showToast(message, type = 'success') {
+    const toastContainer = document.getElementById('toast-container') || createToastContainer();
+    
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-bg-${type} border-0 show`;
+    toast.setAttribute('role', 'alert');
+    toast.innerHTML = `
+        <div class="d-flex">
+            <div class="toast-body">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-2"></i>
+                ${message}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="this.closest('.toast').remove()"></button>
+        </div>
+    `;
+    
+    toastContainer.appendChild(toast);
+    
+    // Auto remove after 4 seconds
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }
+    }, 4000);
+}
+
+function createToastContainer() {
+    const container = document.createElement('div');
+    container.id = 'toast-container';
+    container.className = 'toast-container position-fixed top-0 end-0 p-3';
+    container.style.zIndex = '1055';
+    document.body.appendChild(container);
+    return container;
+}
+
+async function summarizeNote() {
+    const noteBody = document.getElementById('body').value;
+    const summarizeButton = document.getElementById('summarizeButton');
+    const summarySection = document.getElementById('summarySection');
+    const summaryContent = document.getElementById('summaryContent');
+    const noteId = '<%= noteID %>';
+
+    if (!noteBody.trim()) {
+        showToast('Please add some content to your note before summarizing.', 'warning');
+        return;
+    }
+
+    if (noteBody.trim().length < 50) {
+        showToast('Note content is too short for meaningful summarization. Please add more content.', 'warning');
+        return;
+    }
+
+    // Update button state with loading animation
+    const originalButtonContent = summarizeButton.innerHTML;
+    summarizeButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Generating...';
+    summarizeButton.disabled = true;
+
+    try {
+        const response = await fetch('/dashboard/summarize', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                text: noteBody,
+                noteId: noteId 
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.summary && data.summary.trim()) {
+            // Update summary content with fade effect
+            summaryContent.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                summaryContent.textContent = data.summary;
+                summaryContent.style.opacity = '1';
+            }, 200);
+
+            // Show summary section with slide animation
+            if (summarySection.classList.contains('d-none')) {
+                summarySection.classList.remove('d-none');
+                summarySection.style.opacity = '0';
+                summarySection.style.transform = 'translateY(-20px)';
+                
+                setTimeout(() => {
+                    summarySection.style.transition = 'all 0.3s ease';
+                    summarySection.style.opacity = '1';
+                    summarySection.style.transform = 'translateY(0)';
+                }, 10);
+            }
+
+            // Smooth scroll to summary
+            setTimeout(() => {
+                summarySection.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center',
+                    inline: 'nearest'
+                });
+            }, 300);
+
+            showToast('Summary generated and saved successfully!', 'success');
+        } else {
+            showToast('Failed to generate summary. Please try again.', 'danger');
+        }
+    } catch (error) {
+        console.error('Summarization Error:', error);
+        showToast('Network error occurred. Please check your connection and try again.', 'danger');
+    } finally {
+        // Restore button state
+        summarizeButton.innerHTML = originalButtonContent;
+        summarizeButton.disabled = false;
+    }
+}
+
+// Add CSS for smooth transitions
+document.head.insertAdjacentHTML('beforeend', `
+<style>
+    .card {
+        transition: box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    }
+    
+    .btn {
+        transition: all 0.2s ease;
+    }
+    
+    .btn:hover {
+        transform: translateY(-1px);
+    }
+    
+    .btn:active {
+        transform: translateY(0);
+    }
+    
+    #summarySection {
+        transition: all 0.3s ease;
+    }
+    
+    #summaryContent {
+        transition: opacity 0.3s ease;
+        line-height: 1.6;
+    }
+    
+    .spinner-border-sm {
+        width: 1rem;
+        height: 1rem;
+    }
+    
+    .toast {
+        min-width: 300px;
+    }
+    
+    .form-floating > .form-control:focus ~ label {
+        color: #0d6efd;
+    }
+    
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: "›";
+        font-weight: bold;
+    }
+</style>
+`);
+</script>
