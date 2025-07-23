@@ -6,6 +6,7 @@ const mainController = require('../controllers/mainController');
  * App Routes
  */
 router.get('/' , mainController.homepage);
+router.get('/features' , mainController.features);
 router.get('/about' , mainController.about);
 router.get('/faq' , mainController.faq);
 

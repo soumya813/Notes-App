@@ -544,12 +544,26 @@ h1, h2, h3, h4, h5, h6 {
 .feature-card {
   background-color: var(--background-color);
   color: var(--text-color);
-  border-color: var(--primary-brand-color) !important;
+  border: 2px solid var(--primary-brand-color) !important;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(172, 59, 97, 0.15);
 }
 
 [data-theme="dark"] .feature-card {
   background-color: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(231, 166, 177, 0.4) !important;
+  box-shadow: 0 4px 12px rgba(231, 166, 177, 0.1);
+}
+
+.feature-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(172, 59, 97, 0.25);
+  border-color: var(--primary-brand-color) !important;
+}
+
+[data-theme="dark"] .feature-card:hover {
+  box-shadow: 0 8px 25px rgba(231, 166, 177, 0.2);
+  border-color: var(--primary-brand-color) !important;
 }
 
 .feature-card h5 {
@@ -574,11 +588,88 @@ h1, h2, h3, h4, h5, h6 {
 /* Glass card effect for both themes */
 .glass-card {
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 12px;
 }
 
-[data-theme="dark"] .glass-card {
-  border: 1px solid rgba(231, 166, 177, 0.3) !important;
+/* Remove glass card border since feature cards now have their own borders */
+.feature-card.glass-card {
+  border: 2px solid var(--primary-brand-color) !important;
+}
+
+[data-theme="dark"] .feature-card.glass-card {
+  border: 2px solid rgba(231, 166, 177, 0.4) !important;
+}
+
+/* Features page specific styling */
+.features-hero-bg {
+  background: var(--background-color);
+}
+
+.features-hero-title {
+  font-family: 'Unbounded', cursive;
+}
+
+.bg-gradient-features {
+  background: linear-gradient(135deg, var(--primary-brand-color) 0%, var(--button-bg) 100%);
+}
+
+[data-theme="dark"] .bg-gradient-features {
+  background: linear-gradient(135deg, var(--primary-brand-color) 0%, #8B4A6B 100%);
+}
+
+.features-card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.features-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .features-card-hover:hover {
+  box-shadow: 0 10px 30px rgba(231, 166, 177, 0.1);
+}
+
+.features-bg-accent {
+  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Feature icon styling */
+.feature-icon svg {
+  stroke: var(--primary-brand-color);
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover .feature-icon svg {
+  transform: scale(1.1);
+}
+
+/* Badge styling for features page */
+.badge.bg-light.text-dark {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  color: var(--button-bg) !important;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.badge.bg-light.text-dark:hover {
+  background-color: rgba(255, 255, 255, 1) !important;
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .badge.bg-light.text-dark {
+  background-color: rgba(231, 166, 177, 0.25) !important;
+  color: var(--text-color) !important;
+  border: 1px solid rgba(231, 166, 177, 0.4);
+  font-weight: 600;
+}
+
+[data-theme="dark"] .badge.bg-light.text-dark:hover {
+  background-color: rgba(231, 166, 177, 0.35) !important;
+  border-color: rgba(231, 166, 177, 0.6);
+  transform: translateY(-1px);
 }
 
 /* AI Summary content styling */
