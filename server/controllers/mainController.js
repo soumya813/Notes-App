@@ -15,6 +15,19 @@ exports.homepage = async(req,res) => {
 }
 
 /**
+ * GET /features
+ *  Features
+ */
+
+exports.features = async(req,res) => {
+    const locals = {
+        title: "Features - NotesApp",
+        description: "Discover the powerful features of NotesApp - Free Notes App",
+    }
+    res.render('features',locals);
+}
+
+/**
  * GET /
  *  About
  */
