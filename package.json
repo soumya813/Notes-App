@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +13,7 @@
   "dependencies": {
     "axios": "^1.9.0",
     "connect-mongo": "^5.1.0",
+    "connect-redis": "^9.0.0",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
@@ -21,10 +22,15 @@
     "method-override": "^3.0.0",
     "mongodb": "^6.5.0",
     "mongoose": "^8.10.0",
+    "morgan": "^1.10.1",
     "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "redis": "^5.6.1",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "jest": "^30.0.5",
+    "nodemon": "^3.1.0",
+    "supertest": "^7.1.4"
   }
 }

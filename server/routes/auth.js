@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const User = require('../models/User');
+const userService = require('../services/userService');
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -35,40 +35,12 @@ passport.use(new GoogleStrategy({
     console.log('Creating user with data:', JSON.stringify(newUser, null, 2)); // Debug log
     
 
-    try{
-      // First check if user exists by googleId
-      let user = await User.findOne({googleId: profile.id});
-      
-      if(user){
-        // User exists, update email if it's missing
-        if (!user.email && email) {
-          user.email = email;
-          await user.save();
-        }
-        done(null, user);
-      } else {
-        // Check if a user with this email already exists (from a different Google account)
-        const existingEmailUser = await User.findOne({email: email});
-        if (existingEmailUser) {
-          // Update the existing user with the new Google ID
-          existingEmailUser.googleId = profile.id;
-          existingEmailUser.displayName = profile.displayName;
-          existingEmailUser.firstName = profile.name.givenName || 'User';
-          existingEmailUser.lastName = profile.name.familyName || 'Unknown';
-          existingEmailUser.profileImage = (profile.photos && profile.photos[0]) ? profile.photos[0].value : '/img/default-profile.png';
-          existingEmailUser.profilePicture = (profile.photos && profile.photos[0]) ? profile.photos[0].value : '/img/default-profile.png';
-          await existingEmailUser.save();
-          done(null, existingEmailUser);
-        } else {
-          // Create new user
-          user = await User.create(newUser);
-          done(null, user);
-        }
-      }
-    }
-    catch(error){
+    try {
+      const user = await userService.findOrCreateGoogleUser(profile);
+      done(null, user);
+    } catch (error) {
       console.log(error);
-      done(error, null); // Pass error to passport
+      done(error, null);
     }
   }
 ));

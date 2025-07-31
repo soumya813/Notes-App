@@ -1,4 +1,6 @@
 require('dotenv').config();
+const morgan = require('morgan');
+const winston = require('winston');
 
 const express = require('express');
 const expressLayouts =  require('express-ejs-layouts');
@@ -6,19 +8,47 @@ const methodOverride = require('method-override');
 const connectDB = require('./server/config/db');
 const session = require('express-session');
 const passport = require('passport');
-const MongoStore = require('connect-mongo');
+// RedisStore and createClient will be required conditionally below
 
 const app = express();
-const port = 5000 || process.env.PORT;
+const port = process.env.PORT || 5000;
 
-app.use(session({
-    secret:'keyboard cat',
-    resave: false,
-    saveUninitialized: true,
-    store: MongoStore.create({
-        mongoUrl: process.env.MONGODB_URI
-    })
-}));
+// Winston logger setup
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'logs/combined.log' })
+  ],
+});
+
+// Morgan HTTP request logger
+app.use(morgan('combined', { stream: { write: msg => logger.info(msg.trim()) } }));
+
+
+let sessionOptions = {
+  secret: process.env.SESSION_SECRET || 'keyboard cat',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false, httpOnly: true, maxAge: 1000 * 60 * 60 * 24 }, // 1 day
+};
+
+if (process.env.NODE_ENV !== 'test') {
+  const RedisStore = require('connect-redis')(session);
+  const { createClient } = require('redis');
+  const redisClient = createClient({
+    url: process.env.REDIS_URL || 'redis://localhost:6379'
+  });
+  redisClient.connect().catch(console.error);
+  sessionOptions.store = new RedisStore({ client: redisClient });
+}
+
+app.use(session(sessionOptions));
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -31,6 +61,9 @@ app.use(methodOverride("_method"));
 //connect to database
 connectDB();
 
+// API versioning
+app.use('/api/v1/notes', require('./server/routes/api/v1/notes'));
+
 //static files
 app.use(express.static('public'));
 
@@ -38,6 +71,10 @@ app.use(express.static('public'));
 app.use(expressLayouts);
 app.set('layout', './layouts/main');
 app.set('view engine', 'ejs');
+
+// Centralized error handler (should be last)
+const errorHandler = require('./server/middleware/errorHandler');
+app.use(errorHandler);
 
 //routes
 app.use('/', require('./server/routes/auth'));
@@ -57,6 +94,10 @@ app.get('*',function(req,res) {
    });
 })
 
-app.listen(port, () => {
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => {
     console.log(`App listening on ${port}`);
-})
+  });
+}
+
+module.exports = app;
