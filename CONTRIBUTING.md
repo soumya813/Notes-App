@@ -144,7 +144,7 @@ Violations may result in being banned from contributing.
 ## 🔒 Security Policy
 
 If you discover a **security vulnerability**:
-
+- For information on reporting vulnerabilities and our security policy, please see our [Security Policy](./SECURITY.md).
 - **Do NOT** create a public GitHub issue.  
 - Instead, email the project admin at: **soumyasrivastav813@gmail.com**  
 - We’ll review and respond promptly.  
