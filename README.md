@@ -110,6 +110,8 @@ npm install
 
 3. **Set Up Environment Variables**
 
+Refer to [CONTRIBUTING.md](CONTRIBUTING.md) to find out how to get the keys.
+
 Create a `.env` file in the root directory and add:
 
 ```env
