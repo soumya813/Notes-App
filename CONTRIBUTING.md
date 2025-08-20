@@ -37,11 +37,7 @@ You’ll need a **MongoDB connection URI** and **Google OAuth credentials**.
    ```bash
    mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/notesApp?retryWrites=true&w=majority
    ```
-6. Replace <username> and <password> with your credentials, then add it to .env:
-
-  ```env
-  MONGODB_URI=mongodb+srv://notesapp:yourpassword@cluster0.xxxxx.mongodb.net/notesApp
-  ```
+6. Replace <username> and <password> with your credentials, then add it to .env
 
 #### Google OAuth Setup
 
