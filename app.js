@@ -39,13 +39,12 @@ let sessionOptions = {
 };
 
 if (process.env.NODE_ENV !== 'test') {
-  const RedisStore = require('connect-redis')(session);
-  const { createClient } = require('redis');
-  const redisClient = createClient({
-    url: process.env.REDIS_URL || 'redis://localhost:6379'
+  const MongoStore = require('connect-mongo');
+  sessionOptions.store = MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+    touchAfter: 24 * 3600 // lazy session update
   });
-  redisClient.connect().catch(console.error);
-  sessionOptions.store = new RedisStore({ client: redisClient });
+  console.log('Using MongoDB for session storage');
 }
 
 app.use(session(sessionOptions));

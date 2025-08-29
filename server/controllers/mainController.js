@@ -8,10 +8,7 @@ exports.homepage = async(req,res) => {
         title: "NotesApp",
         description: "Free Notes App",
     }
-    res.render('index', {
-        locals,
-        layout: '../views/layouts/front-page'
-    });
+    res.render('index', locals);
 }
 
 /**

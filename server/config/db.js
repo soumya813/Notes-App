@@ -7,10 +7,7 @@ const connectDB = async () => {
         if (!mongoUri) {
             throw new Error('MONGODB_URI not set in environment variables');
         }
-        await mongoose.connect(mongoUri, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect(mongoUri);
         if (process.env.NODE_ENV !== 'test') {
             console.log(`Database Connected: ${mongoose.connection.host}`);
         }
