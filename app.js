@@ -13,6 +13,11 @@ const passport = require('passport');
 const app = express();
 const port = process.env.PORT || 5000;
 
+// trust reverse proxy (e.g., when deployed behind Nginx/Render/Heroku) so secure cookies work
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 // Winston logger setup
 const logger = winston.createLogger({
   level: 'info',
@@ -33,16 +38,27 @@ app.use(morgan('combined', { stream: { write: msg => logger.info(msg.trim()) } }
 
 let sessionOptions = {
   secret: process.env.SESSION_SECRET || 'keyboard cat',
+  name: 'notes.sid',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false, httpOnly: true, maxAge: 1000 * 60 * 60 * 24 }, // 1 day
+  rolling: true, // refresh cookie expiry on activity
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: 'lax',
+    maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+    path: '/', // ensure cookie is available for all routes
+    domain: process.env.NODE_ENV === 'production' ? process.env.DOMAIN : undefined
+  },
 };
 
 if (process.env.NODE_ENV !== 'test') {
   const MongoStore = require('connect-mongo');
   sessionOptions.store = MongoStore.create({
     mongoUrl: process.env.MONGODB_URI,
-    touchAfter: 24 * 3600 // lazy session update
+  touchAfter: 24 * 3600, // lazy session update
+  ttl: 60 * 60 * 24 * 30, // persist sessions for 30 days in store
+  autoRemove: 'native' // use MongoDB's TTL feature for cleanup
   });
   console.log('Using MongoDB for session storage');
 }

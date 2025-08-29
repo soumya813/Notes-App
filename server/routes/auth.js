@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const userService = require('../services/userService');
+const User = require('../models/User');
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -49,13 +50,13 @@ passport.use(new GoogleStrategy({
 router.get('/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-  //retrieve user data
-router.get('/google/callback', 
-  passport.authenticate('google', { 
+  //retrieve user data (Google OAuth callback)
+router.get('/auth/google/callback',
+  passport.authenticate('google', {
     failureRedirect: '/',
     successRedirect: '/dashboard'
- }),
-  );
+  })
+);
 
   //route if something goes wrong
   router.get('/login-failure',(req,res) => {
@@ -64,15 +65,22 @@ router.get('/google/callback',
 
   //destroy session
   router.get('/logout', (req,res) => {
-    req.session.destroy(error => {
-      if(error){
-        console.log(error);
-        res.send('error login out');
+    // Passport 0.7 requires callback
+    req.logout(function(err){
+      if (err) {
+        console.log('Logout error:', err);
+        return res.status(500).send('Error logging out');
       }
-      else{
-        res.redirect('/')
-      }
-    })
+      req.session.destroy(error => {
+        if(error){
+          console.log(error);
+          return res.status(500).send('Error logging out');
+        }
+        // Clear session cookie
+        res.clearCookie('notes.sid');
+        return res.redirect('/');
+      });
+    });
   })
 
   //persist user data after successful authentication
