@@ -4,9 +4,15 @@
         NotesApp
       </a>
 
-      <form class="nav col-12 col-md-auto flex-fill mb-2 justify-content-center mb-md-0" role="search" method="POST" action="/dashboard/search">
-        <input type="search" name="searchTerm" class="form-control border-primary" placeholder="Search..." aria-label="Search">
-      </form>
+      <div class="nav col-12 col-md-6 col-lg-5 flex-fill mb-2 justify-content-center mb-md-0 position-relative mx-md-4">
+        <form role="search" method="POST" action="/dashboard/search" id="searchForm" class="w-100">
+          <input type="search" name="searchTerm" id="searchInput" class="form-control border-primary search-input-custom" placeholder="Search notes..." aria-label="Search" autocomplete="off">
+        </form>
+        <!-- Live search results dropdown -->
+        <div id="searchResults" class="search-results-dropdown position-absolute w-100 rounded-3 shadow-lg" style="top: 100%; z-index: 1000; max-height: 400px; overflow-y: auto; display: none;">
+          <!-- Results will be populated here -->
+        </div>
+      </div>
 
       <div class="col-md-3 text-end d-flex align-items-center justify-content-end">
         <a href="/logout" type="button" class="btn btn-outline-primary">Logout</a>
