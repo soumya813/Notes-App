@@ -4,98 +4,125 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const userService = require('../services/userService');
 const User = require('../models/User');
+const { asyncHandler } = require('../utils/errors');
+const { ValidationError } = require('../utils/errors');
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: process.env.GOOGLE_CALLBACK_URL
   },
-
   async function(accessToken, refreshToken, profile, done) {
-    console.log('Google profile:', JSON.stringify(profile, null, 2)); // Debug log
-    
-    const email = profile.emails && profile.emails[0] ? profile.emails[0].value : null;
-    console.log('Extracted email:', email); // Debug log
-    
-    if (!email) {
-      console.log('No email found in Google profile');
-      return done(new Error('No email found in your Google account. Please use a Google account with a public email.'));
-    }
-
-    const newUser = {
-      googleId: profile.id,
-      displayName: profile.displayName,
-      firstName: profile.name.givenName || 'User',
-      lastName: profile.name.familyName || 'Unknown',
-      profileImage: (profile.photos && profile.photos[0]) ? profile.photos[0].value : '/img/default-profile.png',
-      email: email,
-      profilePicture: (profile.photos && profile.photos[0]) ? profile.photos[0].value : '/img/default-profile.png',
-      createdAt: new Date() 
-    };
-    
-    console.log('Creating user with data:', JSON.stringify(newUser, null, 2)); // Debug log
-    
-
     try {
+      console.log('Google OAuth - Processing profile:', profile.id);
+      
       const user = await userService.findOrCreateGoogleUser(profile);
+      console.log('Google OAuth - User processed successfully:', user.id);
+      
       done(null, user);
     } catch (error) {
-      console.log(error);
-      done(error, null);
+      console.error('Google OAuth error:', error);
+      
+      // Provide user-friendly error messages
+      let userMessage = 'Authentication failed. Please try again.';
+      
+      if (error instanceof ValidationError) {
+        if (error.message.includes('email')) {
+          userMessage = 'Unable to access your email from Google. Please ensure your Google account has a public email address.';
+        } else {
+          userMessage = 'Invalid profile information from Google. Please try again.';
+        }
+      } else if (error.code === 11000) {
+        userMessage = 'An account with this information already exists. Please try logging in.';
+      }
+      
+      // Create error object with user-friendly message
+      const authError = new Error(userMessage);
+      authError.statusCode = 400;
+      done(authError, null);
     }
   }
 ));
 
-//google login route
+// Google login route
 router.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] }));
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
 
-  //retrieve user data (Google OAuth callback)
+// Retrieve user data (Google OAuth callback)
 router.get('/auth/google/callback',
   passport.authenticate('google', {
-    failureRedirect: '/',
-    successRedirect: '/dashboard'
+    failureRedirect: '/login-failure'
+  }),
+  asyncHandler(async (req, res) => {
+    // Update last login time
+    if (req.user) {
+      try {
+        await req.user.updateLastLogin();
+      } catch (error) {
+        console.warn('Failed to update last login time:', error);
+        // Don't fail the login for this
+      }
+    }
+    
+    // Redirect to intended page or dashboard
+    const redirectTo = req.session.returnTo || '/dashboard';
+    delete req.session.returnTo;
+    res.redirect(redirectTo);
   })
 );
 
-  //route if something goes wrong
-  router.get('/login-failure',(req,res) => {
-    res.send('Something went wrong...')
+// Route if authentication fails
+router.get('/login-failure', (req, res) => {
+  const locals = {
+    title: "Login Failed - NotesApp",
+    description: "Authentication failed - NotesApp",
+  };
+  
+  res.status(400).render('index', {
+    locals,
+    layout: './layouts/main',
+    error: 'Login failed. Please try again or contact support if the problem persists.'
   });
+});
 
-  //destroy session
-  router.get('/logout', (req,res) => {
-    // Passport 0.7 requires callback
-    req.logout(function(err){
-      if (err) {
-        console.log('Logout error:', err);
-        return res.status(500).send('Error logging out');
-      }
-      req.session.destroy(error => {
-        if(error){
-          console.log(error);
-          return res.status(500).send('Error logging out');
-        }
-        // Clear session cookie
-        res.clearCookie('notes.sid');
-        return res.redirect('/');
-      });
-    });
-  })
-
-  //persist user data after successful authentication
-  passport.serializeUser(function(user, done){
-    done(null, user.id);
-  });
-
-  //retrieve user data from session
-  passport.deserializeUser(async (id, done) => {
-    try {
-      const user = await User.findById(id);
-      done(null, user);
-    } catch (err) {
-      done(err, null);
+// Destroy session (logout)
+router.get('/logout', (req, res) => {
+  // Passport 0.7 requires callback
+  req.logout(function(err) {
+    if (err) {
+      console.error('Logout error:', err);
+      // Still try to destroy session even if logout fails
     }
+    
+    req.session.destroy(error => {
+      if (error) {
+        console.error('Session destroy error:', error);
+        // Still try to logout by clearing cookie and redirecting
+      }
+      
+      // Clear session cookie
+      res.clearCookie('notes.sid');
+      res.redirect('/?message=logged-out');
+    });
   });
+});
+
+// Persist user data after successful authentication
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+// Retrieve user data from session
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await userService.findUserById(id);
+    done(null, user);
+  } catch (error) {
+    console.error('Deserialize user error:', error);
+    // Return null user instead of error to prevent session issues
+    done(null, null);
+  }
+});
 
 module.exports = router; 

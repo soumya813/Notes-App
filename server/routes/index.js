@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
+const { optionalAuth } = require('../middleware/checkAuth');
 const mainController = require('../controllers/mainController');
 
 /**
- * App Routes
+ * Public app routes with optional authentication
  */
-router.get('/' , mainController.homepage);
-router.get('/features' , mainController.features);
-router.get('/about' , mainController.about);
-router.get('/faq' , mainController.faq);
+router.get('/', optionalAuth, mainController.homepage);
+router.get('/features', optionalAuth, mainController.features);
+router.get('/about', optionalAuth, mainController.about);
+router.get('/faq', optionalAuth, mainController.faq);
 
 module.exports = router;
