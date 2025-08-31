@@ -686,11 +686,13 @@ footer {
   border-top: 1px solid var(--primary-brand-color);
   opacity: 0.8;
   transition: background-color 0.3s ease, border-color 0.3s ease;
-  margin-top: 1rem; /* Reduced space above footer */
-  padding: 0.5rem 0 0; /* Smaller padding, removed bottom padding */
+  margin-top: 0.75rem; /* a touch more gap */
+  padding: 0.4rem 0; /* slightly bigger than ultra-thin */
   width: 100%;
   position: relative;
   z-index: 1;
+  font-size: 1rem; /* modest increase */
+  line-height: 1.25;
 }
 
 [data-theme="dark"] footer {
@@ -708,7 +710,7 @@ footer .nav-link {
   color: var(--text-color) !important;
   opacity: 0.6; /* More muted than navbar links */
   transition: color 0.3s ease, opacity 0.3s ease;
-  padding: 0.25rem 0.5rem; /* Smaller padding than navbar */
+  padding: 0.25rem 0.5rem; /* small bump to match size increase */
 }
 
 footer .nav-link:hover {
@@ -724,7 +726,7 @@ footer .nav-link:hover {
   
   footer .d-flex {
     flex-direction: column !important;
-    gap: 1rem;
+    gap: 0.5rem; /* reduce vertical gap on mobile */
   }
   
   footer .col-md-4 {
@@ -733,6 +735,31 @@ footer .nav-link:hover {
   
   footer .justify-content-end {
     justify-content: center !important;
+  }
+}
+
+/* Footer icons and single-line layout */
+footer ul.nav {
+  flex-wrap: nowrap; /* keep items on one line when possible */
+  gap: 0.25rem;
+}
+
+.footer-icon {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+}
+
+.footer-social {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* If the viewport is too narrow, allow minimal wrap but keep compact spacing */
+@media (max-width: 420px) {
+  footer ul.nav {
+    flex-wrap: wrap;
+    row-gap: 0.25rem;
   }
 }
 

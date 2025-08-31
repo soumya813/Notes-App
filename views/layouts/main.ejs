@@ -13,7 +13,11 @@
     <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-    <%- include('../partials/header.ejs') %>
+    <% if (locals.user) { %>
+        <%- include('../partials/header_dashboard.ejs') %>
+    <% } else { %>
+        <%- include('../partials/header.ejs') %>
+    <% } %>
     <div class="main-content">
         <%- body %>
     </div>

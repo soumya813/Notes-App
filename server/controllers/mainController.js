@@ -44,14 +44,10 @@ exports.homepage = asyncHandler(async (req, res) => {
  * Features page
  */
 exports.features = asyncHandler(async (req, res) => {
-    // If user is already authenticated, redirect to dashboard
-    if (req.user) {
-        return res.redirect('/dashboard');
-    }
-    
     const locals = {
         title: "Features - NotesApp",
         description: "Discover the powerful features of NotesApp - Free Notes App",
+        user: req.user
     };
     
     res.render('features', locals);
@@ -62,14 +58,10 @@ exports.features = asyncHandler(async (req, res) => {
  * About page
  */
 exports.about = asyncHandler(async (req, res) => {
-    // If user is already authenticated, redirect to dashboard
-    if (req.user) {
-        return res.redirect('/dashboard');
-    }
-    
     const locals = {
         title: "About NotesApp",
         description: "Free Notes App",
+        user: req.user
     };
     
     res.render('about', locals);
@@ -80,14 +72,10 @@ exports.about = asyncHandler(async (req, res) => {
  * FAQs page
  */
 exports.faq = asyncHandler(async (req, res) => {
-    // If user is already authenticated, redirect to dashboard
-    if (req.user) {
-        return res.redirect('/dashboard');
-    }
-    
     const locals = {
         title: "FAQs NotesApp",
         description: "Free Notes App",
+        user: req.user
     };
     
     res.render('faq', locals);
