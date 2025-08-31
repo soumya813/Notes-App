@@ -20,13 +20,25 @@
 
         <form action="/dashboard/add" method="POST" class="d-flex flex-column h-100">
             <div class="form-floating mb-4">
-                <input type="text" class="form-control" id="title" name="title" placeholder="Note Title" required value="<%= typeof formData !== 'undefined' ? formData.title : '' %>" />
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="title" 
+                    name="title" 
+                    placeholder="Note Title" 
+                    required 
+                    value="<%= typeof formData !== 'undefined' ? formData.title : '' %>" />
                 <label for="title">Title</label>
             </div>
 
-            <div class="form-floating mb-4 flex-grow-1">
-                <textarea class="form-control" id="body" name="body" placeholder="Start writing your note here..." style="height: 400px; resize: vertical;" required><%= typeof formData !== 'undefined' ? formData.body : '' %></textarea>
-                <label for="body">Content</label>
+            <!-- Quill Editor -->
+            <div class="mb-4 flex-grow-1">
+                <label for="editor" class="form-label">Content</label>
+                <div id="editor" style="height: 400px; background: #fff; border: 1px solid #ccc; border-radius: 8px;">
+                </div>
+                <!-- Hidden field that stores HTML -->
+                <input type="hidden" name="body" id="hiddenBody" 
+                       value="<%= typeof formData !== 'undefined' ? formData.body : '' %>">
             </div>
 
             <div class="d-grid">
@@ -35,3 +47,21 @@
         </form>
     </div>
 </div>
+
+<!-- Quill.js -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+    const quill = new Quill('#editor', { theme: 'snow' });
+
+    // Preload content if editing failed (error with formData)
+    const existingContent = document.querySelector("#hiddenBody").value;
+    if (existingContent) {
+        quill.root.innerHTML = existingContent;
+    }
+
+    // Sync content into hidden field before submit
+    document.querySelector("form").onsubmit = function() {
+        document.querySelector("#hiddenBody").value = quill.root.innerHTML;
+    };
+</script>
