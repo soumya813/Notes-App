@@ -43,12 +43,38 @@ exports.dashboard = asyncHandler(async (req, res) => {
  */
 exports.dashboardViewNote = asyncHandler(async (req, res) => {
   const note = await noteService.getNoteById(req.params.id, req.user.id);
+  const isOwner = String(note.user) === String(req.user.id);
+  let collaboratorList = [];
+  if (isOwner) {
+    // Populate collaborator details for owner view
+    const full = await Note.findOne({ _id: req.params.id, user: req.user.id })
+      .populate('collaborators', 'firstName lastName email')
+      .select('collaborators isCollabEnabled')
+      .lean();
+    if (full && full.collaborators) {
+      collaboratorList = full.collaborators.map(c => ({
+        id: String(c._id),
+        name: [c.firstName, c.lastName].filter(Boolean).join(' ') || c.email,
+        email: c.email
+      }));
+      note.isCollabEnabled = !!full.isCollabEnabled;
+      note.collaborators = full.collaborators.map(c => String(c._id));
+    }
+  }
 
   res.render('dashboard/view-notes', {
     noteID: req.params.id,
-    note,
-    layout: '../views/layouts/dashboard'
+  note,
+    isOwner,
+    collaboratorList,
+    layout: '../views/layouts/dashboard',
+    successMessage: req.session.successMessage,
+    errorMessage: req.session.errorMessage
   });
+
+  // Clear messages after displaying
+  delete req.session.errorMessage;
+  delete req.session.successMessage;
 });
 
 /**

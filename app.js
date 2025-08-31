@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const http = require('http');
 const expressLayouts =  require('express-ejs-layouts');
 const methodOverride = require('method-override');
 const { connectDB } = require('./server/config/db');
@@ -9,6 +10,7 @@ const session = require('express-session');
 const passport = require('passport');
 
 const app = express();
+const server = http.createServer(app);
 const config = getConfig();
 
 // Trust reverse proxy (e.g., when deployed behind Nginx/Render/Heroku) so secure cookies work
@@ -65,7 +67,9 @@ if (config.NODE_ENV !== 'test') {
   console.log('Using MongoDB for session storage');
 }
 
-app.use(session(sessionOptions));
+// Reuse the same session middleware for Express and Socket.IO
+const sessionMiddleware = session(sessionOptions);
+app.use(sessionMiddleware);
 
 // Passport middleware
 app.use(passport.initialize());
@@ -108,6 +112,7 @@ app.use('/', require('./server/routes/health'));
 app.use('/', require('./server/routes/auth'));
 app.use('/', require('./server/routes/index'));
 app.use('/', require('./server/routes/dashboard'));
+app.use('/', require('./server/routes/share'));
 
 // Handle 404 - This should be after all other routes
 app.get('*', function(req, res) {
@@ -148,8 +153,12 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
+// Initialize Socket.IO and real-time features
+const { initSockets } = require('./server/sockets');
+initSockets({ server, sessionMiddleware, passport });
+
 if (config.NODE_ENV !== 'test') {
-  app.listen(config.PORT, () => {
+  server.listen(config.PORT, () => {
     console.log(`App listening on ${config.PORT}`);
   });
 }

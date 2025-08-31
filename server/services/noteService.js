@@ -3,6 +3,7 @@ const Note = require('../models/Notes');
 const mongoose = require('mongoose');
 const { validatePagination, isValidObjectId } = require('../utils/validation');
 const { ValidationError, DatabaseError, NotFoundError } = require('../utils/errors');
+const User = require('../models/User');
 
 /**
  * Get user notes with pagination and sorting
@@ -25,7 +26,17 @@ const getUserNotes = async (userId, perPage = 12, page = 1, sortBy = 'updatedAt'
     const validSortBy = allowedSortFields.includes(sortBy) ? sortBy : 'updatedAt';
 
     const notes = await Note.aggregate([
-      { $match: { user: new mongoose.Types.ObjectId(userId), isArchived: false } },
+      { $match: { 
+          $and: [
+            { isArchived: false },
+            { $or: [
+                { user: new mongoose.Types.ObjectId(userId) },
+                { collaborators: new mongoose.Types.ObjectId(userId) }
+              ]
+            }
+          ]
+        } 
+      },
       { $sort: { [validSortBy]: sortDirection } },
       {
         $project: {
@@ -100,8 +111,8 @@ const getNoteById = async (noteId, userId) => {
     }
 
     const note = await Note.findOne({ 
-      _id: noteId, 
-      user: userId 
+      _id: noteId,
+      $or: [ { user: userId }, { collaborators: userId } ]
     }).lean();
 
     if (!note) {
@@ -161,7 +172,7 @@ const updateNote = async (noteId, userId, updateData) => {
     }
 
     // Filter allowed update fields
-    const allowedFields = ['title', 'body', 'summary', 'tags', 'isArchived'];
+  const allowedFields = ['title', 'body', 'summary', 'tags', 'isArchived', 'isCollabEnabled'];
     const filteredData = Object.keys(updateData)
       .filter(key => allowedFields.includes(key))
       .reduce((obj, key) => {
@@ -170,7 +181,7 @@ const updateNote = async (noteId, userId, updateData) => {
       }, {});
 
     const note = await Note.findOneAndUpdate(
-      { _id: noteId, user: userId },
+      { _id: noteId, $or: [ { user: userId }, { collaborators: userId } ] },
       filteredData,
       { new: true, runValidators: true }
     );
@@ -314,6 +325,70 @@ const getUserNotesStats = async (userId) => {
   }
 };
 
+/**
+ * Add collaborator by email (owner only)
+ */
+const addCollaboratorByEmail = async (noteId, ownerId, email) => {
+  try {
+    if (!isValidObjectId(noteId) || !isValidObjectId(ownerId)) {
+      throw new ValidationError('Invalid IDs');
+    }
+    if (!email || typeof email !== 'string') {
+      throw new ValidationError('Email is required');
+    }
+    const user = await User.findOne({ email: email.toLowerCase(), isActive: true });
+    if (!user) throw new NotFoundError('User');
+    if (String(user._id) === String(ownerId)) {
+      throw new ValidationError('Cannot add yourself as collaborator');
+    }
+
+    const note = await Note.findOneAndUpdate(
+      { _id: noteId, user: ownerId },
+      { $addToSet: { collaborators: user._id }, $set: { isCollabEnabled: true } },
+      { new: true }
+    );
+    if (!note) throw new NotFoundError('Note');
+    return note;
+  } catch (error) {
+    if (error instanceof ValidationError || error instanceof NotFoundError) throw error;
+    throw new DatabaseError('Failed to add collaborator');
+  }
+};
+
+/**
+ * Remove collaborator (owner only)
+ */
+const removeCollaborator = async (noteId, ownerId, collaboratorId) => {
+  try {
+    if (!isValidObjectId(noteId) || !isValidObjectId(ownerId) || !isValidObjectId(collaboratorId)) {
+      throw new ValidationError('Invalid IDs');
+    }
+    const note = await Note.findOneAndUpdate(
+      { _id: noteId, user: ownerId },
+      { $pull: { collaborators: collaboratorId } },
+      { new: true }
+    );
+    if (!note) throw new NotFoundError('Note');
+    return note;
+  } catch (error) {
+    if (error instanceof ValidationError || error instanceof NotFoundError) throw error;
+    throw new DatabaseError('Failed to remove collaborator');
+  }
+};
+
+/**
+ * Check if a user can access a note (owner or collaborator)
+ */
+const canAccessNote = async (noteId, userId) => {
+  try {
+    if (!isValidObjectId(noteId) || !isValidObjectId(userId)) return false;
+    const note = await Note.findOne({ _id: noteId, $or: [ { user: userId }, { collaborators: userId } ] }).select('_id').lean();
+    return !!note;
+  } catch {
+    return false;
+  }
+};
+
 module.exports = {
   getUserNotes,
   countUserNotes,
@@ -322,5 +397,8 @@ module.exports = {
   updateNote,
   deleteNote,
   searchUserNotes,
-  getUserNotesStats
+  getUserNotesStats,
+  addCollaboratorByEmail,
+  removeCollaborator,
+  canAccessNote
 };

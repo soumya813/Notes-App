@@ -30,7 +30,9 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "redis": "^5.6.1",
-    "winston": "^3.17.0"
+  "winston": "^3.17.0",
+  "socket.io": "^4.7.5",
+  "nodemailer": "^6.9.14"
   },
   "devDependencies": {
     "jest": "^30.0.5",

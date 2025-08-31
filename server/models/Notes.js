@@ -8,6 +8,16 @@ const NoteSchema = new schema({
         required: [true, 'Note must belong to a user'],
         index: true
     },
+    collaborators: [{
+        type: schema.ObjectId,
+        ref: 'User',
+        index: true,
+        default: []
+    }],
+    isCollabEnabled: {
+        type: Boolean,
+        default: false
+    },
     title:{
         type: String, 
         required: [true, 'Title is required'],
@@ -51,6 +61,8 @@ const NoteSchema = new schema({
 NoteSchema.index({ user: 1, createdAt: -1 });
 NoteSchema.index({ user: 1, updatedAt: -1 });
 NoteSchema.index({ user: 1, title: 'text', body: 'text' });
+// Index to query by collaborator
+NoteSchema.index({ collaborators: 1, updatedAt: -1 });
 
 // Update the updatedAt field before saving
 NoteSchema.pre('save', function(next) {

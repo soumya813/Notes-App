@@ -14,7 +14,12 @@ const optionalEnvVars = {
   'SESSION_SECRET': 'keyboard cat',
   'DOMAIN': undefined,
   'HUGGING_FACE_API': undefined,
-  'REDIS_URL': undefined
+  'REDIS_URL': undefined,
+  'SMTP_HOST': undefined,
+  'SMTP_PORT': undefined,
+  'SMTP_USER': undefined,
+  'SMTP_PASS': undefined,
+  'SMTP_FROM': undefined
 };
 
 /**
@@ -58,6 +63,14 @@ function getConfig() {
     
     // Redis (optional)
     REDIS_URL: process.env.REDIS_URL,
+    // Email (optional)
+    MAIL: {
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT) : undefined,
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+      from: process.env.SMTP_FROM || 'no-reply@notes-app.local'
+    },
     
     // Security settings
     SECURITY: {

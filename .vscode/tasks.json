@@ -8,6 +8,18 @@
 			"group": "build",
 			"isBackground": true,
 			"problemMatcher": []
+		},
+		{
+			"label": "Install deps",
+			"type": "shell",
+			"command": "npm install",
+			"group": "build"
+		},
+		{
+			"label": "Install new deps",
+			"type": "shell",
+			"command": "npm install",
+			"group": "build"
 		}
 	]
 }

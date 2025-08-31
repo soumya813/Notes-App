@@ -29,6 +29,51 @@
         <div class="col-12">
             <div class="card shadow-sm" style="background-color: #ffffff;">
                 <div class="card-body">
+                    <% if (typeof isOwner !== 'undefined' && isOwner) { %>
+                    <div class="mb-4 p-3 border rounded bg-light">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong><i class="fas fa-user-friends me-2"></i>Collaboration</strong>
+                            <form action="/dashboard/item/<%= noteID %>/collab/toggle" method="POST" class="d-inline">
+                                <input type="hidden" name="enable" value="<%= !note.isCollabEnabled %>">
+                                <button type="submit" class="btn btn-sm <%= note.isCollabEnabled ? 'btn-outline-danger' : 'btn-outline-success' %>">
+                                    <i class="fas <%= note.isCollabEnabled ? 'fa-ban' : 'fa-users' %> me-1"></i>
+                                    <%= note.isCollabEnabled ? 'Disable' : 'Enable' %>
+                                </button>
+                            </form>
+                        </div>
+                        <div class="row g-2 align-items-center">
+                            <div class="col-md-6">
+                                <form action="/dashboard/item/<%= noteID %>/collab/add" method="POST" class="d-flex gap-2">
+                                    <input type="email" name="email" class="form-control" placeholder="Invite by email" required <%= note.isCollabEnabled ? '' : 'disabled' %> />
+                                    <button class="btn btn-primary" <%= note.isCollabEnabled ? '' : 'disabled' %> >Invite</button>
+                                </form>
+                            </div>
+                        </div>
+                        <% if (note.isCollabEnabled && collaboratorList && collaboratorList.length) { %>
+                        <div class="mt-3">
+                            <small class="text-muted d-block mb-1">Collaborators</small>
+                            <div class="d-flex flex-wrap gap-2">
+                <% collaboratorList.forEach(function(c){ %>
+                                    <form action="/dashboard/item/<%= noteID %>/collab/remove" method="POST" class="d-inline">
+                    <input type="hidden" name="userId" value="<%= c.id %>">
+                                        <span class="badge bg-secondary">
+                        <%= c.name %> (<%= c.email %>)
+                                            <button class="btn btn-sm btn-link text-light p-0 ms-1" title="Remove">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </span>
+                                    </form>
+                                <% }) %>
+                            </div>
+                        </div>
+                        <% } %>
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                <%= note.isCollabEnabled ? 'Collaboration is enabled. Invite users by email.' : 'Collaboration is disabled.' %>
+                            </small>
+                        </div>
+                    </div>
+                    <% } %>
                     <!-- Form -->
                     <form action="/dashboard/item/<%= noteID %>?_method=PUT" method="POST">
                         <div class="form-floating mb-4">
@@ -128,6 +173,9 @@
 </div>
 
 <script>
+// Expose note id for collaboration script
+window.NOTE_ID = '<%= noteID %>';
+window.COLLAB_ENABLED = JSON.parse('<%- JSON.stringify(!!note.isCollabEnabled) %>');
 // Toast notification function
 function showToast(message, type = 'success') {
     const toastContainer = document.getElementById('toast-container') || createToastContainer();
@@ -297,4 +345,19 @@ document.head.insertAdjacentHTML('beforeend', `
     }
 </style>
 `);
+// Show any server messages (read from JSON blob)
+const __serverMsgsEl = document.getElementById('server-msgs');
+if (__serverMsgsEl) {
+    try {
+        const __serverMsgs = JSON.parse(__serverMsgsEl.textContent || '{}');
+        if (__serverMsgs.success) showToast(__serverMsgs.success, 'success');
+        if (__serverMsgs.error) showToast(__serverMsgs.error, 'danger');
+    } catch {}
+}
 </script>
+
+<!-- Socket.IO client and collab script -->
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/collab.js"></script>
+<!-- Server messages JSON (safe to parse in JS above) -->
+<script type="application/json" id="server-msgs"><%- JSON.stringify({ success: typeof successMessage !== 'undefined' ? successMessage : null, error: typeof errorMessage !== 'undefined' ? errorMessage : null }) %></script>

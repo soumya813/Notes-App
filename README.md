@@ -132,6 +132,18 @@ The app will run at [http://localhost:5000](http://localhost:5000)
 
 ---
 
+## 🔄 Real-time Collaboration
+
+This app includes collaborative editing powered by Socket.IO:
+
+- Live updates while multiple authenticated users view the same note
+- Presence and typing indicators
+- Changes sync instantly; saving persists the note
+
+It runs over the same Express server and reuses session authentication. No extra setup is required for local development.
+
+---
+
 ## 🌟 SSoC’25 Spotlight
 
 📢 This project is officially part of **SSoC'25 (Social Summer of Code 2025)!**
