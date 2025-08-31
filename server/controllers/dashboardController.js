@@ -97,8 +97,6 @@ exports.dashboardUpdateNote = asyncHandler(async (req, res) => {
     title: req.body.title,
     body: cleanBody
   });
-  
-  });
 
   req.session.successMessage = 'Note updated successfully!';
   res.redirect('/dashboard');
