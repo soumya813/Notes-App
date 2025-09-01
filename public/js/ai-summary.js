@@ -19,14 +19,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
-  // Handle server messages
+  // Handle server messages only on pages that have the server-msgs element
   const serverMsgsEl = document.getElementById('server-msgs');
   if (serverMsgsEl) {
     try {
       const serverMsgs = JSON.parse(serverMsgsEl.textContent || '{}');
-      if (serverMsgs.success) showToast(serverMsgs.success, 'success');
-      if (serverMsgs.error) showToast(serverMsgs.error, 'danger');
-    } catch {}
+      // Only show messages if they exist and aren't empty
+      if (serverMsgs.success && serverMsgs.success.trim()) {
+        showToast(serverMsgs.success, 'success');
+      }
+      if (serverMsgs.error && serverMsgs.error.trim()) {
+        showToast(serverMsgs.error, 'danger');
+      }
+    } catch (e) {
+      // Silently ignore JSON parse errors
+    }
   }
   
   // Make showToast globally available
@@ -72,7 +79,7 @@ function createToastContainer() {
     return container;
 }
 
-async function summarizeNote() {
+async function summarizeNote(isRetry = false) {
     const noteBody = document.getElementById('body').value;
     const summarizeButton = document.getElementById('summarizeButton');
     const summarySection = document.getElementById('summarySection');
@@ -92,7 +99,8 @@ async function summarizeNote() {
 
     // Update button state with loading animation
     const originalButtonContent = summarizeButton.innerHTML;
-    summarizeButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Generating...';
+    const loadingText = isRetry ? 'Retrying...' : 'Generating...';
+    summarizeButton.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>${loadingText}`;
     summarizeButton.disabled = true;
 
     try {
@@ -156,31 +164,92 @@ async function summarizeNote() {
             showToast('Summary generated and saved successfully!', 'success');
         } else {
             const errorMsg = data.message || data.error || 'Failed to generate summary. Please try again.';
-            if (errorMsg.includes('API key not configured') || errorMsg.includes('Hugging Face')) {
-                showToast('AI summarization service is not configured. Please contact the administrator.', 'warning');
-            } else {
-                showToast(errorMsg, 'danger');
-            }
+            handleSummaryError(errorMsg, isRetry);
         }
     } catch (error) {
         console.error('Summarization Error:', error);
-        
-        let errorMessage = 'Network error occurred. Please try again.';
-        
-        if (error.message.includes('HTML instead of JSON')) {
-            errorMessage = 'Please refresh the page and try again. (Session may have expired)';
-        } else if (error.message.includes('timeout') || error.message.includes('503')) {
-            errorMessage = 'AI service is busy. Please try again in a moment.';
-        } else if (error.message.includes('429')) {
-            errorMessage = 'Too many requests. Please wait a moment before trying again.';
-        } else if (error.message.includes('401') || error.message.includes('403')) {
-            errorMessage = 'Authentication error. Please refresh the page and try again.';
-        }
-        
-        showToast(errorMessage, 'danger');
+        handleSummaryError(error.message, isRetry);
     } finally {
         // Restore button state
         summarizeButton.innerHTML = originalButtonContent;
         summarizeButton.disabled = false;
     }
+}
+
+function handleSummaryError(errorMessage, isRetry) {
+    let userMessage = 'Network error occurred. Please try again.';
+    let canRetry = false;
+    
+    if (errorMessage.includes('HTML instead of JSON')) {
+        userMessage = 'Please refresh the page and try again. (Session may have expired)';
+    } else if (errorMessage.includes('temporarily unavailable') || errorMessage.includes('502') || errorMessage.includes('Bad Gateway')) {
+        userMessage = 'AI service is temporarily busy. ';
+        canRetry = !isRetry; // Only show retry option if this isn't already a retry
+        if (canRetry) {
+            userMessage += 'Would you like to try again?';
+        } else {
+            userMessage += 'Please try again in a few moments.';
+        }
+    } else if (errorMessage.includes('timeout') || errorMessage.includes('503')) {
+        userMessage = 'AI service is loading. ';
+        canRetry = !isRetry;
+        if (canRetry) {
+            userMessage += 'Would you like to try again?';
+        } else {
+            userMessage += 'Please wait a moment and try again.';
+        }
+    } else if (errorMessage.includes('429') || errorMessage.includes('Too many requests')) {
+        userMessage = 'Too many requests. Please wait a moment before trying again.';
+    } else if (errorMessage.includes('401') || errorMessage.includes('403')) {
+        userMessage = 'Authentication error. Please refresh the page and try again.';
+    } else if (errorMessage.includes('API key not configured') || errorMessage.includes('Hugging Face')) {
+        userMessage = 'AI summarization service is not configured. Please contact the administrator.';
+    }
+    
+    if (canRetry) {
+        showRetryToast(userMessage);
+    } else {
+        showToast(userMessage, 'danger');
+    }
+}
+
+function showRetryToast(message) {
+    let toastContainer = document.getElementById('toast-container');
+    if (!toastContainer) {
+        toastContainer = createToastContainer();
+    }
+
+    const toast = document.createElement('div');
+    toast.className = 'toast show bg-warning text-dark';
+    toast.setAttribute('role', 'alert');
+    toast.innerHTML = `
+        <div class="toast-body">
+            <div class="d-flex align-items-center mb-2">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <span>${message}</span>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-sm btn-outline-dark retry-btn">
+                    <i class="fas fa-redo me-1"></i>Retry
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-dark toast-close-btn">Cancel</button>
+            </div>
+        </div>
+    `;
+    
+    const retryBtn = toast.querySelector('.retry-btn');
+    retryBtn.addEventListener('click', () => {
+        toast.remove();
+        summarizeNote(true); // Retry with flag
+    });
+    
+    toastContainer.appendChild(toast);
+    
+    // Auto remove after 10 seconds if no action
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }
+    }, 10000);
 }

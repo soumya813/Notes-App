@@ -12,7 +12,7 @@ router.post('/dashboard/item/:id/collab/toggle', isLoggedIn, validateObjectId(),
   const noteId = req.params.id;
   const enable = req.body.enable === 'true' || req.body.enable === true;
   await noteService.updateNote(noteId, req.user.id, { isCollabEnabled: enable });
-  req.session.successMessage = enable ? 'Collaboration enabled.' : 'Collaboration disabled.';
+  req.session.viewSuccessMessage = enable ? 'Collaboration enabled.' : 'Collaboration disabled.';
   res.redirect(`/dashboard/item/${noteId}`);
 }));
 
@@ -28,11 +28,11 @@ router.post('/dashboard/item/:id/collab/add', isLoggedIn, validateObjectId(), as
     const link = `${req.protocol}://${req.get('host')}/dashboard/item/${noteId}`;
     const html = `<p>You have been added as a collaborator to a note.</p><p><a href="${link}">Open the note</a></p>`;
     const result = await sendMail({ to: email, subject, html, text: `Open the note: ${link}` });
-    req.session.successMessage = result.sent
+    req.session.viewSuccessMessage = result.sent
       ? `Added collaborator and sent an invite to ${email}.`
       : `Added collaborator: ${email}. (Email not sent: ${result.reason})`;
   } catch (e) {
-    req.session.errorMessage = e.message || 'Failed to add collaborator';
+    req.session.viewErrorMessage = e.message || 'Failed to add collaborator';
   }
   res.redirect(`/dashboard/item/${noteId}`);
 }));
@@ -43,9 +43,9 @@ router.post('/dashboard/item/:id/collab/remove', isLoggedIn, validateObjectId(),
   const collaboratorId = req.body.userId;
   try {
     await noteService.removeCollaborator(noteId, req.user.id, collaboratorId);
-    req.session.successMessage = 'Removed collaborator.';
+    req.session.viewSuccessMessage = 'Removed collaborator.';
   } catch (e) {
-    req.session.errorMessage = e.message || 'Failed to remove collaborator';
+    req.session.viewErrorMessage = e.message || 'Failed to remove collaborator';
   }
   res.redirect(`/dashboard/item/${noteId}`);
 }));

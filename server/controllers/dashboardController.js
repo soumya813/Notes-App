@@ -64,17 +64,18 @@ exports.dashboardViewNote = asyncHandler(async (req, res) => {
 
   res.render('dashboard/view-notes', {
     noteID: req.params.id,
-  note,
+    note,
     isOwner,
     collaboratorList,
     layout: '../views/layouts/dashboard',
-    successMessage: req.session.successMessage,
-    errorMessage: req.session.errorMessage
+    // Only pass view-specific messages, not general update messages
+    successMessage: req.session.viewSuccessMessage,
+    errorMessage: req.session.viewErrorMessage
   });
 
-  // Clear messages after displaying
-  delete req.session.errorMessage;
-  delete req.session.successMessage;
+  // Clear view-specific messages after displaying
+  delete req.session.viewErrorMessage;
+  delete req.session.viewSuccessMessage;
 });
 
 /**
@@ -257,20 +258,22 @@ exports.dashboardSummarizeNote = asyncHandler(async (req, res) => {
       const message = error.response.data?.error || 'External API error';
       
       if (status === 503) {
-        throw new ExternalAPIError('Hugging Face', 'Model is loading, please try again in a few moments');
+        throw new ExternalAPIError('Hugging Face', 'AI model is loading, please try again in a few moments');
+      } else if (status === 502) {
+        throw new ExternalAPIError('Hugging Face', 'AI service is temporarily unavailable, please try again in a moment');
       } else if (status === 429) {
-        throw new ExternalAPIError('Hugging Face', 'Rate limit exceeded, please try again later');
+        throw new ExternalAPIError('Hugging Face', 'Too many requests, please wait a moment and try again');
       } else if (status === 400) {
         throw new ValidationError('Invalid input for summarization');
       } else {
         throw new ExternalAPIError('Hugging Face', message);
       }
     } else if (error.code === 'ECONNABORTED') {
-      throw new ExternalAPIError('Hugging Face', 'Request timeout - please try again');
+      throw new ExternalAPIError('Hugging Face', 'Request timeout - AI service is busy, please try again');
     } else if (error instanceof ValidationError || error instanceof ExternalAPIError) {
       throw error;
     } else {
-      throw new ExternalAPIError('Hugging Face', 'Failed to generate summary');
+      throw new ExternalAPIError('Hugging Face', 'Failed to generate summary - service temporarily unavailable');
     }
   }
 });
