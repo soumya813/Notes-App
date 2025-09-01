@@ -10,6 +10,21 @@ document.addEventListener('DOMContentLoaded', function() {
         return; // Exit if elements don't exist
     }
 
+    // Add event delegation for search result clicks
+    searchResults.addEventListener('click', function(e) {
+        const searchResultItem = e.target.closest('.search-result-item[data-note-id]');
+        const viewAllResults = e.target.closest('.view-all-results');
+        
+        if (searchResultItem) {
+            const noteId = searchResultItem.dataset.noteId;
+            window.location.href = `/dashboard/item/${noteId}`;
+        } else if (viewAllResults) {
+            e.preventDefault();
+            const searchTerm = viewAllResults.dataset.searchTerm;
+            submitSearchForm(searchTerm);
+        }
+    });
+
     // Function to perform live search
     function performLiveSearch(searchTerm) {
         if (searchTerm.length === 0) {
@@ -64,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const highlightedBody = highlightSearchTerm(truncatedBody, searchTerm);
 
             html += `
-                <div class="search-result-item p-3" onclick="window.location.href='/dashboard/item/${note._id}'">
+                <div class="search-result-item p-3" data-note-id="${note._id}">
                     <div class="d-flex justify-content-between align-items-start">
                         <div class="flex-grow-1">
                             <h6 class="search-result-title">${highlightedTitle}</h6>
@@ -85,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (notes.length >= 10) {
             html += `
                 <div class="search-result-item p-3 text-center border-top">
-                    <a href="/dashboard/search" class="text-primary text-decoration-none fw-semibold" onclick="submitSearchForm('${searchTerm}')">
+                    <a href="/dashboard/search" class="text-primary text-decoration-none fw-semibold view-all-results" data-search-term="${searchTerm}">
                         View all results →
                     </a>
                 </div>
