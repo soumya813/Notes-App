@@ -31,6 +31,17 @@ function validateEnvironment() {
   if (missing.length > 0) {
     throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
   }
+  
+  // Production-specific validations
+  if (process.env.NODE_ENV === 'production') {
+    if (!process.env.SESSION_SECRET || process.env.SESSION_SECRET === 'keyboard cat') {
+      throw new Error('SESSION_SECRET must be set to a secure random string in production');
+    }
+    
+    if (process.env.SESSION_SECRET && process.env.SESSION_SECRET.length < 32) {
+      console.warn('WARNING: SESSION_SECRET should be at least 32 characters long for security');
+    }
+  }
 }
 
 /**

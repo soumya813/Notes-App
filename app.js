@@ -4,6 +4,9 @@ const express = require('express');
 const http = require('http');
 const expressLayouts =  require('express-ejs-layouts');
 const methodOverride = require('method-override');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const compression = require('compression');
 const { connectDB } = require('./server/config/db');
 const { getConfig } = require('./server/config/config');
 const session = require('express-session');
@@ -17,6 +20,9 @@ const config = getConfig();
 if (config.NODE_ENV === 'production') {
   app.set('trust proxy', 1);
 }
+
+// Compression middleware
+app.use(compression());
 
 // Winston logger setup
 const winston = require('winston');
@@ -88,6 +94,58 @@ app.use(methodOverride("_method"));
 // Connect to database
 connectDB();
 
+// Security middleware - Helmet with EJS-friendly CSP
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      // Allow Google Fonts stylesheet
+      styleSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        "https://cdn.jsdelivr.net",
+        "https://cdnjs.cloudflare.com",
+        "https://fonts.googleapis.com"
+      ],
+      scriptSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        "https://cdn.jsdelivr.net",
+        "https://cdnjs.cloudflare.com",
+        "https://cdn.socket.io"
+      ],
+      imgSrc: ["'self'", "data:", "https:"],
+      // Allow Google Fonts font files
+      fontSrc: [
+        "'self'",
+        "data:",
+        "https://cdn.jsdelivr.net",
+        "https://cdnjs.cloudflare.com",
+        "https://fonts.gstatic.com"
+      ],
+      connectSrc: ["'self'", "ws:", "wss:"]
+    }
+  }
+}));
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: config.SECURITY.rateLimitWindow, // from config
+  max: config.SECURITY.rateLimitRequests,
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use(limiter);
+
+// Additional security headers (keeping existing ones for compatibility)
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  next();
+});
+
 // Static files
 app.use(express.static('public'));
 
@@ -95,14 +153,6 @@ app.use(express.static('public'));
 app.use(expressLayouts);
 app.set('layout', './layouts/main');
 app.set('view engine', 'ejs');
-
-// Security middleware
-app.use((req, res, next) => {
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'DENY');
-  res.setHeader('X-XSS-Protection', '1; mode=block');
-  next();
-});
 
 // API versioning
 app.use('/api/v1/notes', require('./server/routes/api/v1/notes'));

@@ -132,6 +132,90 @@ The app will run at [http://localhost:5000](http://localhost:5000)
 
 ---
 
+## 🚀 Production Deployment
+
+### Required Environment Variables
+
+Set these environment variables in your hosting provider:
+
+```env
+# Database (Required)
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/notes-app
+
+# Google OAuth (Required)
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_CALLBACK_URL=https://yourdomain.com/google/callback
+
+# Security (Required for production)
+SESSION_SECRET=your_super_secret_random_string_here
+NODE_ENV=production
+PORT=5000
+
+# Optional Features
+HUGGING_FACE_API=your_hugging_face_token
+REDIS_URL=redis://localhost:6379
+DOMAIN=yourdomain.com
+
+# Email (Optional)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_email@gmail.com
+SMTP_PASS=your_app_password
+SMTP_FROM=noreply@yourdomain.com
+```
+
+### Deploy to Heroku
+
+1. Install Heroku CLI
+2. Login and create app:
+```bash
+heroku login
+heroku create your-notes-app
+```
+
+3. Set environment variables:
+```bash
+heroku config:set NODE_ENV=production
+heroku config:set MONGODB_URI=your_mongodb_uri
+heroku config:set SESSION_SECRET=your_secret
+# ... add all other required vars
+```
+
+4. Deploy:
+```bash
+git add .
+git commit -m "Deploy to production"
+git push heroku main
+```
+
+### Deploy with Docker
+
+1. Build image:
+```bash
+docker build -t notes-app .
+```
+
+2. Run container:
+```bash
+docker run -d \
+  -p 5000:5000 \
+  -e NODE_ENV=production \
+  -e MONGODB_URI=your_mongodb_uri \
+  -e SESSION_SECRET=your_secret \
+  --name notes-app \
+  notes-app
+```
+
+### Deploy to Render/Railway
+
+1. Connect your GitHub repository
+2. Set environment variables in the dashboard
+3. Use build command: `npm install`
+4. Use start command: `npm start`
+
+---
+
 ## 🔄 Real-time Collaboration
 
 This app includes collaborative editing powered by Socket.IO:
