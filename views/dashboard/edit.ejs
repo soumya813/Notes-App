@@ -1,0 +1,31 @@
+<div class="d-flex flex-column flex-grow-1">
+    <div class="card shadow-lg rounded-4 p-4 border-0 flex-grow-1" style="background-color: #fff;">
+      <% if (typeof error !== 'undefined') { %>
+        <div class="alert alert-danger"><%= error %></div>
+      <% } %>
+  
+      <form action="/dashboard/edit/<%= note._id %>?_method=PUT" method="POST" class="h-100 d-flex flex-column">
+        <div id="editor" class="flex-grow-1"></div>
+        <input type="hidden" name="body" id="hiddenBody">
+  
+        <button type="submit" class="btn btn-primary mt-3">Update Note</button>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Quill -->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  
+  <script>
+    const quill = new Quill('#editor', { theme: 'snow' });
+  
+    // Preload existing note content
+    quill.root.innerHTML = `<%- note.body %>`;
+  
+    // Sync content back to hidden input on form submit
+    document.querySelector("form").onsubmit = function() {
+      document.querySelector("#hiddenBody").value = quill.root.innerHTML;
+    };
+  </script>
+  
