@@ -988,3 +988,4 @@
 {"level":"info","message":"::1 - - [01/Sep/2025:08:17:34 +0000] \"GET /js/live-search.js HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36\"","timestamp":"2025-09-01T08:17:34.689Z"}
 {"level":"info","message":"::1 - - [01/Sep/2025:08:17:34 +0000] \"GET /js/ai-summary.js HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36\"","timestamp":"2025-09-01T08:17:34.713Z"}
 {"level":"info","message":"SIGINT received, shutting down gracefully","timestamp":"2025-09-01T08:17:41.091Z"}
+{"level":"info","message":"SIGINT received, shutting down gracefully","timestamp":"2025-09-01T08:28:36.523Z"}

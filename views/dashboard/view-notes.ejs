@@ -183,14 +183,19 @@ window.COLLAB_ENABLED = JSON.parse('<%- JSON.stringify(!!note.isCollabEnabled) %
 
 // Show any server messages
 document.addEventListener('DOMContentLoaded', function() {
-    const serverMsgsEl = document.getElementById('server-msgs');
-    if (serverMsgsEl && typeof showToast === 'function') {
-        try {
-            const serverMsgs = JSON.parse(serverMsgsEl.textContent || '{}');
-            if (serverMsgs.success) showToast(serverMsgs.success, 'success');
-            if (serverMsgs.error) showToast(serverMsgs.error, 'danger');
-        } catch {}
-    }
+    // Only show server messages if external ai-summary.js showToast is not available
+    setTimeout(function() {
+        if (typeof window.showToast !== 'function') {
+            const serverMsgsEl = document.getElementById('server-msgs');
+            if (serverMsgsEl) {
+                try {
+                    const serverMsgs = JSON.parse(serverMsgsEl.textContent || '{}');
+                    if (serverMsgs.success) console.log('Success:', serverMsgs.success);
+                    if (serverMsgs.error) console.log('Error:', serverMsgs.error);
+                } catch {}
+            }
+        }
+    }, 100);
 });
 </script>
 

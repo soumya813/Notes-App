@@ -18,6 +18,19 @@ document.addEventListener('DOMContentLoaded', function() {
       e.target.closest('.toast').remove();
     }
   });
+  
+  // Handle server messages
+  const serverMsgsEl = document.getElementById('server-msgs');
+  if (serverMsgsEl) {
+    try {
+      const serverMsgs = JSON.parse(serverMsgsEl.textContent || '{}');
+      if (serverMsgs.success) showToast(serverMsgs.success, 'success');
+      if (serverMsgs.error) showToast(serverMsgs.error, 'danger');
+    } catch {}
+  }
+  
+  // Make showToast globally available
+  window.showToast = showToast;
 });
 
 function showToast(message, type = 'info') {
@@ -87,15 +100,24 @@ async function summarizeNote() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
+            credentials: 'same-origin', // Include session cookies
             body: JSON.stringify({ 
                 text: noteBody,
                 noteId: noteId 
             })
         });
 
+        // Check if response is HTML (redirect/error page)
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            throw new Error('Server returned HTML instead of JSON - likely an authentication error');
+        }
+
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            const errorText = await response.text();
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
         }
 
         const data = await response.json();
@@ -133,15 +155,29 @@ async function summarizeNote() {
 
             showToast('Summary generated and saved successfully!', 'success');
         } else {
-            showToast(data.message || 'Failed to generate summary. Please try again.', 'danger');
+            const errorMsg = data.message || data.error || 'Failed to generate summary. Please try again.';
+            if (errorMsg.includes('API key not configured') || errorMsg.includes('Hugging Face')) {
+                showToast('AI summarization service is not configured. Please contact the administrator.', 'warning');
+            } else {
+                showToast(errorMsg, 'danger');
+            }
         }
     } catch (error) {
         console.error('Summarization Error:', error);
-        if (error.message.includes('HTML')) {
-            showToast('Authentication error. Please refresh the page and try again.', 'danger');
-        } else {
-            showToast('Network error occurred. Please check your connection and try again.', 'danger');
+        
+        let errorMessage = 'Network error occurred. Please try again.';
+        
+        if (error.message.includes('HTML instead of JSON')) {
+            errorMessage = 'Please refresh the page and try again. (Session may have expired)';
+        } else if (error.message.includes('timeout') || error.message.includes('503')) {
+            errorMessage = 'AI service is busy. Please try again in a moment.';
+        } else if (error.message.includes('429')) {
+            errorMessage = 'Too many requests. Please wait a moment before trying again.';
+        } else if (error.message.includes('401') || error.message.includes('403')) {
+            errorMessage = 'Authentication error. Please refresh the page and try again.';
         }
+        
+        showToast(errorMessage, 'danger');
     } finally {
         // Restore button state
         summarizeButton.innerHTML = originalButtonContent;
