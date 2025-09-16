@@ -11,8 +11,8 @@ exports.homepage = asyncHandler(async (req, res) => {
     }
     
     const locals = {
-        title: "NotesApp",
-        description: "Free Notes App",
+    title: "Notezy",
+    description: "Free Notezy",
     };
 
     // Handle different message types
@@ -45,8 +45,8 @@ exports.homepage = asyncHandler(async (req, res) => {
  */
 exports.features = asyncHandler(async (req, res) => {
     const locals = {
-        title: "Features - NotesApp",
-        description: "Discover the powerful features of NotesApp - Free Notes App",
+    title: "Features - Notezy",
+    description: "Discover the powerful features of Notezy - Free Notezy",
         user: req.user
     };
     
@@ -59,8 +59,8 @@ exports.features = asyncHandler(async (req, res) => {
  */
 exports.about = asyncHandler(async (req, res) => {
     const locals = {
-        title: "About NotesApp",
-        description: "Free Notes App",
+    title: "About Notezy",
+    description: "Free Notezy",
         user: req.user
     };
     
@@ -73,8 +73,8 @@ exports.about = asyncHandler(async (req, res) => {
  */
 exports.faq = asyncHandler(async (req, res) => {
     const locals = {
-        title: "FAQs NotesApp",
-        description: "Free Notes App",
+    title: "FAQs Notezy",
+    description: "Free Notezy",
         user: req.user
     };
     

@@ -1,4 +1,4 @@
-// Live search functionality for the Notes App
+// Live search functionality for notezy
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
     const searchResults = document.getElementById('searchResults');

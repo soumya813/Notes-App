@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 /**
- * Joi validation schemas for the Notes App
+ * Joi validation schemas for notezy
  */
 
 // MongoDB ObjectId validation

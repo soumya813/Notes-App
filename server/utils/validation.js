@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 /**
- * Validation utilities for the Notes App
+ * Validation utilities for notezy
  */
 
 /**

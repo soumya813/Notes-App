@@ -75,8 +75,8 @@ router.get('/auth/google/callback',
 // Route if authentication fails
 router.get('/login-failure', (req, res) => {
   const locals = {
-    title: "Login Failed - NotesApp",
-    description: "Authentication failed - NotesApp",
+  title: "Login Failed - Notezy",
+  description: "Authentication failed - Notezy",
   };
   
   res.status(400).render('index', {

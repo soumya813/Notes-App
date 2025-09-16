@@ -2,7 +2,7 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Start Notes App",
+			"label": "Start Notezy",
 			"type": "shell",
 			"command": "npm start",
 			"group": "build",

@@ -1,4 +1,4 @@
-# 📝 Notes App - A Secure, Minimalistic Note-Taking Platform
+# 📝 Notezy - A Secure, Minimalistic Note-Taking Platform
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/soumya813/Notes-App)
 ![Issues](https://img.shields.io/github/issues/soumya813/Notes-App)
@@ -6,7 +6,7 @@
 ![SSoC'25](https://img.shields.io/badge/Selected%20for-SSoC'25-orange)
 ![License](https://img.shields.io/github/license/soumya813/Notes-App)
 
-Welcome to **Notes App**, a simple and intuitive web-based note-taking platform built with **Node.js, Express, MongoDB**, and **EJS templating**. The app allows users to **sign up, log in, create, view, search, and delete notes** — all with a clean UI and user-friendly dashboard.
+Welcome to **Notezy**, a simple and intuitive web-based note-taking platform built with **Node.js, Express, MongoDB**, and **EJS templating**. The app allows users to **sign up, log in, create, view, search, and delete notes** — all with a clean UI and user-friendly dashboard.
 
 > 🚀 Proudly selected for **SSoC'25**  
 > 📌 Maintained by **Soumya Srivastav** (Project Admin)
@@ -15,7 +15,7 @@ Welcome to **Notes App**, a simple and intuitive web-based note-taking platform 
 
 ## 📸 Demo
 
-![Notes App UI Screenshot](public/img/Notes-App-ui.png)
+![Notezy UI Screenshot](public/img/Notes-App-ui.png)
 
 > 💡 Want to try it live? Deploying soon on Vercel/Render – Stay tuned!
 
@@ -51,7 +51,7 @@ Welcome to **Notes App**, a simple and intuitive web-based note-taking platform 
 ## 🔗 Project Structure
 
 ```plaintext
-Notes-App/
+Notezy/
 ├── app.js
 ├── package.json
 ├── .env

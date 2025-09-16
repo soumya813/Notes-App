@@ -59,7 +59,7 @@ module.exports = (err, req, res, next) => {
     return res.status(404).render('404', {
       locals: {
         title: "404 - Page Not Found",
-        description: "Page not found - NotesApp",
+  description: "Page not found - Notezy",
       },
       layout: './layouts/main'
     });

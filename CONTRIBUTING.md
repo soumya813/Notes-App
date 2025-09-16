@@ -1,9 +1,6 @@
-# 🤝 Contributing to Notes App
-
-Thank you for considering contributing to **Notes App** 🎉  
+# 🤝 Contributing to Notezy
+Thank you for considering contributing to **Notezy** 🎉  
 We welcome all kinds of contributions — whether it’s fixing a bug, improving documentation, designing UI, or adding new features.
-
----
 
 ## 🛠 Project Setup
 
@@ -11,8 +8,8 @@ Follow these steps to set up the project locally:
 
 1. **Fork & Clone the repository**
    ```bash
-   git clone https://github.com/<your-username>/Notes-App.git
-   cd Notes-App
+   git clone https://github.com/<your-username>/Notezy.git
+   cd Notezy
    ```
 2. **Install dependencies**
 
@@ -29,18 +26,18 @@ You’ll need a **MongoDB connection URI** and **Google OAuth credentials**.
 #### MongoDB Setup
 
 1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) and create a free cluster.  
-2. In **Database Access**, create a database user (e.g., `notesapp`).  
+2. In **Database Access**, create a database user (e.g., `notezy`).  
 3. In **Network Access**, allow your IP (`0.0.0.0/0` for testing).  
 4. Go to your cluster → **Connect** → choose *Connect your application*.  
 5. Copy the connection string (example):  
 
    ```bash
-   mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/notesApp?retryWrites=true&w=majority
+   mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/notezy?retryWrites=true&w=majority
    ```
 6. Replace <username> and <password> with your credentials, then add it to .env:
 
   ```env
-  MONGODB_URI=mongodb+srv://notesapp:yourpassword@cluster0.xxxxx.mongodb.net/notesApp
+  MONGODB_URI=mongodb+srv://notezy:yourpassword@cluster0.xxxxx.mongodb.net/notezy
   ```
 
 #### Google OAuth Setup

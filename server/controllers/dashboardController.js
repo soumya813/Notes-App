@@ -13,7 +13,7 @@ exports.dashboard = asyncHandler(async (req, res) => {
 
   const locals = {
     title: "Dashboard",
-    description: "Free NodeJS Notes App.",
+  description: "Free NodeJS Notezy.",
   };
 
   const notes = await noteService.getUserNotes(req.user.id, validPerPage, validPage);

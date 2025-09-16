@@ -168,7 +168,7 @@ app.use('/', require('./server/routes/share'));
 app.get('*', function(req, res) {
    const locals = {
         title: "404 - Page Not Found",
-        description: "Page not found - NotesApp",
+  description: "Page not found - NOTEZY",
     };
    res.status(404).render('404', {
     locals,
