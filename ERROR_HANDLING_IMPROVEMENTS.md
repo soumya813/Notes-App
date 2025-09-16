@@ -1,6 +1,6 @@
 # Error Handling and Validation Improvements
 
-This document outlines the comprehensive error handling and validation improvements made to the Notes App.
+This document outlines the comprehensive error handling and validation improvements made to NOTEZY.
 
 ## Overview of Improvements
 
