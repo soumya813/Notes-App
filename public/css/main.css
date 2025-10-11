@@ -1,3 +1,11 @@
+
+#editor {
+  min-height: 200px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
 :root{
     --background-color : #EDC7B7;
     --bs-primary-rgb: #AC3B61;

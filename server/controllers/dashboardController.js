@@ -1,3 +1,5 @@
+const sanitizeHtml = require("sanitize-html");
+
 const noteService = require('../services/noteService');
 const Note = require('../models/Notes');
 const { asyncHandler } = require('../utils/errors');
@@ -83,9 +85,18 @@ exports.dashboardViewNote = asyncHandler(async (req, res) => {
  * Update specific note
  */
 exports.dashboardUpdateNote = asyncHandler(async (req, res) => {
+  const cleanBody = sanitizeHtml(req.body.body, {
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img', 'h1', 'h2', 'u', 'span' ]),
+    allowedAttributes: {
+      ...sanitizeHtml.defaults.allowedAttributes,
+      img: ['src', 'alt', 'width', 'height'],
+      span: ['class'],
+    }
+  });
+  
   await noteService.updateNote(req.params.id, req.user.id, {
     title: req.body.title,
-    body: req.body.body
+    body: cleanBody
   });
 
   req.session.successMessage = 'Note updated successfully!';
@@ -124,10 +135,22 @@ exports.dashboardAddNote = asyncHandler(async (req, res) => {
  * Create new note
  */
 exports.dashboardAddNotePost = asyncHandler(async (req, res) => {
-  await noteService.createNote({
-    title: req.body.title,
-    body: req.body.body
-  }, req.user.id);
+  const cleanBody = sanitizeHtml(req.body.body, {
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2', 'u', 'span']),
+    allowedAttributes: {
+      ...sanitizeHtml.defaults.allowedAttributes,
+      img: ['src', 'alt', 'width', 'height'],
+      span: ['class'],
+    },
+  });
+
+  await noteService.createNote(
+    {
+      title: req.body.title,
+      body: cleanBody,
+    },
+    req.user.id
+  );
 
   req.session.successMessage = 'Note created successfully!';
   res.redirect('/dashboard');
